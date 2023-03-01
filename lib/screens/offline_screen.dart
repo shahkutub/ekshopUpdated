@@ -80,7 +80,9 @@ class _OfflineState extends State<OfflineScreen> {
 
     if (_photo_path == "" || _photo_upload_id == 0) {
       ToastComponent.showDialog(
-          AppLocalizations.of(context).offline_screen_photo_warning, gravity: Toast.center, duration: Toast.lengthLong);
+          AppLocalizations.of(context).offline_screen_photo_warning,
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
       return;
     }
     loading();
@@ -93,9 +95,11 @@ class _OfflineState extends State<OfflineScreen> {
               photo: _photo_upload_id);
       Navigator.pop(loadingcontext);
       if (submitResponse.result == false) {
-        ToastComponent.showDialog(submitResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+        ToastComponent.showDialog(submitResponse.message,
+            gravity: Toast.center, duration: Toast.lengthLong);
       } else {
-        ToastComponent.showDialog(submitResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+        ToastComponent.showDialog(submitResponse.message,
+            gravity: Toast.center, duration: Toast.lengthLong);
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return Wallet(from_recharge: true);
         }));
@@ -110,9 +114,11 @@ class _OfflineState extends State<OfflineScreen> {
               photo: _photo_upload_id);
       Navigator.pop(loadingcontext);
       if (submitResponse.result == false) {
-        ToastComponent.showDialog(submitResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+        ToastComponent.showDialog(submitResponse.message,
+            gravity: Toast.center, duration: Toast.lengthLong);
       } else {
-        ToastComponent.showDialog(submitResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+        ToastComponent.showDialog(submitResponse.message,
+            gravity: Toast.center, duration: Toast.lengthLong);
 
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return OrderDetails(id: widget.order_id, go_back: false);
@@ -146,14 +152,18 @@ class _OfflineState extends State<OfflineScreen> {
               ));
     } else if (status.isRestricted) {
       ToastComponent.showDialog(
-          AppLocalizations.of(context).common_give_photo_permission, gravity: Toast.center, duration: Toast.lengthLong);
+          AppLocalizations.of(context).common_give_photo_permission,
+          gravity: Toast.center,
+          duration: Toast.lengthLong);
     } else if (status.isGranted) {
       //file = await ImagePicker.pickImage(source: ImageSource.camera);
       _photo_file = await _picker.pickImage(source: ImageSource.gallery);
 
       if (_photo_file == null) {
         ToastComponent.showDialog(
-            AppLocalizations.of(context).common_no_file_chosen, gravity: Toast.center, duration: Toast.lengthLong);
+            AppLocalizations.of(context).common_no_file_chosen,
+            gravity: Toast.center,
+            duration: Toast.lengthLong);
         return;
       }
 
@@ -169,10 +179,12 @@ class _OfflineState extends State<OfflineScreen> {
 
       if (imageUpdateResponse.result == false) {
         print(imageUpdateResponse.message);
-        ToastComponent.showDialog(imageUpdateResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+        ToastComponent.showDialog(imageUpdateResponse.message,
+            gravity: Toast.center, duration: Toast.lengthLong);
         return;
       } else {
-        ToastComponent.showDialog(imageUpdateResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+        ToastComponent.showDialog(imageUpdateResponse.message,
+            gravity: Toast.center, duration: Toast.lengthLong);
 
         _photo_path = imageUpdateResponse.path;
         _photo_upload_id = imageUpdateResponse.upload_id;
@@ -366,13 +378,7 @@ class _OfflineState extends State<OfflineScreen> {
                             Border.all(color: MyTheme.textfield_grey, width: 1),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8.0))),
-                    child: FlatButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      //height: 50,
-                      color: MyTheme.medium_grey,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0))),
+                    child: ElevatedButton(
                       child: Text(
                         AppLocalizations.of(context).offline_screen_photo_proof,
                         style: TextStyle(
@@ -408,13 +414,7 @@ class _OfflineState extends State<OfflineScreen> {
                             Border.all(color: MyTheme.textfield_grey, width: 1),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8.0))),
-                    child: FlatButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      //height: 50,
-                      color: MyTheme.accent_color,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0))),
+                    child: ElevatedButton(
                       child: Text(
                         AppLocalizations.of(context).common_submit,
                         style: TextStyle(

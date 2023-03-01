@@ -18,12 +18,12 @@ class CommonFunctions{
           child: AlertDialog(
             content: Text(AppLocalizations.of(context).home_screen_close_app),
             actions: [
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     Platform.isAndroid ? SystemNavigator.pop() : exit(0);
                   },
                   child: Text(AppLocalizations.of(context).common_yes)),
-              FlatButton(
+              ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },

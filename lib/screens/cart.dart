@@ -1,26 +1,25 @@
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
-import 'package:active_ecommerce_flutter/custom/common_functions.dart';
+
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
 import 'package:active_ecommerce_flutter/custom/text_styles.dart';
 import 'package:active_ecommerce_flutter/custom/useful_elements.dart';
 import 'package:active_ecommerce_flutter/presenter/cart_counter.dart';
 import 'package:active_ecommerce_flutter/screens/select_address.dart';
-import 'package:active_ecommerce_flutter/screens/shipping_info.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:active_ecommerce_flutter/ui_sections/drawer.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:active_ecommerce_flutter/repositories/cart_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:active_ecommerce_flutter/custom/common_functions.dart';
 
 class Cart extends StatefulWidget {
-  Cart({Key key, this.has_bottomnav,this.from_navigation = false, this.counter}) : super(key: key);
+  Cart(
+      {Key key, this.has_bottomnav, this.from_navigation = false, this.counter})
+      : super(key: key);
   final bool has_bottomnav;
   final bool from_navigation;
   final CartCounter counter;
@@ -53,15 +52,13 @@ class _CartState extends State<Cart> {
     }
   }
 
-
   @override
   void dispose() {
     super.dispose();
     _mainScrollController.dispose();
   }
 
-
-  getCartCount()async {
+  getCartCount() async {
     var res = await CartRepository().getCartCount();
     widget.counter.controller.sink.add(res.count);
   }
@@ -156,7 +153,7 @@ class _CartState extends State<Cart> {
                 ),
               ),
               actions: [
-                FlatButton(
+                ElevatedButton(
                   child: Text(
                     AppLocalizations.of(context).cart_screen_cancel,
                     style: TextStyle(color: MyTheme.medium_grey),
@@ -165,8 +162,7 @@ class _CartState extends State<Cart> {
                     Navigator.of(context, rootNavigator: true).pop();
                   },
                 ),
-                FlatButton(
-                  color: MyTheme.soft_accent_color,
+                ElevatedButton(
                   child: Text(
                     AppLocalizations.of(context).cart_screen_confirm,
                     style: TextStyle(color: MyTheme.dark_grey),
@@ -330,7 +326,7 @@ class _CartState extends State<Cart> {
       height: widget.has_bottomnav ? 200 : 120,
       //color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4),
         child: Column(
           children: [
             Container(
@@ -345,8 +341,10 @@ class _CartState extends State<Cart> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       AppLocalizations.of(context).cart_screen_total_amount,
-                      style:
-                          TextStyle(color: MyTheme.dark_font_grey, fontSize: 13,fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          color: MyTheme.dark_font_grey,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                   Spacer(),
@@ -385,25 +383,7 @@ class _CartState extends State<Cart> {
                                 topRight: const Radius.circular(0.0),
                                 bottomRight: const Radius.circular(0.0),
                               )),
-                    child: FlatButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      //height: 50,
-                      color: MyTheme.soft_accent_color,
-                      shape: app_language_rtl.$
-                          ? RoundedRectangleBorder(
-                              borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(0.0),
-                              bottomLeft: const Radius.circular(0.0),
-                              topRight: const Radius.circular(6.0),
-                              bottomRight: const Radius.circular(6.0),
-                            ))
-                          : RoundedRectangleBorder(
-                              borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(6.0),
-                              bottomLeft: const Radius.circular(6.0),
-                              topRight: const Radius.circular(0.0),
-                              bottomRight: const Radius.circular(0.0),
-                            )),
+                    child: ElevatedButton(
                       child: Text(
                         AppLocalizations.of(context).cart_screen_update_cart,
                         style: TextStyle(
@@ -439,25 +419,7 @@ class _CartState extends State<Cart> {
                                 topRight: const Radius.circular(6.0),
                                 bottomRight: const Radius.circular(6.0),
                               )),
-                    child: FlatButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      //height: 50,
-                      color: MyTheme.accent_color,
-                      shape: app_language_rtl.$
-                          ? RoundedRectangleBorder(
-                              borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(6.0),
-                              bottomLeft: const Radius.circular(6.0),
-                              topRight: const Radius.circular(0.0),
-                              bottomRight: const Radius.circular(0.0),
-                            ))
-                          : RoundedRectangleBorder(
-                              borderRadius: const BorderRadius.only(
-                              topLeft: const Radius.circular(0.0),
-                              bottomLeft: const Radius.circular(0.0),
-                              topRight: const Radius.circular(6.0),
-                              bottomRight: const Radius.circular(6.0),
-                            )),
+                    child: ElevatedButton(
                       child: Text(
                         AppLocalizations.of(context)
                             .cart_screen_proceed_to_shipping,
@@ -484,8 +446,9 @@ class _CartState extends State<Cart> {
     return AppBar(
       backgroundColor: Colors.white,
       leading: Builder(
-        builder: (context) =>
-            widget.from_navigation ? UsefulElements.backToMain(context, go_back: false) : UsefulElements.backButton(context),
+        builder: (context) => widget.from_navigation
+            ? UsefulElements.backToMain(context, go_back: false)
+            : UsefulElements.backButton(context),
       ),
       title: Text(
         AppLocalizations.of(context).cart_screen_shopping_cart,
@@ -587,7 +550,7 @@ class _CartState extends State<Cart> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-                width: DeviceInfo(context).width/4,
+                width: DeviceInfo(context).width / 4,
                 height: 120,
                 child: ClipRRect(
                     borderRadius: BorderRadius.horizontal(
@@ -601,7 +564,7 @@ class _CartState extends State<Cart> {
                     ))),
             Container(
               //color: Colors.red,
-              width: DeviceInfo(context).width/3,
+              width: DeviceInfo(context).width / 3,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
                 child: Column(

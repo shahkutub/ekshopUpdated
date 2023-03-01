@@ -504,23 +504,12 @@ class CustomSelectorButton extends StatelessWidget {
             height: 36,
             decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border.all(
-                    color: MyTheme.textfield_grey,
-                    width: .5
-                ),
+                border: Border.all(color: MyTheme.textfield_grey, width: .5),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(5.0),
                     bottomLeft: Radius.circular(5.0))),
-            child: FlatButton(
+            child: ElevatedButton(
               key: Key(TestHelper.DropdownButtonKeyValue),
-              padding: EdgeInsets.zero,
-              minWidth: 0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.only(
-                topLeft: const Radius.circular(5.0),
-                bottomLeft: const Radius.circular(5.0),
-              )),
               onPressed: countries.isNotEmpty &&
                       countries.length > 1 &&
                       isEnabled

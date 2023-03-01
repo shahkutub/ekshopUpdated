@@ -32,15 +32,16 @@ class _PasswordOtpState extends State<PasswordOtp> {
   TextEditingController _passwordConfirmController = TextEditingController();
   bool _resetPasswordSuccess = false;
 
-  String headeText ="";
+  String headeText = "";
 
   FlipCardController cardController = FlipCardController();
 
   @override
   void initState() {
     Future.delayed(Duration.zero).then((value) {
-      headeText = AppLocalizations.of(context).password_otp_screen_enter_the_code_sent;
-      setState((){});
+      headeText =
+          AppLocalizations.of(context).password_otp_screen_enter_the_code_sent;
+      setState(() {});
     });
     //on Splash Screen hide statusbar
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
@@ -56,7 +57,6 @@ class _PasswordOtpState extends State<PasswordOtp> {
   }
 
   onPressConfirm() async {
-
     var code = _codeController.text.toString();
     var password = _passwordController.text.toString();
     var password_confirm = _passwordConfirmController.text.toString();
@@ -106,9 +106,10 @@ class _PasswordOtpState extends State<PasswordOtp> {
       ToastComponent.showDialog(passwordConfirmResponse.message,
           gravity: Toast.center, duration: Toast.lengthLong);
 
-      headeText=AppLocalizations.of(context).password_otp_screen_password_changed;
+      headeText =
+          AppLocalizations.of(context).password_otp_screen_password_changed;
       cardController.toggleCard();
-      setState((){});
+      setState(() {});
     }
   }
 
@@ -125,8 +126,9 @@ class _PasswordOtpState extends State<PasswordOtp> {
     }
   }
 
-  gotoLoginScreen(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Login()));
+  gotoLoginScreen() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   @override
@@ -138,10 +140,10 @@ class _PasswordOtpState extends State<PasswordOtp> {
         context,
         headeText,
         WillPopScope(
-          onWillPop: (){
-            gotoLoginScreen();
-           return Future.delayed(Duration.zero);
-          },
+            onWillPop: () {
+              gotoLoginScreen();
+              return Future.delayed(Duration.zero);
+            },
             child: buildBody(context, _screen_width, _verify_by)));
   }
 
@@ -277,13 +279,7 @@ class _PasswordOtpState extends State<PasswordOtp> {
                               color: MyTheme.textfield_grey, width: 1),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(12.0))),
-                      child: FlatButton(
-                        minWidth: MediaQuery.of(context).size.width,
-                        //height: 50,
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12.0))),
+                      child: ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context).common_confirm_ucfirst,
                           style: TextStyle(
@@ -363,13 +359,7 @@ class _PasswordOtpState extends State<PasswordOtp> {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 height: 45,
-                child: FlatButton(
-                  minWidth: MediaQuery.of(context).size.width,
-                  //height: 50,
-                  color: MyTheme.accent_color,
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(6.0))),
+                child: ElevatedButton(
                   child: Text(
                     AppLocalizations.of(context)
                         .password_otp_screen_back_to_Login,

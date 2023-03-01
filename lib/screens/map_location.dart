@@ -19,7 +19,6 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/repositories/address_repository.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class MapLocation extends StatefulWidget {
   MapLocation({Key key, this.address}) : super(key: key);
   var address;
@@ -49,11 +48,9 @@ class MapLocationState extends State<MapLocation>
     // TODO: implement initState
     super.initState();
 
-
-
     if (widget.address.location_available) {
       setInitialLocation();
-    }else{
+    } else {
       setDummyInitialLocation();
     }
   }
@@ -70,27 +67,27 @@ class MapLocationState extends State<MapLocation>
   }
 
   onTapPickHere(selectedPlace) async {
-
-    var addressUpdateLocationResponse = await AddressRepository().getAddressUpdateLocationResponse(
-        widget.address.id,
-        selectedPlace.geometry.location.lat,
-        selectedPlace.geometry.location.lng
-        );
+    var addressUpdateLocationResponse = await AddressRepository()
+        .getAddressUpdateLocationResponse(
+            widget.address.id,
+            selectedPlace.geometry.location.lat,
+            selectedPlace.geometry.location.lng);
 
     if (addressUpdateLocationResponse.result == false) {
-      ToastComponent.showDialog(addressUpdateLocationResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+      ToastComponent.showDialog(addressUpdateLocationResponse.message,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
-    ToastComponent.showDialog(addressUpdateLocationResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
-
+    ToastComponent.showDialog(addressUpdateLocationResponse.message,
+        gravity: Toast.center, duration: Toast.lengthLong);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return PlacePicker(
-      hintText:  AppLocalizations.of(context).map_location_screen_your_delivery_location,
+      hintText: AppLocalizations.of(context)
+          .map_location_screen_your_delivery_location,
       apiKey: OtherConfig.GOOGLE_MAP_API_KEY,
       initialPosition: kInitialPosition,
       useCurrentLocation: false,
@@ -102,8 +99,8 @@ class MapLocationState extends State<MapLocation>
       onPlacePicked: (result) {
         selectedPlace = result;
 
-        print("onPlacePicked..."+result.toString());
-       // Navigator.of(context).pop();
+        print("onPlacePicked..." + result.toString());
+        // Navigator.of(context).pop();
         setState(() {});
       },
       //forceSearchOnZoomChanged: true,
@@ -114,7 +111,7 @@ class MapLocationState extends State<MapLocation>
       selectedPlaceWidgetBuilder:
           (_, selectedPlace, state, isSearchBarFocused) {
         //print("state: $state, isSearchBarFocused: $isSearchBarFocused");
-       //print(selectedPlace.toString());
+        //print(selectedPlace.toString());
         //print("-------------");
         /*
         if(!isSearchBarFocused && state != SearchingState.Searching){
@@ -139,7 +136,8 @@ class MapLocationState extends State<MapLocation>
                 child: state == SearchingState.Searching
                     ? Center(
                         child: Text(
-                          AppLocalizations.of(context).map_location_screen_calculating,
+                        AppLocalizations.of(context)
+                            .map_location_screen_calculating,
                         style: TextStyle(color: MyTheme.font_grey),
                       ))
                     : Padding(
@@ -165,17 +163,10 @@ class MapLocationState extends State<MapLocation>
                             ),
                             Expanded(
                               flex: 1,
-                              child: FlatButton(
-                                color: MyTheme.accent_color,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: const BorderRadius.only(
-                                  topLeft: const Radius.circular(4.0),
-                                  bottomLeft: const Radius.circular(4.0),
-                                  topRight: const Radius.circular(4.0),
-                                  bottomRight: const Radius.circular(4.0),
-                                )),
+                              child: ElevatedButton(
                                 child: Text(
-                                  AppLocalizations.of(context).map_location_screen_pick_here,
+                                  AppLocalizations.of(context)
+                                      .map_location_screen_pick_here,
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {

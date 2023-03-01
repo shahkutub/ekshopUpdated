@@ -3,7 +3,6 @@ import 'package:active_ecommerce_flutter/custom/lang_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:active_ecommerce_flutter/repositories/address_repository.dart';
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
@@ -12,7 +11,6 @@ import 'package:active_ecommerce_flutter/data_model/state_response.dart';
 import 'package:active_ecommerce_flutter/data_model/country_response.dart';
 import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
-import 'package:active_ecommerce_flutter/other_config.dart';
 import 'package:active_ecommerce_flutter/screens/map_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -169,7 +167,7 @@ class _AddressState extends State<Address> {
 
   onAddressSwitch(index) async {
     var addressMakeDefaultResponse =
-    await AddressRepository().getAddressMakeDefaultResponse(index);
+        await AddressRepository().getAddressMakeDefaultResponse(index);
 
     if (addressMakeDefaultResponse.result == false) {
       ToastComponent.showDialog(addressMakeDefaultResponse.message,
@@ -189,46 +187,45 @@ class _AddressState extends State<Address> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          contentPadding: EdgeInsets.only(
-              top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
-          content: Padding(
-            padding:
-            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              AppLocalizations.of(context)
-                  .address_screen_address_remove_warning,
-              maxLines: 3,
-              style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
-            ),
-          ),
-          actions: [
-            FlatButton(
-              child: Text(
-                AppLocalizations.of(context).common_cancel_ucfirst,
-                style: TextStyle(color: MyTheme.medium_grey),
+              contentPadding: EdgeInsets.only(
+                  top: 16.0, left: 2.0, right: 2.0, bottom: 2.0),
+              content: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Text(
+                  AppLocalizations.of(context)
+                      .address_screen_address_remove_warning,
+                  maxLines: 3,
+                  style: TextStyle(color: MyTheme.font_grey, fontSize: 14),
+                ),
               ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-            ),
-            FlatButton(
-              color: MyTheme.soft_accent_color,
-              child: Text(
-                AppLocalizations.of(context).common_confirm_ucfirst,
-                style: TextStyle(color: MyTheme.dark_grey),
-              ),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true).pop();
-                confirmDelete(id);
-              },
-            ),
-          ],
-        ));
+              actions: [
+                ElevatedButton(
+                  child: Text(
+                    AppLocalizations.of(context).common_cancel_ucfirst,
+                    style: TextStyle(color: MyTheme.medium_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text(
+                    AppLocalizations.of(context).common_confirm_ucfirst,
+                    style: TextStyle(color: MyTheme.dark_grey),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    confirmDelete(id);
+                  },
+                ),
+              ],
+            ));
   }
 
   confirmDelete(id) async {
     var addressDeleteResponse =
-    await AddressRepository().getAddressDeleteResponse(id);
+        await AddressRepository().getAddressDeleteResponse(id);
 
     if (addressDeleteResponse.result == false) {
       ToastComponent.showDialog(addressDeleteResponse.message,
@@ -339,13 +336,13 @@ class _AddressState extends State<Address> {
 
     var addressUpdateResponse = await AddressRepository()
         .getAddressUpdateResponse(
-        id: id,
-        address: address,
-        country_id: _selected_country_list_for_update[index].id,
-        state_id: _selected_state_list_for_update[index].id,
-        city_id: _selected_city_list_for_update[index].id,
-        postal_code: postal_code,
-        phone: phone);
+            id: id,
+            address: address,
+            country_id: _selected_country_list_for_update[index].id,
+            state_id: _selected_state_list_for_update[index].id,
+            city_id: _selected_city_list_for_update[index].id,
+            postal_code: postal_code,
+            phone: phone);
 
     if (addressUpdateResponse.result == false) {
       ToastComponent.showDialog(addressUpdateResponse.message,
@@ -504,46 +501,38 @@ class _AddressState extends State<Address> {
             slivers: [
               SliverList(
                   delegate: SliverChildListDelegate([
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: FlatButton(
-                        minWidth: MediaQuery.of(context).size.width - 16,
-                        height: 90,
-                        color: MyTheme.amber,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                                color: Colors.amber.shade600, width: 1.0)),
-                        child: Column(
-                          children: [
-                            Text(
-                              "${AppLocalizations.of(context).common_no_address_added}",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: MyTheme.dark_font_grey,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Icon(
-                              Icons.add_sharp,
-                              color: MyTheme.accent_color,
-                              size: 30,
-                            ),
-                          ],
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: ElevatedButton(
+                    child: Column(
+                      children: [
+                        Text(
+                          "${AppLocalizations.of(context).common_no_address_added}",
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: MyTheme.dark_font_grey,
+                              fontWeight: FontWeight.bold),
                         ),
-                        onPressed: () {
-                          buildShowAddFormDialog(context);
-                        },
-                      ),
+                        Icon(
+                          Icons.add_sharp,
+                          color: MyTheme.accent_color,
+                          size: 30,
+                        ),
+                      ],
                     ),
-                    Container(
-
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: buildAddressList(),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    )
-                  ]))
+                    onPressed: () {
+                      buildShowAddFormDialog(context);
+                    },
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: buildAddressList(),
+                ),
+                SizedBox(
+                  height: 100,
+                )
+              ]))
             ],
           ),
         ));
@@ -584,7 +573,10 @@ class _AddressState extends State<Address> {
                             autofocus: false,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
-                            decoration: buildAddressInputDecoration(context,AppLocalizations.of(context).address_screen_enter_address),
+                            decoration: buildAddressInputDecoration(
+                                context,
+                                AppLocalizations.of(context)
+                                    .address_screen_enter_address),
                           ),
                         ),
                       ),
@@ -647,8 +639,10 @@ class _AddressState extends State<Address> {
                               onSubmitted: (txt) {
                                 // keep this blank
                               },
-                              decoration: buildAddressInputDecoration(context,  AppLocalizations.of(context)
-                                  .address_screen_enter_country),
+                              decoration: buildAddressInputDecoration(
+                                  context,
+                                  AppLocalizations.of(context)
+                                      .address_screen_enter_country),
                             ),
                           ),
                         ),
@@ -673,8 +667,8 @@ class _AddressState extends State<Address> {
                               }
                               var stateResponse = await AddressRepository()
                                   .getStateListByCountry(
-                                  country_id: _selected_country.id,
-                                  name: name);
+                                      country_id: _selected_country.id,
+                                      name: name);
                               return stateResponse.states;
                             },
                             loadingBuilder: (context) {
@@ -721,8 +715,10 @@ class _AddressState extends State<Address> {
                                 // setState(() {});
                                 // _onSearchSubmit();
                               },
-                              decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                  .address_screen_enter_state),
+                              decoration: buildAddressInputDecoration(
+                                  context,
+                                  AppLocalizations.of(context)
+                                      .address_screen_enter_state),
                             ),
                           ),
                         ),
@@ -747,7 +743,7 @@ class _AddressState extends State<Address> {
                               }
                               var cityResponse = await AddressRepository()
                                   .getCityListByState(
-                                  state_id: _selected_state.id, name: name);
+                                      state_id: _selected_state.id, name: name);
                               return cityResponse.cities;
                             },
                             loadingBuilder: (context) {
@@ -792,8 +788,10 @@ class _AddressState extends State<Address> {
                               onSubmitted: (txt) {
                                 // keep blank
                               },
-                              decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                  .address_screen_enter_city),
+                              decoration: buildAddressInputDecoration(
+                                  context,
+                                  AppLocalizations.of(context)
+                                      .address_screen_enter_city),
                             ),
                           ),
                         ),
@@ -813,8 +811,10 @@ class _AddressState extends State<Address> {
                           child: TextField(
                             controller: _postalCodeController,
                             autofocus: false,
-                            decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                .address_screen_enter_postal_code),
+                            decoration: buildAddressInputDecoration(
+                                context,
+                                AppLocalizations.of(context)
+                                    .address_screen_enter_postal_code),
                           ),
                         ),
                       ),
@@ -832,8 +832,10 @@ class _AddressState extends State<Address> {
                           child: TextField(
                             controller: _phoneController,
                             autofocus: false,
-                            decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                .address_screen_enter_phone),
+                            decoration: buildAddressInputDecoration(
+                                context,
+                                AppLocalizations.of(context)
+                                    .address_screen_enter_phone),
                           ),
                         ),
                       )
@@ -847,14 +849,7 @@ class _AddressState extends State<Address> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 40,
-                        color: Color.fromRGBO(253, 253, 253, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            side: BorderSide(
-                                color: MyTheme.light_grey, width: 1)),
+                      child: ElevatedButton(
                         child: Text(
                           LangText(context).local.common_close_ucfirst,
                           style: TextStyle(
@@ -873,13 +868,7 @@ class _AddressState extends State<Address> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 28.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 40,
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
+                      child: ElevatedButton(
                         child: Text(
                           LangText(context).local.common_add_ucfirst,
                           style: TextStyle(
@@ -901,7 +890,7 @@ class _AddressState extends State<Address> {
         });
   }
 
-  InputDecoration buildAddressInputDecoration(BuildContext context,hintText) {
+  InputDecoration buildAddressInputDecoration(BuildContext context, hintText) {
     return InputDecoration(
         filled: true,
         fillColor: MyTheme.light_grey,
@@ -955,8 +944,10 @@ class _AddressState extends State<Address> {
                             autofocus: false,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
-                            decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                .address_screen_enter_address),
+                            decoration: buildAddressInputDecoration(
+                                context,
+                                AppLocalizations.of(context)
+                                    .address_screen_enter_address),
                           ),
                         ),
                       ),
@@ -1017,12 +1008,14 @@ class _AddressState extends State<Address> {
                               onTap: () {},
                               //autofocus: true,
                               controller:
-                              _countryControllerListForUpdate[index],
+                                  _countryControllerListForUpdate[index],
                               onSubmitted: (txt) {
                                 // keep this blank
                               },
-                              decoration:buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                  .address_screen_enter_country),
+                              decoration: buildAddressInputDecoration(
+                                  context,
+                                  AppLocalizations.of(context)
+                                      .address_screen_enter_country),
                             ),
                           ),
                         ),
@@ -1048,11 +1041,11 @@ class _AddressState extends State<Address> {
                               }
                               var stateResponse = await AddressRepository()
                                   .getStateListByCountry(
-                                  country_id:
-                                  _selected_country_list_for_update[
-                                  index]
-                                      .id,
-                                  name: name);
+                                      country_id:
+                                          _selected_country_list_for_update[
+                                                  index]
+                                              .id,
+                                      name: name);
                               return stateResponse.states;
                             },
                             loadingBuilder: (context) {
@@ -1100,8 +1093,10 @@ class _AddressState extends State<Address> {
                                 // setState(() {});
                                 // _onSearchSubmit();
                               },
-                              decoration:buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                  .address_screen_enter_state),
+                              decoration: buildAddressInputDecoration(
+                                  context,
+                                  AppLocalizations.of(context)
+                                      .address_screen_enter_state),
                             ),
                           ),
                         ),
@@ -1127,10 +1122,10 @@ class _AddressState extends State<Address> {
                               }
                               var cityResponse = await AddressRepository()
                                   .getCityListByState(
-                                  state_id:
-                                  _selected_state_list_for_update[index]
-                                      .id,
-                                  name: name);
+                                      state_id:
+                                          _selected_state_list_for_update[index]
+                                              .id,
+                                      name: name);
                               return cityResponse.cities;
                             },
                             loadingBuilder: (context) {
@@ -1176,8 +1171,10 @@ class _AddressState extends State<Address> {
                               onSubmitted: (txt) {
                                 // keep blank
                               },
-                              decoration: buildAddressInputDecoration(context,  AppLocalizations.of(context)
-                                  .address_screen_enter_city),
+                              decoration: buildAddressInputDecoration(
+                                  context,
+                                  AppLocalizations.of(context)
+                                      .address_screen_enter_city),
                             ),
                           ),
                         ),
@@ -1196,10 +1193,12 @@ class _AddressState extends State<Address> {
                           height: 40,
                           child: TextField(
                             controller:
-                            _postalCodeControllerListForUpdate[index],
+                                _postalCodeControllerListForUpdate[index],
                             autofocus: false,
-                            decoration:buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                .address_screen_enter_postal_code),
+                            decoration: buildAddressInputDecoration(
+                                context,
+                                AppLocalizations.of(context)
+                                    .address_screen_enter_postal_code),
                           ),
                         ),
                       ),
@@ -1217,8 +1216,10 @@ class _AddressState extends State<Address> {
                           child: TextField(
                             controller: _phoneControllerListForUpdate[index],
                             autofocus: false,
-                            decoration: buildAddressInputDecoration(context, AppLocalizations.of(context)
-                                .address_screen_enter_phone),
+                            decoration: buildAddressInputDecoration(
+                                context,
+                                AppLocalizations.of(context)
+                                    .address_screen_enter_phone),
                           ),
                         ),
                       )
@@ -1232,21 +1233,12 @@ class _AddressState extends State<Address> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 40,
-                        color: Color.fromRGBO(253, 253, 253, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            side: BorderSide(
-                                color: MyTheme.light_grey, width: 1.0)),
+                      child: ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context)
                               .common_close_in_all_capital,
                           style: TextStyle(
-                              color: MyTheme.accent_color,
-                              fontSize: 13
-                          ),
+                              color: MyTheme.accent_color, fontSize: 13),
                         ),
                         onPressed: () {
                           Navigator.of(context, rootNavigator: true).pop();
@@ -1258,13 +1250,7 @@ class _AddressState extends State<Address> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 28.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 40,
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
+                      child: ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context)
                               .common_update_in_all_capital,
@@ -1302,7 +1288,10 @@ class _AddressState extends State<Address> {
         children: [
           Text(
             AppLocalizations.of(context).address_screen_addresses_of_user,
-            style: TextStyle(fontSize: 16, color: MyTheme.dark_font_grey,fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 16,
+                color: MyTheme.dark_font_grey,
+                fontWeight: FontWeight.bold),
           ),
           Text(
             "* ${AppLocalizations.of(context).address_screen_addresses_to_make_default}",
@@ -1322,9 +1311,9 @@ class _AddressState extends State<Address> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).common_login_warning,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).common_login_warning,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     } else if (_isInitial && _shippingAddressList.length == 0) {
       return SingleChildScrollView(
           child: ShimmerHelper()
@@ -1351,9 +1340,9 @@ class _AddressState extends State<Address> {
           height: 100,
           child: Center(
               child: Text(
-                AppLocalizations.of(context).common_no_address_added,
-                style: TextStyle(color: MyTheme.font_grey),
-              )));
+            AppLocalizations.of(context).common_no_address_added,
+            style: TextStyle(color: MyTheme.font_grey),
+          )));
     }
   }
 
@@ -1369,13 +1358,13 @@ class _AddressState extends State<Address> {
         decoration: BoxDecorations.buildBoxDecoration_1().copyWith(
             border: Border.all(
                 color:
-                _default_shipping_address == _shippingAddressList[index].id
-                    ? MyTheme.accent_color
-                    : MyTheme.light_grey,
+                    _default_shipping_address == _shippingAddressList[index].id
+                        ? MyTheme.accent_color
+                        : MyTheme.light_grey,
                 width:
-                _default_shipping_address == _shippingAddressList[index].id
-                    ? 1.0
-                    : 0.0)),
+                    _default_shipping_address == _shippingAddressList[index].id
+                        ? 1.0
+                        : 0.0)),
         child: Stack(
           children: [
             Padding(
@@ -1551,15 +1540,15 @@ class _AddressState extends State<Address> {
             ),
             app_language_rtl.$
                 ? Positioned(
-              left: 0.0,
-              top: 10.0,
-              child: showOptions(listIndex: index),
-            )
+                    left: 0.0,
+                    top: 10.0,
+                    child: showOptions(listIndex: index),
+                  )
                 : Positioned(
-              right: 0.0,
-              top: 10.0,
-              child: showOptions(listIndex: index),
-            ),
+                    right: 0.0,
+                    top: 10.0,
+                    child: showOptions(listIndex: index),
+                  ),
             /*  app_language_rtl.$
                 ? Positioned(
                     left: 0,
@@ -1636,13 +1625,7 @@ class _AddressState extends State<Address> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              FlatButton(
-                minWidth: MediaQuery.of(context).size.width,
-                height: 50,
-                color: MyTheme.accent_color,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                ),
+              ElevatedButton(
                 child: Text(
                   AppLocalizations.of(context)
                       .address_screen_back_to_shipping_info,
@@ -1698,7 +1681,7 @@ class _AddressState extends State<Address> {
           PopupMenuItem<MenuOptions>(
             value: MenuOptions.AddLocation,
             child:
-            Text(AppLocalizations.of(context).address_screen_add_location),
+                Text(AppLocalizations.of(context).address_screen_add_location),
           ),
         ],
       ),

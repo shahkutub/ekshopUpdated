@@ -181,9 +181,15 @@ class _ProfileState extends State<Profile> {
                         margin: EdgeInsets.only(right: 18),
                         height: 30,
                         child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
-                            }, child: Icon(Icons.close,color: MyTheme.white,size: 20,)),),
+                            },
+                            child: Icon(
+                              Icons.close,
+                              color: MyTheme.white,
+                              size: 20,
+                            )),
+                      ),
                     ),
 
                     // Container(
@@ -209,7 +215,6 @@ class _ProfileState extends State<Profile> {
                 slivers: [
                   SliverList(
                     delegate: SliverChildListDelegate([
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
                         child: buildCountersRow(),
@@ -316,12 +321,9 @@ class _ProfileState extends State<Profile> {
             height: 40,
             child: TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return DigitalProducts(
-
-                      );
-                    }));
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DigitalProducts();
+                }));
               },
               style: TextButton.styleFrom(
                   splashFactory: NoSplash.splashFactory,
@@ -355,11 +357,9 @@ class _ProfileState extends State<Profile> {
             height: 40,
             child: TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return AuctionProducts(
-                      );
-                    }));
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return AuctionProducts();
+                }));
               },
               style: TextButton.styleFrom(
                   splashFactory: NoSplash.splashFactory,
@@ -393,12 +393,9 @@ class _ProfileState extends State<Profile> {
             height: 40,
             child: TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return WholeSaleProducts(
-
-                      );
-                    }));
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return WholeSaleProducts();
+                }));
               },
               style: TextButton.styleFrom(
                   splashFactory: NoSplash.splashFactory,
@@ -432,12 +429,11 @@ class _ProfileState extends State<Profile> {
             height: 40,
             child: TextButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                      return Filter(
-                        selected_filter: "sellers",
-                      );
-                    }));
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return Filter(
+                    selected_filter: "sellers",
+                  );
+                }));
               },
               style: TextButton.styleFrom(
                   splashFactory: NoSplash.splashFactory,
@@ -634,7 +630,6 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-
 
   Widget buildSettingAndAddonsHorizontalMenu() {
     return Container(
@@ -860,7 +855,8 @@ class _ProfileState extends State<Profile> {
                   height: 40,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
                         return Wallet();
                       }));
                     },
@@ -883,8 +879,8 @@ class _ProfileState extends State<Profile> {
                         Text(
                           AppLocalizations.of(context).wallet_screen_my_wallet,
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
+                          style: TextStyle(
+                              color: MyTheme.dark_font_grey, fontSize: 12),
                         )
                       ],
                     ),
@@ -982,7 +978,8 @@ class _ProfileState extends State<Profile> {
                   height: 40,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
                         return Clubpoint();
                       }));
                     },
@@ -1006,8 +1003,8 @@ class _ProfileState extends State<Profile> {
                           AppLocalizations.of(context)
                               .club_point_screen_earned_points,
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
+                          style: TextStyle(
+                              color: MyTheme.dark_font_grey, fontSize: 12),
                         )
                       ],
                     ),
@@ -1029,7 +1026,8 @@ class _ProfileState extends State<Profile> {
                   height: 40,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
                         return RefundRequest();
                       }));
                     },
@@ -1053,8 +1051,8 @@ class _ProfileState extends State<Profile> {
                           AppLocalizations.of(context)
                               .refund_request_screen_refund_requests,
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
+                          style: TextStyle(
+                              color: MyTheme.dark_font_grey, fontSize: 12),
                         )
                       ],
                     ),
@@ -1096,8 +1094,8 @@ class _ProfileState extends State<Profile> {
                     Text(
                       AppLocalizations.of(context).main_drawer_messages,
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(color: MyTheme.dark_font_grey, fontSize: 12),
+                      style: TextStyle(
+                          color: MyTheme.dark_font_grey, fontSize: 12),
                     )
                   ],
                 ),
@@ -1165,9 +1163,8 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget buildTopSection() {
-
     return Container(
-     // color: Colors.amber,
+      // color: Colors.amber,
       alignment: Alignment.center,
       height: 48,
       child: Row(
@@ -1204,7 +1201,6 @@ class _ProfileState extends State<Profile> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
-
             children: [
               Text(
                 "${user_name.$}",
@@ -1228,12 +1224,7 @@ class _ProfileState extends State<Profile> {
           Container(
             width: 70,
             height: 26,
-            child: FlatButton(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-              // 	rgb(50,205,50)
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  side: BorderSide(color: MyTheme.white)),
+            child: ElevatedButton(
               child: Text(
                 AppLocalizations.of(context).main_drawer_logout,
                 style: TextStyle(

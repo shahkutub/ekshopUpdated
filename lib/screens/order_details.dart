@@ -106,7 +106,6 @@ class _OrderDetailsState extends State<OrderDetails> {
     fetchAll();
   }
 
-
   onPressOfflinePaymentButton() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return Checkout(
@@ -114,7 +113,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         title: AppLocalizations.of(context).checkout_screen_checkout,
         list: "offline",
         manual_payment_from_order_details: true,
-        rechargeAmount:double.parse(_orderDetails.plane_grand_total),
+        rechargeAmount: double.parse(_orderDetails.plane_grand_total),
       );
     })).then((value) {
       onPopped(value);
@@ -248,14 +247,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 30,
-                        color: Color.fromRGBO(253, 253, 253, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                                color: MyTheme.light_grey, width: 1.0)),
+                      child: ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context)
                               .common_close_in_all_capital,
@@ -274,14 +266,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 28.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 30,
-                        color: MyTheme.accent_color,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                                color: MyTheme.light_grey, width: 1.0)),
+                      child: ElevatedButton(
                         child: Text(
                           AppLocalizations.of(context).common_submit,
                           style: TextStyle(
@@ -325,14 +310,15 @@ class _OrderDetailsState extends State<OrderDetails> {
         .getRefundRequestSendResponse(id: item_id, reason: reason);
 
     if (refundRequestSendResponse.result == false) {
-      ToastComponent.showDialog(refundRequestSendResponse.message, gravity: Toast.center, duration: Toast.lengthLong);
+      ToastComponent.showDialog(refundRequestSendResponse.message,
+          gravity: Toast.center, duration: Toast.lengthLong);
       return;
     }
 
     Navigator.of(context, rootNavigator: true).pop();
     _refundReasonController.clear();
 
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         refundRequestSendResponse.message,
         style: TextStyle(color: MyTheme.font_grey),
@@ -391,7 +377,8 @@ class _OrderDetailsState extends State<OrderDetails> {
               slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0,vertical: 20.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 20.0),
                       child: _orderDetails != null
                           ? buildTimeLineTiles()
                           : buildTimeLineShimmer()),
@@ -399,7 +386,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                 SliverList(
                     delegate: SliverChildListDelegate([
                   Padding(
-                    padding: const EdgeInsets.only(left:18.0,right:18.0,bottom: 20.0),
+                    padding: const EdgeInsets.only(
+                        left: 18.0, right: 18.0, bottom: 20.0),
                     child: _orderDetails != null
                         ? buildOrderDetailsTopCard()
                         : ShimmerHelper().buildBasicShimmer(height: 150.0),
@@ -418,7 +406,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                   ),
                   Padding(
-                     padding: const EdgeInsets.only(left:18.0,right:18.0,top: 14.0),
+                      padding: const EdgeInsets.only(
+                          left: 18.0, right: 18.0, top: 14.0),
                       child: _orderedItemList.length == 0 && _orderItemsInit
                           ? ShimmerHelper().buildBasicShimmer(height: 100.0)
                           : (_orderedItemList.length > 0
@@ -435,7 +424,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                 SliverList(
                     delegate: SliverChildListDelegate([
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0,vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18.0, vertical: 20),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -922,7 +912,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     );
   }
 
-   buildOrderDetailsTopCard() {
+  buildOrderDetailsTopCard() {
     return Container(
       decoration: BoxDecorations.buildBoxDecoration_1(),
       child: Padding(
@@ -1193,7 +1183,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     );
   }
 
-   buildOrderedProductItemsCard(index) {
+  buildOrderedProductItemsCard(index) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(14.0),
@@ -1331,9 +1321,8 @@ class _OrderDetailsState extends State<OrderDetails> {
       decoration: BoxDecorations.buildBoxDecoration_1(),
       child: SingleChildScrollView(
         child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(
-              color: MyTheme.medium_grey
-          ),
+          separatorBuilder: (context, index) =>
+              Divider(color: MyTheme.medium_grey),
           itemCount: _orderedItemList.length,
           scrollDirection: Axis.vertical,
           physics: NeverScrollableScrollPhysics(),
@@ -1374,13 +1363,12 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   buildPaymentButtonSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0,vertical: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _orderDetails != null && _orderDetails.manually_payable
-              ? FlatButton(
-                  color: MyTheme.soft_accent_color,
+              ? ElevatedButton(
                   child: Text(
                     AppLocalizations.of(context)
                         .order_details_screen_make_offline_payment,

@@ -46,18 +46,20 @@ class ProductDetails extends StatefulWidget {
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _ProductDetailsState extends State<ProductDetails> with TickerProviderStateMixin{
+class _ProductDetailsState extends State<ProductDetails>
+    with TickerProviderStateMixin {
   bool _showCopied = false;
   String _appbarPriceString = ". . .";
   int _currentImage = 0;
-  ScrollController _mainScrollController = ScrollController(initialScrollOffset: 0.0);
+  ScrollController _mainScrollController =
+      ScrollController(initialScrollOffset: 0.0);
   ScrollController _colorScrollController = ScrollController();
   ScrollController _variantScrollController = ScrollController();
   ScrollController _imageScrollController = ScrollController();
   TextEditingController sellerChatTitleController = TextEditingController();
   TextEditingController sellerChatMessageController = TextEditingController();
 
-  double _scrollPosition=0.0;
+  double _scrollPosition = 0.0;
 
   Animation _colorTween;
   AnimationController _ColorAnimationController;
@@ -81,7 +83,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
   int _quantity = 1;
   int _stock = 0;
 
-  double opacity =0;
+  double opacity = 0;
 
   List<dynamic> _relatedProducts = [];
   bool _relatedProductInit = false;
@@ -90,7 +92,6 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
   @override
   void initState() {
-
     _ColorAnimationController =
         AnimationController(vsync: this, duration: Duration(seconds: 0));
 
@@ -98,39 +99,28 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         .animate(_ColorAnimationController);
 
     _mainScrollController.addListener(() {
-      _scrollPosition =  _mainScrollController.position.pixels;
+      _scrollPosition = _mainScrollController.position.pixels;
 
-
-      if (_mainScrollController.position.userScrollDirection == ScrollDirection.forward) {
-
+      if (_mainScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
         if (100 > _scrollPosition && _scrollPosition > 1) {
-
-            opacity = _scrollPosition / 100;
-
+          opacity = _scrollPosition / 100;
         }
+      }
 
-        }
+      if (_mainScrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (100 > _scrollPosition && _scrollPosition > 1) {
+          opacity = _scrollPosition / 100;
 
-        if (_mainScrollController.position.userScrollDirection ==
-            ScrollDirection.reverse) {
-          if (100 > _scrollPosition && _scrollPosition > 1) {
-
-              opacity = _scrollPosition / 100;
-
-
-            if(100 > _scrollPosition){
-
-                opacity = 1;
-
-            }
-
-
+          if (100 > _scrollPosition) {
+            opacity = 1;
           }
-
         }
+      }
       print("opachity{} $_scrollPosition");
 
-        setState((){});
+      setState(() {});
     });
     fetchAll();
     super.initState();
@@ -395,7 +385,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     } else {
       if (mode == "add_to_cart") {
         if (snackbar != null && context != null) {
-          Scaffold.of(context).showSnackBar(snackbar);
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
         reset();
         fetchAll();
@@ -443,14 +433,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
-                        child: FlatButton(
-                          minWidth: 75,
-                          height: 26,
-                          color: Color.fromRGBO(253, 253, 253, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side:
-                                  BorderSide(color: Colors.black, width: 1.0)),
+                        child: ElevatedButton(
                           child: Text(
                             AppLocalizations.of(context)
                                 .product_details_screen_copy_product_link,
@@ -476,14 +459,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                           : Container(),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
-                        child: FlatButton(
-                          minWidth: 75,
-                          height: 26,
-                          color: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side:
-                                  BorderSide(color: Colors.black, width: 1.0)),
+                        child: ElevatedButton(
                           child: Text(
                             AppLocalizations.of(context)
                                 .product_details_screen_share_options,
@@ -507,14 +483,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                       padding: app_language_rtl.$
                           ? EdgeInsets.only(left: 8.0)
                           : EdgeInsets.only(right: 8.0),
-                      child: FlatButton(
-                        minWidth: 75,
-                        height: 30,
-                        color: Color.fromRGBO(253, 253, 253, 1),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            side: BorderSide(
-                                color: MyTheme.font_grey, width: 1.0)),
+                      child: ElevatedButton(
                         child: Text(
                           "CLOSE",
                           style: TextStyle(
@@ -649,14 +618,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: FlatButton(
-                          minWidth: 75,
-                          height: 30,
-                          color: Color.fromRGBO(253, 253, 253, 1),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide(
-                                  color: MyTheme.light_grey, width: 1.0)),
+                        child: ElevatedButton(
                           child: Text(
                             AppLocalizations.of(context)
                                 .common_close_in_all_capital,
@@ -674,14 +636,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                        child: FlatButton(
-                          minWidth: 75,
-                          height: 30,
-                          color: MyTheme.accent_color,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              side: BorderSide(
-                                  color: MyTheme.light_grey, width: 1.0)),
+                        child: ElevatedButton(
                           child: Text(
                             AppLocalizations.of(context)
                                 .common_send_in_all_capital,
@@ -746,8 +701,6 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
@@ -777,9 +730,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     return Directionality(
       textDirection: app_language_rtl.$ ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        extendBody: true,
-         bottomNavigationBar:
-         buildBottomAppBar(context, _addedToCartSnackbar),
+          extendBody: true,
+          bottomNavigationBar: buildBottomAppBar(context, _addedToCartSnackbar),
           //appBar: buildAppBar(statusBarHeight, context),
           body: RefreshIndicator(
             color: MyTheme.accent_color,
@@ -818,11 +770,17 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                         ),
                       ),
                       AnimatedOpacity(
-                        opacity: _scrollPosition>350?1:0,
+                          opacity: _scrollPosition > 350 ? 1 : 0,
                           duration: Duration(milliseconds: 200),
                           child: Container(
-                            width: DeviceInfo(context).width/1.8,
-                              child: Text("${_productDetails!=null?_productDetails.name:''}",style: TextStyle(color: MyTheme.dark_font_grey,fontSize: 13,fontWeight: FontWeight.bold),))),
+                              width: DeviceInfo(context).width / 1.8,
+                              child: Text(
+                                "${_productDetails != null ? _productDetails.name : ''}",
+                                style: TextStyle(
+                                    color: MyTheme.dark_font_grey,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold),
+                              ))),
                       Spacer(),
                       InkWell(
                         onTap: () {
@@ -1324,11 +1282,15 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
           _productDetails.added_by == "admin"
               ? Container()
               : InkWell(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SellerDetails(id: _productDetails.shop_id,)));
-
-            },
-                child: Padding(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SellerDetails(
+                                  id: _productDetails.shop_id,
+                                )));
+                  },
+                  child: Padding(
                     padding: app_language_rtl.$
                         ? EdgeInsets.only(left: 8.0)
                         : EdgeInsets.only(right: 8.0),
@@ -1351,7 +1313,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                       ),
                     ),
                   ),
-              ),
+                ),
           Container(
             width: MediaQuery.of(context).size.width * (.5),
             child: Column(
@@ -1390,8 +1352,8 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
                           onTapSellerChat();
                         },
-                        child: Image.asset('assets/chat.png',height: 16,width: 16, color: MyTheme.dark_grey)
-                        ),
+                        child: Image.asset('assets/chat.png',
+                            height: 16, width: 16, color: MyTheme.dark_grey)),
                   ],
                 )),
           )
@@ -1409,14 +1371,14 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
         children: [
           Container(
             child: Padding(
-
               padding: app_language_rtl.$
                   ? EdgeInsets.only(left: 8.0)
                   : EdgeInsets.only(right: 8.0),
               child: Container(
                 width: 75,
                 child: Text(
-                  AppLocalizations.of(context).product_details_screen_total_price,
+                  AppLocalizations.of(context)
+                      .product_details_screen_total_price,
                   style: TextStyle(
                       color: Color.fromRGBO(153, 153, 153, 1), fontSize: 10),
                 ),
@@ -1671,7 +1633,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               BoxShadow(
                 color: Colors.black.withOpacity(0.12),
                 blurRadius: 6,
-                spreadRadius:1,
+                spreadRadius: 1,
                 offset: Offset(0.0, 3.0), // shadow direction: bottom right
               )
             ],
@@ -1712,14 +1674,17 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
           ),
         ),
         Container(
-          alignment:app_language_rtl.$ ?Alignment.centerRight:Alignment.centerLeft,
+          alignment:
+              app_language_rtl.$ ? Alignment.centerRight : Alignment.centerLeft,
           height: 40,
           width: MediaQuery.of(context).size.width - (107 + 44),
           child: Scrollbar(
             controller: _colorScrollController,
             child: ListView.separated(
-              separatorBuilder: (context,index){
-                return SizedBox(width: 10,);
+              separatorBuilder: (context, index) {
+                return SizedBox(
+                  width: 10,
+                );
               },
               itemCount: _colorList.length,
               scrollDirection: Axis.horizontal,
@@ -1754,15 +1719,16 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
           //         ? Colors.purple
           //         : Colors.white,
           //     width: 1),
-           borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(16.0),
           color: ColorHelper.getColorFromColorCode(_colorList[index]),
           boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(_selectedColorIndex == index ?0.25:0.12),
-                    blurRadius: 10,
-                    spreadRadius: 2.0,
-                    offset: Offset(0.0, 6.0), // shadow direction: bottom right
-                  )
+            BoxShadow(
+              color: Colors.black
+                  .withOpacity(_selectedColorIndex == index ? 0.25 : 0.12),
+              blurRadius: 10,
+              spreadRadius: 2.0,
+              offset: Offset(0.0, 6.0), // shadow direction: bottom right
+            )
           ],
         ),
         child: _selectedColorIndex == index
@@ -1802,35 +1768,36 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
 
   Widget buildClubPointRow() {
     return Container(
-
       constraints: BoxConstraints(maxWidth: 130),
       //width: ,
       decoration: BoxDecoration(
           //border: Border.all(color: MyTheme.golden, width: 1),
           borderRadius: BorderRadius.circular(6.0),
           color:
-          //Colors.red,),
-          Color.fromRGBO(253, 235, 212, 1)),
+              //Colors.red,),
+              Color.fromRGBO(253, 235, 212, 1)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
-                Row(
-                  children: [
-                    Image.asset(
-                      "assets/clubpoint.png",
-                      width: 18,
-                      height: 12,
-                    ),
-                    SizedBox(width: 5,),
-                    Text(
-                      AppLocalizations.of(context).product_details_screen_club_point,
-                      style: TextStyle(color: MyTheme.font_grey, fontSize: 10),
-                    ),
-                  ],
+            Row(
+              children: [
+                Image.asset(
+                  "assets/clubpoint.png",
+                  width: 18,
+                  height: 12,
                 ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  AppLocalizations.of(context)
+                      .product_details_screen_club_point,
+                  style: TextStyle(color: MyTheme.font_grey, fontSize: 10),
+                ),
+              ],
+            ),
             Text(
               _productDetails.earn_point.toString(),
               style: TextStyle(color: MyTheme.golden, fontSize: 12.0),
@@ -1918,7 +1885,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     );
   }
 
- Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
+  Widget buildBottomAppBar(BuildContext context, _addedToCartSnackbar) {
     return BottomNavigationBar(
       backgroundColor: MyTheme.white.withOpacity(0.9),
       items: [
@@ -1930,7 +1897,9 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               onPressAddToCart(context, _addedToCartSnackbar);
             },
             child: Container(
-              margin: EdgeInsets.only(left: 18,),
+              margin: EdgeInsets.only(
+                left: 18,
+              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
                 color: MyTheme.accent_color,
@@ -1939,8 +1908,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                     color: MyTheme.accent_color_shadow,
                     blurRadius: 20,
                     spreadRadius: 0.0,
-                    offset:
-                        Offset(0.0, 10.0), // shadow direction: bottom right
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
                   )
                 ],
               ),
@@ -1958,7 +1926,6 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
             ),
           ),
         ),
-
         BottomNavigationBarItem(
           label: "",
           icon: InkWell(
@@ -1966,7 +1933,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               onPressBuyNow(context);
             },
             child: Container(
-              margin: EdgeInsets.only(left: 18,right: 18),
+              margin: EdgeInsets.only(left: 18, right: 18),
               height: 50,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6.0),
@@ -1976,8 +1943,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
                     color: MyTheme.golden_shadow,
                     blurRadius: 20,
                     spreadRadius: 0.0,
-                    offset:
-                        Offset(0.0, 10.0), // shadow direction: bottom right
+                    offset: Offset(0.0, 10.0), // shadow direction: bottom right
                   )
                 ],
               ),
@@ -2134,7 +2100,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
               Builder(
                 builder: (context) {
                   var controller = ExpandableController.of(context);
-                  return FlatButton(
+                  return ElevatedButton(
                     child: Text(
                       !controller.expanded
                           ? AppLocalizations.of(context).common_view_more
@@ -2178,7 +2144,9 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     } else if (_topProducts.length > 0) {
       return SingleChildScrollView(
         child: ListView.separated(
-          separatorBuilder: (context,index)=>SizedBox(height: 14,),
+          separatorBuilder: (context, index) => SizedBox(
+            height: 14,
+          ),
           itemCount: _topProducts.length,
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.only(top: 14),
@@ -2453,7 +2421,7 @@ class _ProductDetailsState extends State<ProductDetails> with TickerProviderStat
     }
   }
 
- Widget buildProductSliderImageSection() {
+  Widget buildProductSliderImageSection() {
     if (_productImageList.length == 0) {
       return ShimmerHelper().buildBasicShimmer(
         height: 190.0,

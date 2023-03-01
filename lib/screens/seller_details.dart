@@ -4,17 +4,16 @@ import 'package:active_ecommerce_flutter/custom/lang_text.dart';
 import 'package:active_ecommerce_flutter/custom/useful_elements.dart';
 import 'package:active_ecommerce_flutter/repositories/product_repository.dart';
 import 'package:active_ecommerce_flutter/screens/seller_products.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:active_ecommerce_flutter/ui_elements/product_card.dart';
-import 'package:active_ecommerce_flutter/ui_elements/list_product_card.dart';
-import 'package:active_ecommerce_flutter/ui_elements/mini_product_card.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:active_ecommerce_flutter/repositories/shop_repository.dart';
-import 'package:active_ecommerce_flutter/app_config.dart';
+
 import 'package:active_ecommerce_flutter/helpers/shimmer_helper.dart';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -63,16 +62,13 @@ class _SellerDetailsState extends State<SellerDetails> {
 
       if (_mainScrollController.position.pixels ==
           _mainScrollController.position.maxScrollExtent) {
-        if(tabOptionIndex ==2) {
-
+        if (tabOptionIndex == 2) {
           print("object");
           setState(() {
-          _page++;
-        });
+            _page++;
+          });
           fetchAllProductData();
         }
-
-
       }
     });
     super.initState();
@@ -86,15 +82,17 @@ class _SellerDetailsState extends State<SellerDetails> {
     super.dispose();
   }
 
-
   fetchAllProductData() async {
-    var productResponse = await ProductRepository().getShopProducts(id:widget.id,page: _page,);
+    var productResponse = await ProductRepository().getShopProducts(
+      id: widget.id,
+      page: _page,
+    );
     _allProductList.addAll(productResponse.products);
     _allProductList.addAll(productResponse.products);
     _isInitialAllProduct = false;
     setState(() {});
   }
-  
+
   fetchAll() {
     fetchShopDetails();
     fetchNewArrivalProducts();
@@ -107,7 +105,7 @@ class _SellerDetailsState extends State<SellerDetails> {
     var shopDetailsResponse = await ShopRepository().getShopInfo(id: widget.id);
 
     //print('ss:' + shopDetailsResponse.toString());
-    if (shopDetailsResponse.shop !=null) {
+    if (shopDetailsResponse.shop != null) {
       _shopDetails = shopDetailsResponse.shop;
     }
 
@@ -155,9 +153,9 @@ class _SellerDetailsState extends State<SellerDetails> {
     _newArrivalProductInit = false;
     _featuredProductInit = false;
 
-     _allProductList.clear();
-     _isInitialAllProduct = true;
-     _page = 1;
+    _allProductList.clear();
+    _isInitialAllProduct = true;
+    _page = 1;
 
     setState(() {});
   }
@@ -218,29 +216,26 @@ class _SellerDetailsState extends State<SellerDetails> {
   }
 
   Widget buildTabBarBody(BuildContext context) {
-
-    if(tabOptionIndex==1){
-     return
-       // false
-     _shopDetails !=null
-         ?
-       buildTopSelling(context):ShimmerHelper().buildProductGridShimmer();
+    if (tabOptionIndex == 1) {
+      return
+          // false
+          _shopDetails != null
+              ? buildTopSelling(context)
+              : ShimmerHelper().buildProductGridShimmer();
     }
-       if(tabOptionIndex==2){
-     return
-       // false
-       _shopDetails !=null
-           ?
-       buildAllProducts(context):
-     ShimmerHelper().buildProductGridShimmer();
+    if (tabOptionIndex == 2) {
+      return
+          // false
+          _shopDetails != null
+              ? buildAllProducts(context)
+              : ShimmerHelper().buildProductGridShimmer();
     }
 
-   return
-     //false
-     _shopDetails !=null
-       ?
-   buildStoreHome(context):
-   buildStoreHomeShimmer(context);
+    return
+        //false
+        _shopDetails != null
+            ? buildStoreHome(context)
+            : buildStoreHomeShimmer(context);
   }
 
   Container buildTopSelling(BuildContext context) {
@@ -256,7 +251,8 @@ class _SellerDetailsState extends State<SellerDetails> {
               0.0,
             ),
             child: Text(
-              AppLocalizations.of(context).top_selling_products_screen_top_selling_products,
+              AppLocalizations.of(context)
+                  .top_selling_products_screen_top_selling_products,
               style: TextStyle(
                   color: MyTheme.font_grey,
                   fontSize: 16,
@@ -319,6 +315,7 @@ class _SellerDetailsState extends State<SellerDetails> {
       ],
     );
   }
+
   Widget buildStoreHomeShimmer(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,8 +328,8 @@ class _SellerDetailsState extends State<SellerDetails> {
             18.0,
             0.0,
           ),
-
-          child: ShimmerHelper().buildBasicShimmer(height: 15,width:90,radius: 0),
+          child: ShimmerHelper()
+              .buildBasicShimmer(height: 15, width: 90, radius: 0),
         ),
         ShimmerHelper().buildProductGridShimmer(),
       ],
@@ -363,7 +360,7 @@ class _SellerDetailsState extends State<SellerDetails> {
           ),
           Container(
             height: 239,
-            padding: EdgeInsets.only(top: 10,bottom: 20),
+            padding: EdgeInsets.only(top: 10, bottom: 20),
             width: double.infinity,
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
@@ -409,31 +406,33 @@ class _SellerDetailsState extends State<SellerDetails> {
             padding: const EdgeInsets.only(left: 18.0, top: 20),
             child: Column(
               children: [
-                ShimmerHelper().buildBasicShimmer(height: 15,width: 90,radius: 0),
+                ShimmerHelper()
+                    .buildBasicShimmer(height: 15, width: 90, radius: 0),
               ],
             ),
           ),
           Container(
             height: 239,
-            padding: EdgeInsets.only(top: 10,bottom: 20),
+            padding: EdgeInsets.only(top: 10, bottom: 20),
             width: double.infinity,
             child: ListView.separated(
               itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                itemBuilder: (context, index) {
-                  return Container(
-                    height: 196,
-                    width: 124,
-                    child:  ShimmerHelper().buildBasicShimmer(height: 196,width: 124),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Container(
-                    width: 14,
-                  );
-                },
-                ),
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 18),
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 196,
+                  width: 124,
+                  child: ShimmerHelper()
+                      .buildBasicShimmer(height: 196, width: 124),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Container(
+                  width: 14,
+                );
+              },
+            ),
           )
         ],
       ),
@@ -512,17 +511,7 @@ class _SellerDetailsState extends State<SellerDetails> {
       height: 30,
       width: DeviceInfo(context).width / 4,
       decoration: BoxDecorations.buildBoxDecoration_1(),
-      child: FlatButton(
-        padding: EdgeInsets.zero,
-        color: tabOptionIndex == index
-            ? MyTheme.accent_color
-            : MyTheme.white,
-        textColor: tabOptionIndex == index
-            ? MyTheme.white
-            : MyTheme.dark_font_grey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
+      child: ElevatedButton(
         onPressed: () {
           tabOptionIndex = index;
           setState(() {});
@@ -633,13 +622,7 @@ class _SellerDetailsState extends State<SellerDetails> {
   }
 
   buildShowProductsButton(BuildContext context) {
-    return FlatButton(
-      minWidth: MediaQuery.of(context).size.width,
-      height: 50,
-      color: MyTheme.accent_color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.0),
-      ),
+    return ElevatedButton(
       child: Text(
         AppLocalizations.of(context)
             .seller_details_screen_btn_view_all_products,
@@ -658,7 +641,7 @@ class _SellerDetailsState extends State<SellerDetails> {
   }
 
   Widget buildTopSellingProducts() {
-    return  MasonryGridView.count(
+    return MasonryGridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 14,
         crossAxisSpacing: 14,
@@ -668,13 +651,13 @@ class _SellerDetailsState extends State<SellerDetails> {
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return ProductCard(
-              id: _topProducts[index].id,
-              image: _topProducts[index].thumbnail_image,
-              name: _topProducts[index].name,
-              main_price: _topProducts[index].main_price,
-              stroked_price: _topProducts[index].stroked_price,
-              has_discount: _topProducts[index].has_discount,
-              discount: _topProducts[index].discount,
+            id: _topProducts[index].id,
+            image: _topProducts[index].thumbnail_image,
+            name: _topProducts[index].name,
+            main_price: _topProducts[index].main_price,
+            stroked_price: _topProducts[index].stroked_price,
+            has_discount: _topProducts[index].has_discount,
+            discount: _topProducts[index].discount,
           );
         });
   }
@@ -694,13 +677,13 @@ class _SellerDetailsState extends State<SellerDetails> {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return ProductCard(
-                id: _newArrivalProducts[index].id,
-                image: _newArrivalProducts[index].thumbnail_image,
-                name: _newArrivalProducts[index].name,
-                main_price: _newArrivalProducts[index].main_price,
-                stroked_price: _newArrivalProducts[index].stroked_price,
-                has_discount: _newArrivalProducts[index].has_discount,
-                discount: _newArrivalProducts[index].discount,
+              id: _newArrivalProducts[index].id,
+              image: _newArrivalProducts[index].thumbnail_image,
+              name: _newArrivalProducts[index].name,
+              main_price: _newArrivalProducts[index].main_price,
+              stroked_price: _newArrivalProducts[index].stroked_price,
+              has_discount: _newArrivalProducts[index].has_discount,
+              discount: _newArrivalProducts[index].discount,
             );
           });
     } else if (_newArrivalProducts.length == 0) {
@@ -711,7 +694,6 @@ class _SellerDetailsState extends State<SellerDetails> {
       return Container(); // should never be happening
     }
   }
-
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
@@ -782,7 +764,7 @@ class _SellerDetailsState extends State<SellerDetails> {
                             ),
                           ),
                           actions: [
-                            FlatButton(
+                            ElevatedButton(
                               child: Text(
                                 AppLocalizations.of(context)
                                     .common_close_in_all_capital,
@@ -858,7 +840,7 @@ class _SellerDetailsState extends State<SellerDetails> {
               height: 30,
               width: 90,
               decoration: BoxDecorations.buildBoxDecoration_1(),
-              child: FlatButton(
+              child: ElevatedButton(
                 padding: EdgeInsets.zero,
                 color: MyTheme.amber,
                 shape: RoundedRectangleBorder(
@@ -958,9 +940,8 @@ class _SellerDetailsState extends State<SellerDetails> {
     );
   }
 
-
   Widget buildAllProductList() {
-    return  MasonryGridView.count(
+    return MasonryGridView.count(
         crossAxisCount: 2,
         mainAxisSpacing: 14,
         crossAxisSpacing: 14,
@@ -970,13 +951,13 @@ class _SellerDetailsState extends State<SellerDetails> {
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return ProductCard(
-              id: _allProductList[index].id,
-              image: _allProductList[index].thumbnail_image,
-              name: _allProductList[index].name,
-              main_price: _allProductList[index].main_price,
-              stroked_price: _allProductList[index].stroked_price,
-              has_discount: _allProductList[index].has_discount,
-              discount: _allProductList[index].discount,
+            id: _allProductList[index].id,
+            image: _allProductList[index].thumbnail_image,
+            name: _allProductList[index].name,
+            main_price: _allProductList[index].main_price,
+            stroked_price: _allProductList[index].stroked_price,
+            has_discount: _allProductList[index].has_discount,
+            discount: _allProductList[index].discount,
           );
         });
   }
