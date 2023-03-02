@@ -27,8 +27,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Home extends StatefulWidget {
-
-  Home({Key key, this.title, this.show_back_button = false, go_back = true, this.counter})
+  Home(
+      {Key key,
+      this.title,
+      this.show_back_button = false,
+      go_back = true,
+      this.counter})
       : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -92,9 +96,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     // In initState()
-    if (AppConfig.purchase_code == "") {
-      initPiratedAnimation();
-    }
+    // if (AppConfig.purchase_code == "") {
+    //   initPiratedAnimation();
+    // }
 
     fetchAll();
 
@@ -113,14 +117,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     });
   }
 
-  getCartCount()async {
+  getCartCount() async {
     var res = await CartRepository().getCartCount();
     widget.counter.controller.sink.add(res.count);
   }
 
-
   fetchAll() {
-
     getCartCount();
 
     fetchCarouselImages();
@@ -133,11 +135,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   fetchCarouselImages() async {
     var carouselResponse = await SlidersRepository().getSliders();
-    carouselResponse.sliders.forEach((slider) {
-      _carouselImageList.add(slider.photo);
+    carouselResponse.forEach((slider) {
+      _carouselImageList.add(slider.image);
     });
     _isCarouselInitial = false;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   fetchBannerOneImages() async {
@@ -229,28 +233,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     setState(() {});
   }
 
-  initPiratedAnimation() {
-    pirated_logo_controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 2000));
-    pirated_logo_animation = Tween(begin: 40.0, end: 60.0).animate(
-        CurvedAnimation(
-            curve: Curves.bounceOut, parent: pirated_logo_controller));
+  // initPiratedAnimation() {
+  //   pirated_logo_controller = AnimationController(
+  //       vsync: this, duration: Duration(milliseconds: 2000));
+  //   pirated_logo_animation = Tween(begin: 40.0, end: 60.0).animate(
+  //       CurvedAnimation(
+  //           curve: Curves.bounceOut, parent: pirated_logo_controller));
 
-    pirated_logo_controller.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        pirated_logo_controller.repeat();
-      }
-    });
+  //   pirated_logo_controller.addStatusListener((AnimationStatus status) {
+  //     if (status == AnimationStatus.completed) {
+  //       pirated_logo_controller.repeat();
+  //     }
+  //   });
 
-    pirated_logo_controller.forward();
-  }
+  //   pirated_logo_controller.forward();
+  // }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     pirated_logo_controller?.dispose();
     _mainScrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -401,7 +405,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -424,11 +429,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                           ]),
                         ),
                         SliverList(
-                            delegate: SliverChildListDelegate(
-                                [
-                                  buildHomeBannerTwo(context),
-                                ],
-                            ),),
+                          delegate: SliverChildListDelegate(
+                            [
+                              buildHomeBannerTwo(context),
+                            ],
+                          ),
+                        ),
                         SliverList(
                           delegate: SliverChildListDelegate([
                             Padding(
@@ -476,7 +482,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  Widget  buildHomeAllProducts(context) {
+  Widget buildHomeAllProducts(context) {
     if (_isAllProductInitial && _allProductList.length == 0) {
       return SingleChildScrollView(
           child: ShimmerHelper().buildProductGridShimmer(
@@ -500,12 +506,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         itemBuilder: (context, index) {
           // 3
           return ProductCard(
-              id: _allProductList[index].id,
-              image: _allProductList[index].thumbnail_image,
-              name: _allProductList[index].name,
-              main_price: _allProductList[index].main_price,
-              stroked_price: _allProductList[index].stroked_price,
-              has_discount: _allProductList[index].has_discount,
+            id: _allProductList[index].id,
+            image: _allProductList[index].thumbnail_image,
+            name: _allProductList[index].name,
+            main_price: _allProductList[index].main_price,
+            stroked_price: _allProductList[index].stroked_price,
+            has_discount: _allProductList[index].has_discount,
             discount: _allProductList[index].discount,
           );
         },
@@ -535,12 +541,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return ProductCard(
-                id: _allProductList[index].id,
-                image: _allProductList[index].thumbnail_image,
-                name: _allProductList[index].name,
-                main_price: _allProductList[index].main_price,
-                stroked_price: _allProductList[index].stroked_price,
-                has_discount: _allProductList[index].has_discount,
+              id: _allProductList[index].id,
+              image: _allProductList[index].thumbnail_image,
+              name: _allProductList[index].name,
+              main_price: _allProductList[index].main_price,
+              stroked_price: _allProductList[index].stroked_price,
+              has_discount: _allProductList[index].has_discount,
               discount: _allProductList[index].discount,
             );
           });
@@ -553,7 +559,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
-  Widget  buildHomeFeaturedCategories(context) {
+  Widget buildHomeFeaturedCategories(context) {
     if (_isCategoryInitial && _featuredCategoryList.length == 0) {
       return ShimmerHelper().buildHorizontalGridShimmerWithAxisCount(
           crossAxisSpacing: 14.0,
@@ -717,7 +723,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     }
   }
 
-Widget  buildHomeMenuRow1(BuildContext context) {
+  Widget buildHomeMenuRow1(BuildContext context) {
     return Row(
       children: [
         Flexible(
@@ -787,7 +793,7 @@ Widget  buildHomeMenuRow1(BuildContext context) {
     );
   }
 
- Widget buildHomeMenuRow2(BuildContext context) {
+  Widget buildHomeMenuRow2(BuildContext context) {
     return Row(
       children: [
         Flexible(
@@ -902,7 +908,7 @@ Widget  buildHomeMenuRow1(BuildContext context) {
     );
   }
 
-Widget  buildHomeCarouselSlider(context) {
+  Widget buildHomeCarouselSlider(context) {
     if (_isCarouselInitial && _carouselImageList.length == 0) {
       return Padding(
           padding:
@@ -936,14 +942,14 @@ Widget  buildHomeCarouselSlider(context) {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      //color: Colors.amber,
+                        //color: Colors.amber,
                         width: double.infinity,
                         decoration: BoxDecorations.buildBoxDecoration_1(),
                         child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'assets/placeholder_rectangle.png',
-                              image: i,
+                              image: "http://192.168.68.127:2500/upload/$i",
                               height: 140,
                               fit: BoxFit.cover,
                             ))),
@@ -991,7 +997,7 @@ Widget  buildHomeCarouselSlider(context) {
     }
   }
 
-Widget  buildHomeBannerOne(context) {
+  Widget buildHomeBannerOne(context) {
     if (_isBannerOneInitial && _bannerOneImageList.length == 0) {
       return Padding(
           padding:
@@ -1023,7 +1029,7 @@ Widget  buildHomeBannerOne(context) {
                   padding: const EdgeInsets.only(
                       left: 9.0, right: 9, top: 20.0, bottom: 20),
                   child: Container(
-                    //color: Colors.amber,
+                      //color: Colors.amber,
                       width: double.infinity,
                       decoration: BoxDecorations.buildBoxDecoration_1(),
                       child: ClipRRect(
@@ -1055,7 +1061,7 @@ Widget  buildHomeBannerOne(context) {
     }
   }
 
- Widget buildHomeBannerTwo(context) {
+  Widget buildHomeBannerTwo(context) {
     if (_isBannerTwoInitial && _bannerTwoImageList.length == 0) {
       return Padding(
           padding:
@@ -1091,7 +1097,6 @@ Widget  buildHomeBannerOne(context) {
                       left: 9.0, right: 9, top: 20.0, bottom: 10),
                   child: Container(
                       width: double.infinity,
-
                       decoration: BoxDecorations.buildBoxDecoration_1(),
                       child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -1133,7 +1138,7 @@ Widget  buildHomeBannerOne(context) {
           // padding:
           //     const EdgeInsets.only(top: 40.0, bottom: 22, left: 18, right: 18),
           padding:
-          const EdgeInsets.only(top: 20.0, bottom: 22, left: 18, right: 18),
+              const EdgeInsets.only(top: 20.0, bottom: 22, left: 18, right: 18),
           child: GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -1168,7 +1173,6 @@ Widget  buildHomeBannerOne(context) {
         ),
       ),
     );
-
   }
 
   Container buildProductLoadingContainer() {
