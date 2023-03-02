@@ -428,7 +428,8 @@ class _FilterState extends State<Filter> {
           child: Column(
             children: [buildTopAppbar(context), buildBottomAppBar(context)],
           ),
-        ));
+        )
+    );
   }
 
   Row buildBottomAppBar(BuildContext context) {
@@ -493,7 +494,7 @@ class _FilterState extends State<Filter> {
             width: MediaQuery.of(context).size.width * .33,
             child: Center(
                 child: Container(
-              width: 50,
+              width: 55,
               child: Row(
                 children: [
                   Icon(
@@ -1130,15 +1131,25 @@ class _FilterState extends State<Filter> {
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
+
                   // 3
                   return ProductCard(
-                    id: _productList[index].id,
-                    image: _productList[index].thumbnail_image,
+                    // id: _productList[index].id,
+                    // image: _productList[index].thumbnail_image,
+                    // name: _productList[index].name,
+                    // main_price: _productList[index].main_price,
+                    // stroked_price: _productList[index].stroked_price,
+                    // has_discount: _productList[index].has_discount,
+                    // discount: _productList[index].discount,
+                    //id: int.parse(_allProductList[index].store_id),
+                    image: _productList[index].images[0],
+                    //image: 'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
                     name: _productList[index].name,
-                    main_price: _productList[index].main_price,
-                    stroked_price: _productList[index].stroked_price,
-                    has_discount: _productList[index].has_discount,
-                    discount: _productList[index].discount,
+                    // main_price: _allProductList[index].price.toString(),
+                    // stroked_price: _allProductList[index].price.toString(),
+                    has_discount: false,
+                    // discount: _allProductList[index].price.toString(),
+
                   );
                 },
               )

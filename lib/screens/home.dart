@@ -473,7 +473,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                   ),
                   Align(
-                      alignment: Alignment.center,
+                      alignment: Alignment.bottomCenter,
                       child: buildProductLoadingContainer())
                 ],
               )),
@@ -1165,13 +1165,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           children: [
             Text(
               AppLocalizations.of(context).home_screen_search,
-              style: TextStyle(fontSize: 13.0, color: MyTheme.textfield_grey),
+              style: TextStyle(fontSize: 13.0, color: MyTheme.accent_color),
             ),
             Image.asset(
               'assets/search.png',
               height: 16,
               //color: MyTheme.dark_grey,
-              color: MyTheme.dark_grey,
+              color: MyTheme.accent_color,
             )
           ],
         ),
