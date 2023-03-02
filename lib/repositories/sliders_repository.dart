@@ -10,7 +10,7 @@ class SlidersRepository {
   Future<List<SliderV1>> getSliders() async {
     final List<SliderV1> sliderList = [];
     Uri url = Uri.parse(
-        "http://192.168.68.127:8081/ekshop/theme/slider/list?user_id=63fa3cd15595d06245a950ed");
+        AppConfig.BASE_URL+"ekshop/theme/slider/list?user_id="+merchant_id.$);
     final response = await http.get(
       url,
       headers: {

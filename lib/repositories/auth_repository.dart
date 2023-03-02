@@ -23,7 +23,7 @@ class AuthRepository {
     });
 
     //Uri url = Uri.parse("${AppConfig.BASE_URL}merchant/admin/findMerchantByStore");
-    Uri url = Uri.parse("http://192.168.68.102:8081/merchant/admin/findMerchantByStore");
+    Uri url = Uri.parse(AppConfig.BASE_URL+"merchant/admin/findMerchantByStore");
     print('findMerchantByStore url: '+url.toString());
 
     final response = await http.post(url,

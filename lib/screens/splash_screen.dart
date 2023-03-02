@@ -53,13 +53,13 @@ class _SplashScreenState extends State<SplashScreen> {
         future: getSharedValueHelperData(),
         builder: (context, snapshot) {
           if(snapshot.hasData){
-            Future.delayed(Duration(seconds: 3)).then((value) {
+            Future.delayed(Duration(seconds: 5)).then((value) {
               Provider.of<LocaleProvider>(context,listen: false).setLocale(app_mobile_language.$);
-              // Navigator.pushAndRemoveUntil(context,
-              //     MaterialPageRoute(builder: (context) {
-              //       return Main(go_back: false,);
-              //     },
-              //     ),(route)=>false,);
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                    return Main(go_back: false,);
+                  },
+                  ),(route)=>false,);
             }
             );
 
@@ -191,9 +191,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> getFindMerchantByStore() async {
-    var loginResponse = await AuthRepository()
+    var merchantResponse = await AuthRepository()
         .findMerchantByStore('beautyfi-shop');
-    print(""+loginResponse.success.toString());
+    print(""+merchantResponse.success.toString());
+
+    if(merchantResponse.success){
+      if(merchantResponse.data != null){
+        merchant_id.$ = merchantResponse.data[0].id;
+        merchant_id.save();
+      }
+    }
+
 
   }
 }

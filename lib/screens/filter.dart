@@ -202,16 +202,17 @@ class _FilterState extends State<Filter> {
     //print("sb:"+_selectedBrands.join(",").toString());
     var productResponse = await ProductRepository().getFilteredProducts(
         page: _productPage,
-        name: _searchKey,
-        sort_key: _selectedSort,
-        brands: _selectedBrands.join(",").toString(),
-        categories: _selectedCategories.join(",").toString(),
-        max: _maxPriceController.text.toString(),
-        min: _minPriceController.text.toString());
+        // name: _searchKey,
+        // sort_key: _selectedSort,
+        // brands: _selectedBrands.join(",").toString(),
+        // categories: _selectedCategories.join(",").toString(),
+        // max: _maxPriceController.text.toString(),
+        // min: _minPriceController.text.toString()
+    );
 
-    _productList.addAll(productResponse.products);
+    _productList.addAll(productResponse.data);
     _isProductInitial = false;
-    _totalProductData = productResponse.meta.total;
+    _totalProductData = productResponse.totalCount;
     _showProductLoadingContainer = false;
     setState(() {});
   }

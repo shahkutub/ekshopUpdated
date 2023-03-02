@@ -48,7 +48,7 @@ class _ProductCardState extends State<ProductCard> {
                                 top: Radius.circular(6), bottom: Radius.zero),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'assets/placeholder.png',
-                              image:  widget.image,
+                              image:  widget.image != null? 'http://192.168.68.102:6660/upload/'+widget.image:'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
                               fit: BoxFit.cover,
                             ))),
                   ),
@@ -60,7 +60,7 @@ class _ProductCardState extends State<ProductCard> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
                           child: Text(
-                            widget.name,
+                            widget.name != null?widget.name:'',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: TextStyle(
@@ -87,7 +87,7 @@ class _ProductCardState extends State<ProductCard> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                           child: Text(
-                            widget.main_price,
+                            widget.main_price !=null? widget.main_price:'',
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,

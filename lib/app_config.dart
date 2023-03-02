@@ -29,5 +29,8 @@ class AppConfig {
   static const String API_ENDPATH = "";
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "${PROTOCOL}${DOMAIN_PATH}";
-  static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
+  //static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
+  static const String BASE_URL = "http://192.168.68.102:8081/";
+  static const String BASE_URL_noslash = "http://192.168.68.102";
+ // static const String port =
 }

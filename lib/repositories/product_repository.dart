@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/all_product_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:active_ecommerce_flutter/data_model/product_mini_response.dart';
 import 'package:active_ecommerce_flutter/data_model/product_details_response.dart';
@@ -75,22 +76,38 @@ class ProductRepository {
     return productMiniResponseFromJson(response.body);
   }
 
-  Future<ProductMiniResponse> getFilteredProducts(
-      {name = "",
-      sort_key = "",
-      page = 1,
-      brands = "",
-      categories = "",
-      min = "",
-      max = ""}) async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/products/search" +
-        "?page=${page}&name=${name}&sort_key=${sort_key}&brands=${brands}&categories=${categories}&min=${min}&max=${max}");
+  // Future<ProductMiniResponse> getFilteredProducts(
+  //     {name = "",
+  //     sort_key = "",
+  //     page = 1,
+  //     brands = "",
+  //     categories = "",
+  //     min = "",
+  //     max = ""}) async {
+  //   Uri url = Uri.parse("${AppConfig.BASE_URL}/products/search" +
+  //       "?page=${page}&name=${name}&sort_key=${sort_key}&brands=${brands}&categories=${categories}&min=${min}&max=${max}");
+  //
+  //   final response = await http.get(url, headers: {
+  //     "App-Language": app_language.$,
+  //   });
+  //   return productMiniResponseFromJson(response.body);
+  // }
+
+  Future<AllProductResponse> getFilteredProducts(
+      {
+        page = ""}) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}product/list?limit=10" +
+        "&user_id=${merchant_id.$}&offset=${page}");
 
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
     });
-    return productMiniResponseFromJson(response.body);
+
+    print('allprodResponse: '+response.body.toString());
+
+    return allProductResponseFromJson(response.body);
   }
+
 
   Future<ProductDetailsResponse> getProductDetails(
       {@required int id = 0}) async {

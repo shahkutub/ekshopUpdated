@@ -11,6 +11,11 @@ final SharedValue<String> access_token = SharedValue(
   key: "access_token", // disk storage key for shared_preferences
 );
 
+final SharedValue<String> merchant_id = SharedValue(
+  value: "", // initial value
+  key: "merchant_id", // disk storage key for shared_preferences
+);
+
 final SharedValue<int> user_id = SharedValue(
   value: 0, // initial value
   key: "user_id", // disk storage key for shared_preferences

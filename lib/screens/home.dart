@@ -185,11 +185,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     var productResponse =
         await ProductRepository().getFilteredProducts(page: _allProductPage);
 
-    _allProductList.addAll(productResponse.products);
+    _allProductList.addAll(productResponse.data);
     _isAllProductInitial = false;
-    _totalAllProductData = productResponse.meta.total;
+    _totalAllProductData = productResponse.totalCount;
     _showAllLoadingContainer = false;
-    setState(() {});
+    //setState(() {});
   }
 
   reset() {
@@ -506,13 +506,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         itemBuilder: (context, index) {
           // 3
           return ProductCard(
-            id: _allProductList[index].id,
-            image: _allProductList[index].thumbnail_image,
+            //id: int.parse(_allProductList[index].store_id),
+             image: _allProductList[index].images[0],
+            //image: 'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
             name: _allProductList[index].name,
-            main_price: _allProductList[index].main_price,
-            stroked_price: _allProductList[index].stroked_price,
-            has_discount: _allProductList[index].has_discount,
-            discount: _allProductList[index].discount,
+            // main_price: _allProductList[index].price.toString(),
+            // stroked_price: _allProductList[index].price.toString(),
+             has_discount: false,
+            // discount: _allProductList[index].price.toString(),
           );
         },
       );
@@ -541,13 +542,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return ProductCard(
-              id: _allProductList[index].id,
-              image: _allProductList[index].thumbnail_image,
+              //id: int.parse(_allProductList[index].store_id),
+              // image: _allProductList[index].thumbnail_image.toString(),
+              image: _allProductList[index].images[0],
+              // image: 'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
               name: _allProductList[index].name,
-              main_price: _allProductList[index].main_price,
-              stroked_price: _allProductList[index].stroked_price,
-              has_discount: _allProductList[index].has_discount,
-              discount: _allProductList[index].discount,
+              // main_price: _allProductList[index].price.toString(),
+              // stroked_price: _allProductList[index].price.toString(),
+              // //has_discount: _allProductList[index].has_discount,
+              has_discount: false,
+              // discount: _allProductList[index].price.toString(),
             );
           });
     } else if (_totalAllProductData == 0) {
@@ -949,7 +953,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'assets/placeholder_rectangle.png',
-                              image: "http://192.168.68.127:2500/upload/$i",
+                              image: "http://192.168.68.102:2500/upload/$i",
                               height: 140,
                               fit: BoxFit.cover,
                             ))),
