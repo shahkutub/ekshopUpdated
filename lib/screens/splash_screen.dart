@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
+import '../repositories/auth_repository.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key key}) : super(key: key);
 
@@ -34,10 +36,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  void initState() {
+  Future<void> initState()  {
     // TODO: implement initState
     super.initState();
     _initPackageInfo();
+
+    getFindMerchantByStore();
+
+
+
   }
 
   @override
@@ -48,11 +55,11 @@ class _SplashScreenState extends State<SplashScreen> {
           if(snapshot.hasData){
             Future.delayed(Duration(seconds: 3)).then((value) {
               Provider.of<LocaleProvider>(context,listen: false).setLocale(app_mobile_language.$);
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) {
-                    return Main(go_back: false,);
-                  },
-                  ),(route)=>false,);
+              // Navigator.pushAndRemoveUntil(context,
+              //     MaterialPageRoute(builder: (context) {
+              //       return Main(go_back: false,);
+              //     },
+              //     ),(route)=>false,);
             }
             );
 
@@ -180,6 +187,13 @@ class _SplashScreenState extends State<SplashScreen> {
     // print("new splash screen app_language_rtl ${app_language_rtl.$}");
 
     return app_mobile_language.$;
+
+  }
+
+  Future<void> getFindMerchantByStore() async {
+    var loginResponse = await AuthRepository()
+        .findMerchantByStore('beautyfi-shop');
+    print(""+loginResponse.success.toString());
 
   }
 }

@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/find_merchant_by_store.dart';
 import 'package:http/http.dart' as http;
 import 'package:active_ecommerce_flutter/data_model/login_response.dart';
 import 'package:active_ecommerce_flutter/data_model/logout_response.dart';
@@ -13,6 +14,34 @@ import 'dart:convert';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
 class AuthRepository {
+
+
+  Future<FindMerchantByStore> findMerchantByStore(
+      @required String name) async {
+    var post_body = jsonEncode({
+      "name": "${name}"
+    });
+
+    //Uri url = Uri.parse("${AppConfig.BASE_URL}merchant/admin/findMerchantByStore");
+    Uri url = Uri.parse("http://192.168.68.102:8081/merchant/admin/findMerchantByStore");
+    print('findMerchantByStore url: '+url.toString());
+
+    final response = await http.post(url,
+        headers: {
+          "Accept": "*/*",
+          "Content-Type": "application/json",
+          "App-Language": app_language.$,
+        },
+        body: post_body);
+
+    print('findMerchantByStoreResponse'+response.body.toString());
+
+
+    return findMerchantByStoreFromJson(response.body);
+  }
+
+
+
   Future<LoginResponse> getLoginResponse(
       @required String email, @required String password) async {
     var post_body = jsonEncode({

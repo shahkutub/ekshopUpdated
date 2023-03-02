@@ -22,10 +22,11 @@ class AppConfig {
   // static const DOMAIN_PATH = "192.168.6.1/folder"; //localhost
   //
   static const DOMAIN_PATH =
-      "192.168.68.127"; // directly inside the public folder
+      "http://192.168.68.102:8081"; // directly inside the public folder
 
   //do not configure these below
-  static const String API_ENDPATH = "api/v2";
+  //static const String API_ENDPATH = "api/v2";
+  static const String API_ENDPATH = "";
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "${PROTOCOL}${DOMAIN_PATH}";
   static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
