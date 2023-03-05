@@ -37,8 +37,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
 
+import '../data_model/product_details_response.dart';
+
 class ProductDetails extends StatefulWidget {
-  int id;
+  String id;
 
   ProductDetails({Key key, this.id}) : super(key: key);
 
@@ -70,7 +72,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
   bool _isInWishList = false;
   var _productDetailsFetched = false;
-  var _productDetails = null;
+  DataProductDetails _productDetails = DataProductDetails();
   var _productImageList = [];
   var _colorList = [];
   int _selectedColorIndex = 0;
@@ -140,18 +142,18 @@ class _ProductDetailsState extends State<ProductDetails>
     if (is_logged_in.$ == true) {
       fetchWishListCheckInfo();
     }
-    fetchRelatedProducts();
-    fetchTopProducts();
+    // fetchRelatedProducts();
+    // fetchTopProducts();
   }
 
   fetchProductDetails() async {
     var productDetailsResponse =
         await ProductRepository().getProductDetails(id: widget.id);
 
-    if (productDetailsResponse.detailed_products.length > 0) {
-      _productDetails = productDetailsResponse.detailed_products[0];
+    if (productDetailsResponse.data != null) {
+      _productDetails = productDetailsResponse.data;
       sellerChatTitleController.text =
-          productDetailsResponse.detailed_products[0].name;
+          productDetailsResponse.data.name;
     }
 
     setProductDetailValues();
@@ -159,46 +161,46 @@ class _ProductDetailsState extends State<ProductDetails>
     setState(() {});
   }
 
-  fetchRelatedProducts() async {
-    var relatedProductResponse =
-        await ProductRepository().getRelatedProducts(id: widget.id);
-    _relatedProducts.addAll(relatedProductResponse.products);
-    _relatedProductInit = true;
+  // fetchRelatedProducts() async {
+  //   var relatedProductResponse =
+  //       await ProductRepository().getRelatedProducts(id: widget.id);
+  //   _relatedProducts.addAll(relatedProductResponse.products);
+  //   _relatedProductInit = true;
+  //
+  //   setState(() {});
+  // }
 
-    setState(() {});
-  }
-
-  fetchTopProducts() async {
-    var topProductResponse =
-        await ProductRepository().getTopFromThisSellerProducts(id: widget.id);
-    _topProducts.addAll(topProductResponse.products);
-    _topProductInit = true;
-  }
+  // fetchTopProducts() async {
+  //   var topProductResponse =
+  //       await ProductRepository().getTopFromThisSellerProducts(id: widget.id);
+  //   _topProducts.addAll(topProductResponse.products);
+  //   _topProductInit = true;
+  // }
 
   setProductDetailValues() {
     if (_productDetails != null) {
-      _appbarPriceString = _productDetails.price_high_low;
-      _singlePrice = _productDetails.calculable_price;
-      _singlePriceString = _productDetails.main_price;
+      _appbarPriceString = _productDetails.price.toString();
+      _singlePrice = _productDetails.price;
+      _singlePriceString = _productDetails.price;
       calculateTotalPrice();
-      _stock = _productDetails.current_stock;
-      _productDetails.photos.forEach((photo) {
-        _productImageList.add(photo.path);
+     // _stock = _productDetails.current_stock;
+      _productDetails.images.forEach((photo) {
+        _productImageList.add(photo);
       });
 
-      _productDetails.choice_options.forEach((choice_opiton) {
-        _selectedChoices.add(choice_opiton.options[0]);
-      });
-      _productDetails.colors.forEach((color) {
-        _colorList.add(color);
-      });
+      // _productDetails.choice_options.forEach((choice_opiton) {
+      //   _selectedChoices.add(choice_opiton.options[0]);
+      // });
+      // _productDetails.colors.forEach((color) {
+      //   _colorList.add(color);
+      // });
 
       setChoiceString();
 
-      if (_productDetails.colors.length > 0 ||
-          _productDetails.choice_options.length > 0) {
-        fetchAndSetVariantWiseInfo(change_appbar_string: true);
-      }
+      // if (_productDetails.colors.length > 0 ||
+      //     _productDetails.choice_options.length > 0) {
+      //   //fetchAndSetVariantWiseInfo(change_appbar_string: true);
+      // }
       _productDetailsFetched = true;
 
       setState(() {});
@@ -260,50 +262,50 @@ class _ProductDetailsState extends State<ProductDetails>
     }
   }
 
-  fetchAndSetVariantWiseInfo({bool change_appbar_string = true}) async {
-    var color_string = _colorList.length > 0
-        ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
-        : "";
-
-    /*print("color string: "+color_string);
-    return;*/
-
-    var variantResponse = await ProductRepository().getVariantWiseInfo(
-        id: widget.id, color: color_string, variants: _choiceString);
-
-    /*print("vr"+variantResponse.toJson().toString());
-    return;*/
-
-    _singlePrice = variantResponse.price;
-    _stock = variantResponse.stock;
-    if (_quantity > _stock) {
-      _quantity = _stock;
-      setState(() {});
-    }
-
-    _variant = variantResponse.variant;
-    setState(() {});
-
-    calculateTotalPrice();
-    _singlePriceString = variantResponse.price_string;
-
-    if (change_appbar_string) {
-      _appbarPriceString = "${variantResponse.variant} ${_singlePriceString}";
-    }
-
-    int pindex = 0;
-    _productDetails.photos.forEach((photo) {
-      //print('con:'+ (photo.variant == _variant && variantResponse.image != "").toString());
-      if (photo.variant == _variant && variantResponse.image != "") {
-        _currentImage = pindex;
-        _carouselController.jumpToPage(pindex);
-      }
-
-      pindex++;
-    });
-
-    setState(() {});
-  }
+  // fetchAndSetVariantWiseInfo({bool change_appbar_string = true}) async {
+  //   var color_string = _colorList.length > 0
+  //       ? _colorList[_selectedColorIndex].toString().replaceAll("#", "")
+  //       : "";
+  //
+  //   /*print("color string: "+color_string);
+  //   return;*/
+  //
+  //   var variantResponse = await ProductRepository().getVariantWiseInfo(
+  //       id: widget.id, color: color_string, variants: _choiceString);
+  //
+  //   /*print("vr"+variantResponse.toJson().toString());
+  //   return;*/
+  //
+  //   _singlePrice = variantResponse.price;
+  //   _stock = variantResponse.stock;
+  //   if (_quantity > _stock) {
+  //     _quantity = _stock;
+  //     setState(() {});
+  //   }
+  //
+  //   _variant = variantResponse.variant;
+  //   setState(() {});
+  //
+  //   calculateTotalPrice();
+  //   _singlePriceString = variantResponse.price_string;
+  //
+  //   if (change_appbar_string) {
+  //     _appbarPriceString = "${variantResponse.variant} ${_singlePriceString}";
+  //   }
+  //
+  //   int pindex = 0;
+  //   _productDetails.photos.forEach((photo) {
+  //     //print('con:'+ (photo.variant == _variant && variantResponse.image != "").toString());
+  //     if (photo.variant == _variant && variantResponse.image != "") {
+  //       _currentImage = pindex;
+  //       _carouselController.jumpToPage(pindex);
+  //     }
+  //
+  //     pindex++;
+  //   });
+  //
+  //   setState(() {});
+  // }
 
   reset() {
     restProductDetailValues();
@@ -345,59 +347,59 @@ class _ProductDetailsState extends State<ProductDetails>
     _selectedChoices[_choice_options_index] = value;
     setChoiceString();
     setState(() {});
-    fetchAndSetVariantWiseInfo();
+   // fetchAndSetVariantWiseInfo();
   }
 
   _onColorChange(index) {
     _selectedColorIndex = index;
     setState(() {});
-    fetchAndSetVariantWiseInfo();
+    //fetchAndSetVariantWiseInfo();
   }
 
   onPressAddToCart(context, snackbar) {
-    addToCart(mode: "add_to_cart", context: context, snackbar: snackbar);
+    //addToCart(mode: "add_to_cart", context: context, snackbar: snackbar);
   }
 
   onPressBuyNow(context) {
-    addToCart(mode: "buy_now", context: context);
+   // addToCart(mode: "buy_now", context: context);
   }
 
-  addToCart({mode, context = null, snackbar = null}) async {
-    if (is_logged_in.$ == false) {
-      // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
-      //     gravity: Toast.center, duration: Toast.lengthLong);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-      return;
-    }
-
-    // print(widget.id);
-    // print(_variant);
-    // print(user_id.$);
-    // print(_quantity);
-
-    var cartAddResponse = await CartRepository()
-        .getCartAddResponse(widget.id, _variant, user_id.$, _quantity);
-
-    if (cartAddResponse.result == false) {
-      ToastComponent.showDialog(cartAddResponse.message,
-          gravity: Toast.center, duration: Toast.lengthLong);
-      return;
-    } else {
-      if (mode == "add_to_cart") {
-        if (snackbar != null && context != null) {
-          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-        }
-        reset();
-        fetchAll();
-      } else if (mode == 'buy_now') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Cart(has_bottomnav: false);
-        })).then((value) {
-          onPopped(value);
-        });
-      }
-    }
-  }
+  // addToCart({mode, context = null, snackbar = null}) async {
+  //   if (is_logged_in.$ == false) {
+  //     // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
+  //     //     gravity: Toast.center, duration: Toast.lengthLong);
+  //     Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+  //     return;
+  //   }
+  //
+  //   // print(widget.id);
+  //   // print(_variant);
+  //   // print(user_id.$);
+  //   // print(_quantity);
+  //
+  //   // var cartAddResponse = await CartRepository()
+  //   //     .getCartAddResponse(widget.id, _variant, user_id.$, _quantity);
+  //
+  //   if (cartAddResponse.result == false) {
+  //     ToastComponent.showDialog(cartAddResponse.message,
+  //         gravity: Toast.center, duration: Toast.lengthLong);
+  //     return;
+  //   } else {
+  //     if (mode == "add_to_cart") {
+  //       if (snackbar != null && context != null) {
+  //         ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  //       }
+  //       reset();
+  //       fetchAll();
+  //     } else if (mode == 'buy_now') {
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //         return Cart(has_bottomnav: false);
+  //       })).then((value) {
+  //         onPopped(value);
+  //       });
+  //     }
+  //   }
+  // }
 
   onPopped(value) async {
     reset();
@@ -443,7 +445,7 @@ class _ProductDetailsState extends State<ProductDetails>
                           ),
                           onPressed: () {
                             onCopyTap(setState);
-                            SocialShare.copyToClipboard(_productDetails.link);
+                           // SocialShare.copyToClipboard(_productDetails.link);
                           },
                         ),
                       ),
@@ -466,8 +468,8 @@ class _ProductDetailsState extends State<ProductDetails>
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            print("share links ${_productDetails.link}");
-                            SocialShare.shareOptions(_productDetails.link);
+                            // print("share links ${_productDetails.link}");
+                            // SocialShare.shareOptions(_productDetails.link);
                           },
                         ),
                       ),
@@ -986,23 +988,23 @@ class _ProductDetailsState extends State<ProductDetails>
                         divider(),
                         InkWell(
                           onTap: () {
-                            if (_productDetails.video_link == "") {
-                              ToastComponent.showDialog(
-                                  AppLocalizations.of(context)
-                                      .product_details_screen_video_not_available,
-                                  gravity: Toast.center,
-                                  duration: Toast.lengthLong);
-                              return;
-                            }
-
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return VideoDescription(
-                                url: _productDetails.video_link,
-                              );
-                            })).then((value) {
-                              onPopped(value);
-                            });
+                            // if (_productDetails.video_link == "") {
+                            //   ToastComponent.showDialog(
+                            //       AppLocalizations.of(context)
+                            //           .product_details_screen_video_not_available,
+                            //       gravity: Toast.center,
+                            //       duration: Toast.lengthLong);
+                            //   return;
+                            // }
+                            //
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return VideoDescription(
+                            //     url: _productDetails.video_link,
+                            //   );
+                            // })).then((value) {
+                            //   onPopped(value);
+                            // });
                           },
                           child: Container(
                             color: MyTheme.white,
@@ -1038,12 +1040,12 @@ class _ProductDetailsState extends State<ProductDetails>
                         divider(),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return ProductReviews(id: widget.id);
-                            })).then((value) {
-                              onPopped(value);
-                            });
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return ProductReviews(id: widget.id);
+                            // })).then((value) {
+                            //   onPopped(value);
+                            // });
                           },
                           child: Container(
                             color: MyTheme.white,
@@ -1279,41 +1281,41 @@ class _ProductDetailsState extends State<ProductDetails>
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       child: Row(
         children: [
-          _productDetails.added_by == "admin"
-              ? Container()
-              : InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SellerDetails(
-                                  id: _productDetails.shop_id,
-                                )));
-                  },
-                  child: Padding(
-                    padding: app_language_rtl.$
-                        ? EdgeInsets.only(left: 8.0)
-                        : EdgeInsets.only(right: 8.0),
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6.0),
-                        border: Border.all(
-                            color: Color.fromRGBO(112, 112, 112, .3), width: 1),
-                        //shape: BoxShape.rectangle,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6.0),
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/placeholder.png',
-                          image: _productDetails.shop_logo,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+          // _productDetails.added_by == "admin"
+          //     ? Container()
+          //     : InkWell(
+          //         onTap: () {
+          //           Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                   builder: (context) => SellerDetails(
+          //                         id: _productDetails.shop_id,
+          //                       )));
+          //         },
+          //         child: Padding(
+          //           padding: app_language_rtl.$
+          //               ? EdgeInsets.only(left: 8.0)
+          //               : EdgeInsets.only(right: 8.0),
+          //           child: Container(
+          //             width: 30,
+          //             height: 30,
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(6.0),
+          //               border: Border.all(
+          //                   color: Color.fromRGBO(112, 112, 112, .3), width: 1),
+          //               //shape: BoxShape.rectangle,
+          //             ),
+          //             child: ClipRRect(
+          //               borderRadius: BorderRadius.circular(6.0),
+          //               child: FadeInImage.assetNetwork(
+          //                 placeholder: 'assets/placeholder.png',
+          //                 image: _productDetails.shop_logo,
+          //                 fit: BoxFit.cover,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
           Container(
             width: MediaQuery.of(context).size.width * (.5),
             child: Column(
@@ -1324,7 +1326,7 @@ class _ProductDetailsState extends State<ProductDetails>
                       color: Color.fromRGBO(153, 153, 153, 1),
                     )),
                 Text(
-                  _productDetails.shop_name,
+                  _productDetails.user,
                   style: TextStyle(
                       color: MyTheme.font_grey,
                       fontSize: 14,
@@ -1385,16 +1387,16 @@ class _ProductDetailsState extends State<ProductDetails>
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 5.0),
-            child: Text(
-              _productDetails.currency_symbol + _totalPrice.toString(),
-              style: TextStyle(
-                  color: MyTheme.accent_color,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600),
-            ),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 5.0),
+          //   child: Text(
+          //     _productDetails.currency_symbol + _totalPrice.toString(),
+          //     style: TextStyle(
+          //         color: MyTheme.accent_color,
+          //         fontSize: 16.0,
+          //         fontWeight: FontWeight.w600),
+          //   ),
+          // )
         ],
       ),
     );
@@ -1432,7 +1434,7 @@ class _ProductDetailsState extends State<ProductDetails>
                   width: 36,
                   child: Center(
                       child: Text(
-                    _quantity.toString(),
+                    ''+_quantity.toString(),
                     style: TextStyle(fontSize: 18, color: MyTheme.dark_grey),
                   ))),
               buildQuantityUpButton()
@@ -1442,7 +1444,7 @@ class _ProductDetailsState extends State<ProductDetails>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
-            "(${_stock} ${AppLocalizations.of(context).product_details_screen_available})",
+            ''+"(${_stock} ${AppLocalizations.of(context).product_details_screen_available})",
             style: TextStyle(
                 color: Color.fromRGBO(152, 152, 153, 1), fontSize: 14),
           ),
@@ -1537,19 +1539,19 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   buildChoiceOptionList() {
-    return ListView.builder(
-      itemCount: _productDetails.choice_options.length,
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: buildChoiceOpiton(_productDetails.choice_options, index),
-        );
-      },
-    );
+    // return ListView.builder(
+    //   itemCount: _productDetails.choice_options.length,
+    //   scrollDirection: Axis.vertical,
+    //   shrinkWrap: true,
+    //   padding: EdgeInsets.zero,
+    //   physics: NeverScrollableScrollPhysics(),
+    //   itemBuilder: (context, index) {
+    //     return Padding(
+    //       padding: const EdgeInsets.only(bottom: 8.0),
+    //       child: buildChoiceOpiton(_productDetails.choice_options, index),
+    //     );
+    //   },
+    // );
   }
 
   buildChoiceOpiton(choice_options, choice_options_index) {
@@ -1570,7 +1572,7 @@ class _ProductDetailsState extends State<ProductDetails>
             child: Container(
               width: 75,
               child: Text(
-                choice_options[choice_options_index].title,
+                ''+choice_options[choice_options_index].title,
                 style: TextStyle(color: Color.fromRGBO(153, 153, 153, 1)),
               ),
             ),
@@ -1799,7 +1801,7 @@ class _ProductDetailsState extends State<ProductDetails>
               ],
             ),
             Text(
-              _productDetails.earn_point.toString(),
+              ''+_productDetails.ean.toString(),
               style: TextStyle(color: MyTheme.golden, fontSize: 12.0),
             ),
           ],
@@ -1812,35 +1814,35 @@ class _ProductDetailsState extends State<ProductDetails>
     return Row(
       children: [
         Text(
-          _singlePriceString,
+          ''+_singlePriceString,
           style: TextStyle(
               color: MyTheme.accent_color,
               fontSize: 16.0,
               fontWeight: FontWeight.w600),
         ),
-        Visibility(
-          visible: _productDetails.has_discount,
-          child: Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(_productDetails.stroked_price,
-                style: TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  color: Color.fromRGBO(224, 224, 225, 1),
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.normal,
-                )),
-          ),
-        ),
-        Visibility(
-          visible: _productDetails.has_discount,
-          child: Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              "${_productDetails.discount}",
-              style: TextStyles.largeBoldAccentTexStyle(),
-            ),
-          ),
-        ),
+        // Visibility(
+        //   visible: _productDetails.has_discount,
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 8.0),
+        //     child: Text(_productDetails.stroked_price,
+        //         style: TextStyle(
+        //           decoration: TextDecoration.lineThrough,
+        //           color: Color.fromRGBO(224, 224, 225, 1),
+        //           fontSize: 12.0,
+        //           fontWeight: FontWeight.normal,
+        //         )),
+        //   ),
+        // ),
+        // Visibility(
+        //   visible: _productDetails.has_discount,
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 8.0),
+        //     child: Text(
+        //       "${_productDetails.discount}",
+        //       style: TextStyles.largeBoldAccentTexStyle(),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -1864,7 +1866,7 @@ class _ProductDetailsState extends State<ProductDetails>
             child: Padding(
               padding: const EdgeInsets.only(top: 22.0),
               child: Text(
-                _appbarPriceString,
+                ''+_appbarPriceString,
                 style: TextStyle(fontSize: 16, color: MyTheme.font_grey),
               ),
             )),
@@ -1985,102 +1987,102 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   buildRatingAndWishButtonRow() {
-    return Row(
-      children: [
-        RatingBar(
-          itemSize: 15.0,
-          ignoreGestures: true,
-          initialRating: double.parse(_productDetails.rating.toString()),
-          direction: Axis.horizontal,
-          allowHalfRating: false,
-          itemCount: 5,
-          ratingWidget: RatingWidget(
-            full: Icon(FontAwesome.star, color: Colors.amber),
-            half: Icon(FontAwesome.star_half, color: Colors.amber),
-            empty:
-                Icon(FontAwesome.star, color: Color.fromRGBO(224, 224, 225, 1)),
-          ),
-          itemPadding: EdgeInsets.only(right: 1.0),
-          onRatingUpdate: (rating) {
-            //print(rating);
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Text(
-            "(" + _productDetails.rating_count.toString() + ")",
-            style: TextStyle(
-                color: Color.fromRGBO(152, 152, 153, 1), fontSize: 10),
-          ),
-        ),
-      ],
-    );
+    // return Row(
+    //   children: [
+    //     RatingBar(
+    //       itemSize: 15.0,
+    //       ignoreGestures: true,
+    //       initialRating: double.parse(_productDetails.rating.toString()),
+    //       direction: Axis.horizontal,
+    //       allowHalfRating: false,
+    //       itemCount: 5,
+    //       ratingWidget: RatingWidget(
+    //         full: Icon(FontAwesome.star, color: Colors.amber),
+    //         half: Icon(FontAwesome.star_half, color: Colors.amber),
+    //         empty:
+    //             Icon(FontAwesome.star, color: Color.fromRGBO(224, 224, 225, 1)),
+    //       ),
+    //       itemPadding: EdgeInsets.only(right: 1.0),
+    //       onRatingUpdate: (rating) {
+    //         //print(rating);
+    //       },
+    //     ),
+    //     Padding(
+    //       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+    //       child: Text(
+    //         "(" + _productDetails.rating_count.toString() + ")",
+    //         style: TextStyle(
+    //             color: Color.fromRGBO(152, 152, 153, 1), fontSize: 10),
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 
   buildBrandRow() {
-    return _productDetails.brand.id > 0
-        ? InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return BrandProducts(
-                  id: _productDetails.brand.id,
-                  brand_name: _productDetails.brand.name,
-                );
-              }));
-            },
-            child: Row(
-              children: [
-                Padding(
-                  padding: app_language_rtl.$
-                      ? EdgeInsets.only(left: 8.0)
-                      : EdgeInsets.only(right: 8.0),
-                  child: Container(
-                    width: 75,
-                    child: Text(
-                      AppLocalizations.of(context).product_details_screen_brand,
-                      style: TextStyle(
-                          color: Color.fromRGBO(
-                            153,
-                            153,
-                            153,
-                            1,
-                          ),
-                          fontSize: 10),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Text(
-                    _productDetails.brand.name,
-                    style: TextStyle(
-                        color: MyTheme.font_grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10),
-                  ),
-                ),
-                /*Spacer(),
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                        color: Color.fromRGBO(112, 112, 112, .3), width: 1),
-                    //shape: BoxShape.rectangle,
-                  ),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/placeholder.png',
-                        image: _productDetails.brand.logo,
-                        fit: BoxFit.contain,
-                      )),
-                ),*/
-              ],
-            ),
-          )
-        : Container();
+    // return _productDetails.brand.id > 0
+    //     ? InkWell(
+    //         onTap: () {
+    //           Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //             return BrandProducts(
+    //               id: _productDetails.brand.id,
+    //               brand_name: _productDetails.brand.name,
+    //             );
+    //           }));
+    //         },
+    //         child: Row(
+    //           children: [
+    //             Padding(
+    //               padding: app_language_rtl.$
+    //                   ? EdgeInsets.only(left: 8.0)
+    //                   : EdgeInsets.only(right: 8.0),
+    //               child: Container(
+    //                 width: 75,
+    //                 child: Text(
+    //                   AppLocalizations.of(context).product_details_screen_brand,
+    //                   style: TextStyle(
+    //                       color: Color.fromRGBO(
+    //                         153,
+    //                         153,
+    //                         153,
+    //                         1,
+    //                       ),
+    //                       fontSize: 10),
+    //                 ),
+    //               ),
+    //             ),
+    //             Padding(
+    //               padding: const EdgeInsets.symmetric(horizontal: 4.0),
+    //               child: Text(
+    //                 _productDetails.brand.name,
+    //                 style: TextStyle(
+    //                     color: MyTheme.font_grey,
+    //                     fontWeight: FontWeight.bold,
+    //                     fontSize: 10),
+    //               ),
+    //             ),
+    //             /*Spacer(),
+    //             Container(
+    //               width: 36,
+    //               height: 36,
+    //               decoration: BoxDecoration(
+    //                 borderRadius: BorderRadius.circular(5),
+    //                 border: Border.all(
+    //                     color: Color.fromRGBO(112, 112, 112, .3), width: 1),
+    //                 //shape: BoxShape.rectangle,
+    //               ),
+    //               child: ClipRRect(
+    //                   borderRadius: BorderRadius.circular(5),
+    //                   child: FadeInImage.assetNetwork(
+    //                     placeholder: 'assets/placeholder.png',
+    //                     image: _productDetails.brand.logo,
+    //                     fit: BoxFit.contain,
+    //                   )),
+    //             ),*/
+    //           ],
+    //         ),
+    //       )
+    //     : Container();
   }
 
   ExpandableNotifier buildExpandableDescription() {

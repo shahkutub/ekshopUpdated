@@ -30,11 +30,11 @@ class _ListProductCardState extends State<ListProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ProductDetails(
-            id: widget.id,
-          );
-        }));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return ProductDetails(
+        //     id: widget.id,
+        //   );
+        // }));
       },
       child: Container(
         decoration: BoxDecorations.buildBoxDecoration_1(),

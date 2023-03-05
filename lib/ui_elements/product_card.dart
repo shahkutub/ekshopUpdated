@@ -5,7 +5,7 @@ import 'package:active_ecommerce_flutter/screens/product_details.dart';
 import 'package:active_ecommerce_flutter/app_config.dart';
 class ProductCard extends StatefulWidget {
 
-  int id;
+  String id;
   String image;
   String name;
   String main_price;

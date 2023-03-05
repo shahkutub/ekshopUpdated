@@ -110,13 +110,13 @@ class ProductRepository {
 
 
   Future<ProductDetailsResponse> getProductDetails(
-      {@required int id = 0}) async {
-    Uri url = Uri.parse("${AppConfig.BASE_URL}/products/" + id.toString());
+      {@required String id = ''}) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URL}product/list/" + id.toString());
     print(url.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
     });
-    //print(response.body.toString());
+    print(response.body.toString());
     return productDetailsResponseFromJson(response.body);
   }
 

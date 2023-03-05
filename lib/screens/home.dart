@@ -542,16 +542,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             return ProductCard(
-              //id: int.parse(_allProductList[index].store_id),
+              id: _allProductList[index].id,
               // image: _allProductList[index].thumbnail_image.toString(),
               image: _allProductList[index].images[0],
               // image: 'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
               name: _allProductList[index].name,
-              // main_price: _allProductList[index].price.toString(),
-              // stroked_price: _allProductList[index].price.toString(),
-              // //has_discount: _allProductList[index].has_discount,
-              has_discount: false,
-              // discount: _allProductList[index].price.toString(),
+               main_price: _allProductList[index].price.toString(),
+               stroked_price: _allProductList[index].price.toString(),
+             // has_discount: _allProductList[index].has_discount,
+              has_discount: true,
+               discount: _allProductList[index].price.toString(),
             );
           });
     } else if (_totalAllProductData == 0) {

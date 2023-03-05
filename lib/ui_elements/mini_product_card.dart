@@ -22,9 +22,9 @@ class _MiniProductCardState extends State<MiniProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ProductDetails(id: widget.id);
-        }));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return ProductDetails(id: widget.id);
+        // }));
       },
       child: Container(
         width: 135,
