@@ -138,7 +138,7 @@ class _CategoryListState extends State<CategoryList> {
     var data = widget.is_top_category
         ? CategoryRepository().getTopCategories()
         : CategoryRepository()
-            .getCategories(parent_id: widget.parent_category_id);
+            .getCategories();
     return FutureBuilder(
         future: data,
         builder: (context, snapshot) {

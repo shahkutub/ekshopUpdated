@@ -39,8 +39,8 @@ class _CategoryProductsState extends State<CategoryProducts> {
 
 
   getSubCategory()async{
-   var res=await CategoryRepository().getCategories(parent_id: widget.category_id);
-   _subCategoryList.addAll(res.categories);
+   var res=await CategoryRepository().getCategories();
+  //  _subCategoryList.addAll(res.categories);
    setState((){});
   }
 
