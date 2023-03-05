@@ -9,8 +9,9 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 class SlidersRepository {
   Future<List<SliderV1>> getSliders() async {
     final List<SliderV1> sliderList = [];
-    Uri url = Uri.parse(
-        AppConfig.BASE_URL+"ekshop/theme/slider/list?user_id="+merchant_id.$);
+    Uri url = Uri.parse(AppConfig.BASE_URLV1 +
+        "ekshop/theme/slider/list?user_id=" +
+        merchant_id.$);
     final response = await http.get(
       url,
       headers: {

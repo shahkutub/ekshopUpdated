@@ -36,15 +36,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Future<void> initState()  {
+  Future<void> initState() {
     // TODO: implement initState
     super.initState();
     _initPackageInfo();
 
     getFindMerchantByStore();
-
-
-
   }
 
   @override
@@ -52,31 +49,34 @@ class _SplashScreenState extends State<SplashScreen> {
     return FutureBuilder<String>(
         future: getSharedValueHelperData(),
         builder: (context, snapshot) {
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             Future.delayed(Duration(seconds: 5)).then((value) {
-              Provider.of<LocaleProvider>(context,listen: false).setLocale(app_mobile_language.$);
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) {
-                    return Main(go_back: false,);
+              Provider.of<LocaleProvider>(context, listen: false)
+                  .setLocale(app_mobile_language.$);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Main(
+                      go_back: false,
+                    );
                   },
-                  ),(route)=>false,);
-            }
-            );
-
+                ),
+                (route) => false,
+              );
+            });
           }
           return splashScreen();
-        }
-    );
+        });
   }
 
   Widget splashScreen() {
     return Container(
       width: DeviceInfo(context).height,
       height: DeviceInfo(context).height,
-      color:  MyTheme.splash_screen_color,
+      color: MyTheme.splash_screen_color,
       child: InkWell(
         child: Stack(
-
           // mainAxisAlignment: MainAxisAlignment.start,
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -92,7 +92,7 @@ class _SplashScreenState extends State<SplashScreen> {
               radius: 140.0,
             ),
             Positioned.fill(
-              top: DeviceInfo(context).height/2-72,
+              top: DeviceInfo(context).height / 2 - 72,
               child: Column(
                 children: [
                   Padding(
@@ -102,13 +102,13 @@ class _SplashScreenState extends State<SplashScreen> {
                       child: Container(
                         height: 72,
                         width: 72,
-                        padding: EdgeInsets.symmetric(horizontal: 12,vertical: 12),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         decoration: BoxDecoration(
-                          color: MyTheme.white,
-                          borderRadius: BorderRadius.circular(8)
-                        ),
+                            color: MyTheme.white,
+                            borderRadius: BorderRadius.circular(8)),
                         child: Image.asset(
-                            "assets/playstoreicon.png",
+                          "assets/playstoreicon.png",
                           filterQuality: FilterQuality.low,
                         ),
                       ),
@@ -127,17 +127,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   Text(
                     "V " + _packageInfo.version,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14.0,
-                        color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0,
+                      color: Colors.white,
                     ),
                   ),
                 ],
               ),
             ),
-
-
-
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -173,12 +170,12 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<String>  getSharedValueHelperData()async{
+  Future<String> getSharedValueHelperData() async {
     access_token.load().whenComplete(() {
       AuthHelper().fetch_and_set();
     });
     AddonsHelper().setAddonsData();
-    BusinessSettingHelper().setBusinessSettingData();
+    // BusinessSettingHelper().setBusinessSettingData();
     await app_language.load();
     await app_mobile_language.load();
     await app_language_rtl.load();
@@ -187,21 +184,18 @@ class _SplashScreenState extends State<SplashScreen> {
     // print("new splash screen app_language_rtl ${app_language_rtl.$}");
 
     return app_mobile_language.$;
-
   }
 
   Future<void> getFindMerchantByStore() async {
-    var merchantResponse = await AuthRepository()
-        .findMerchantByStore('beautyfi-shop');
-    print(""+merchantResponse.success.toString());
+    var merchantResponse =
+        await AuthRepository().findMerchantByStore('beautyfi-shop');
+    print("" + merchantResponse.success.toString());
 
-    if(merchantResponse.success){
-      if(merchantResponse.data != null){
+    if (merchantResponse.success) {
+      if (merchantResponse.data != null) {
         merchant_id.$ = merchantResponse.data[0].id;
         merchant_id.save();
       }
     }
-
-
   }
 }

@@ -22,22 +22,21 @@ class AuthHelper {
   }
 
   clearUserData() {
-      is_logged_in.$ = false;
-      is_logged_in.save();
-      access_token.$ = "";
-      access_token.save();
-      user_id.$ = 0;
-      user_id.save();
-      user_name.$ = "";
-      user_name.save();
-      user_email.$ = "";
-      user_email.save();
-      user_phone.$ = "";
-      user_phone.save();
-      avatar_original.$ = "";
-      avatar_original.save();
+    is_logged_in.$ = false;
+    is_logged_in.save();
+    access_token.$ = "";
+    access_token.save();
+    user_id.$ = 0;
+    user_id.save();
+    user_name.$ = "";
+    user_name.save();
+    user_email.$ = "";
+    user_email.save();
+    user_phone.$ = "";
+    user_phone.save();
+    avatar_original.$ = "";
+    avatar_original.save();
   }
-
 
   fetch_and_set() async {
     var userByTokenResponse = await AuthRepository().getUserByTokenResponse();
