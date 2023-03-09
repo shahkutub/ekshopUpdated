@@ -123,7 +123,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   fetchAll() {
-    getCartCount();
+
 
     fetchCarouselImages();
     fetchBannerOneImages();
@@ -131,6 +131,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     fetchFeaturedCategories();
     fetchFeaturedProducts();
     fetchAllProducts();
+    getCartCount();
   }
 
   fetchCarouselImages() async {
