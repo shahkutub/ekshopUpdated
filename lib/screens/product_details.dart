@@ -150,14 +150,16 @@ class _ProductDetailsState extends State<ProductDetails>
     var productDetailsResponse =
         await ProductRepository().getProductDetails(id: widget.id);
 
-    if (productDetailsResponse.data != null) {
-      _productDetails = productDetailsResponse.data;
-      sellerChatTitleController.text =
-          productDetailsResponse.data.name;
-    }
+    if(productDetailsResponse != null){
+      if (productDetailsResponse.data != null) {
+        _productDetails = productDetailsResponse.data;
+        sellerChatTitleController.text =
+            productDetailsResponse.data.name;
+      }
 
-    print('pName: '+_productDetails.name);
-    //setProductDetailValues();
+      print('pName: '+_productDetails.name);
+      //setProductDetailValues();
+    }
 
     setState(() {});
   }
@@ -941,335 +943,336 @@ class _ProductDetailsState extends State<ProductDetails>
                     ),
                   ),
                 ),
-                // SliverToBoxAdapter(
-                //   child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Container(
-                //           color: MyTheme.white,
-                //           margin: EdgeInsets.only(top: 10),
-                //           child: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             children: [
-                //               Padding(
-                //                 padding: const EdgeInsets.fromLTRB(
-                //                   16.0,
-                //                   20.0,
-                //                   16.0,
-                //                   0.0,
-                //                 ),
-                //                 child: Text(
-                //                   AppLocalizations.of(context)
-                //                       .product_details_screen_description,
-                //                   style: TextStyle(
-                //                       color: MyTheme.dark_font_grey,
-                //                       fontSize: 13,
-                //                       fontWeight: FontWeight.w600),
-                //                 ),
-                //               ),
-                //               Padding(
-                //                 padding: const EdgeInsets.fromLTRB(
-                //                   8.0,
-                //                   0.0,
-                //                   8.0,
-                //                   8.0,
-                //                 ),
-                //                 child: _productDetails != null
-                //                     ? buildExpandableDescription()
-                //                     : Padding(
-                //                         padding: const EdgeInsets.symmetric(
-                //                             horizontal: 8.0, vertical: 8.0),
-                //                         child:
-                //                             ShimmerHelper().buildBasicShimmer(
-                //                           height: 60.0,
-                //                         )),
-                //               ),
-                //             ],
-                //           ),
-                //         ),
-                //         divider(),
-                //         InkWell(
-                //           onTap: () {
-                //             // if (_productDetails.video_link == "") {
-                //             //   ToastComponent.showDialog(
-                //             //       AppLocalizations.of(context)
-                //             //           .product_details_screen_video_not_available,
-                //             //       gravity: Toast.center,
-                //             //       duration: Toast.lengthLong);
-                //             //   return;
-                //             // }
-                //             //
-                //             // Navigator.push(context,
-                //             //     MaterialPageRoute(builder: (context) {
-                //             //   return VideoDescription(
-                //             //     url: _productDetails.video_link,
-                //             //   );
-                //             // })).then((value) {
-                //             //   onPopped(value);
-                //             // });
-                //           },
-                //           child: Container(
-                //             color: MyTheme.white,
-                //             height: 48,
-                //             child: Padding(
-                //               padding: const EdgeInsets.fromLTRB(
-                //                 18.0,
-                //                 14.0,
-                //                 18.0,
-                //                 14.0,
-                //               ),
-                //               child: Row(
-                //                 children: [
-                //                   Text(
-                //                     AppLocalizations.of(context)
-                //                         .product_details_screen_video,
-                //                     style: TextStyle(
-                //                         color: MyTheme.dark_font_grey,
-                //                         fontSize: 13,
-                //                         fontWeight: FontWeight.w600),
-                //                   ),
-                //                   Spacer(),
-                //                   Image.asset(
-                //                     "assets/arrow.png",
-                //                     height: 11,
-                //                     width: 20,
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         divider(),
-                //         InkWell(
-                //           onTap: () {
-                //             // Navigator.push(context,
-                //             //     MaterialPageRoute(builder: (context) {
-                //             //   return ProductReviews(id: widget.id);
-                //             // })).then((value) {
-                //             //   onPopped(value);
-                //             // });
-                //           },
-                //           child: Container(
-                //             color: MyTheme.white,
-                //             height: 48,
-                //             child: Padding(
-                //               padding: const EdgeInsets.fromLTRB(
-                //                 18.0,
-                //                 14.0,
-                //                 18.0,
-                //                 14.0,
-                //               ),
-                //               child: Row(
-                //                 children: [
-                //                   Text(
-                //                     AppLocalizations.of(context)
-                //                         .product_details_screen_reviews,
-                //                     style: TextStyle(
-                //                         color: MyTheme.dark_font_grey,
-                //                         fontSize: 13,
-                //                         fontWeight: FontWeight.w600),
-                //                   ),
-                //                   Spacer(),
-                //                   Image.asset(
-                //                     "assets/arrow.png",
-                //                     height: 11,
-                //                     width: 20,
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         divider(),
-                //         InkWell(
-                //           onTap: () {
-                //             Navigator.push(context,
-                //                 MaterialPageRoute(builder: (context) {
-                //               return CommonWebviewScreen(
-                //                 url:
-                //                     "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
-                //                 page_name: AppLocalizations.of(context)
-                //                     .product_details_screen_seller_policy,
-                //               );
-                //             }));
-                //           },
-                //           child: Container(
-                //             color: MyTheme.white,
-                //             height: 48,
-                //             child: Padding(
-                //               padding: const EdgeInsets.fromLTRB(
-                //                 18.0,
-                //                 14.0,
-                //                 18.0,
-                //                 14.0,
-                //               ),
-                //               child: Row(
-                //                 children: [
-                //                   Text(
-                //                     AppLocalizations.of(context)
-                //                         .product_details_screen_seller_policy,
-                //                     style: TextStyle(
-                //                         color: MyTheme.dark_font_grey,
-                //                         fontSize: 13,
-                //                         fontWeight: FontWeight.w600),
-                //                   ),
-                //                   Spacer(),
-                //                   Image.asset(
-                //                     "assets/arrow.png",
-                //                     height: 11,
-                //                     width: 20,
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         divider(),
-                //         InkWell(
-                //           onTap: () {
-                //             Navigator.push(context,
-                //                 MaterialPageRoute(builder: (context) {
-                //               return CommonWebviewScreen(
-                //                 url:
-                //                     "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
-                //                 page_name: AppLocalizations.of(context)
-                //                     .product_details_screen_return_policy,
-                //               );
-                //             }));
-                //           },
-                //           child: Container(
-                //             color: MyTheme.white,
-                //             height: 48,
-                //             child: Padding(
-                //               padding: const EdgeInsets.fromLTRB(
-                //                 18.0,
-                //                 14.0,
-                //                 18.0,
-                //                 14.0,
-                //               ),
-                //               child: Row(
-                //                 children: [
-                //                   Text(
-                //                     AppLocalizations.of(context)
-                //                         .product_details_screen_return_policy,
-                //                     style: TextStyle(
-                //                         color: MyTheme.dark_font_grey,
-                //                         fontSize: 13,
-                //                         fontWeight: FontWeight.w600),
-                //                   ),
-                //                   Spacer(),
-                //                   Image.asset(
-                //                     "assets/arrow.png",
-                //                     height: 11,
-                //                     width: 20,
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         divider(),
-                //         InkWell(
-                //           onTap: () {
-                //             Navigator.push(context,
-                //                 MaterialPageRoute(builder: (context) {
-                //               return CommonWebviewScreen(
-                //                 url:
-                //                     "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
-                //                 page_name: AppLocalizations.of(context)
-                //                     .product_details_screen_support_policy,
-                //               );
-                //             }));
-                //           },
-                //           child: Container(
-                //             color: MyTheme.white,
-                //             height: 48,
-                //             child: Padding(
-                //               padding: const EdgeInsets.fromLTRB(
-                //                 18.0,
-                //                 14.0,
-                //                 18.0,
-                //                 14.0,
-                //               ),
-                //               child: Row(
-                //                 children: [
-                //                   Text(
-                //                     AppLocalizations.of(context)
-                //                         .product_details_screen_support_policy,
-                //                     style: TextStyle(
-                //                         color: MyTheme.dark_font_grey,
-                //                         fontSize: 13,
-                //                         fontWeight: FontWeight.w600),
-                //                   ),
-                //                   Spacer(),
-                //                   Image.asset(
-                //                     "assets/arrow.png",
-                //                     height: 11,
-                //                     width: 20,
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         divider(),
-                //       ]),
-                // ),
-                // SliverList(
-                //   delegate: SliverChildListDelegate([
-                //     Padding(
-                //       padding: const EdgeInsets.fromLTRB(
-                //         18.0,
-                //         24.0,
-                //         18.0,
-                //         0.0,
-                //       ),
-                //       child: Text(
-                //         AppLocalizations.of(context)
-                //             .product_details_screen_products_may_like,
-                //         style: TextStyle(
-                //             color: MyTheme.dark_font_grey,
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w600),
-                //       ),
-                //     ),
-                //     buildProductsMayLikeList()
-                //   ]),
-                // ),
-                //
-                // //Top selling product
-                // SliverList(
-                //   delegate: SliverChildListDelegate([
-                //     Padding(
-                //       padding: const EdgeInsets.fromLTRB(
-                //         18.0,
-                //         24.0,
-                //         18.0,
-                //         0.0,
-                //       ),
-                //       child: Text(
-                //         AppLocalizations.of(context)
-                //             .top_selling_products_screen_top_selling_products,
-                //         style: TextStyle(
-                //             color: MyTheme.dark_font_grey,
-                //             fontSize: 16,
-                //             fontWeight: FontWeight.w600),
-                //       ),
-                //     ),
-                //     Padding(
-                //       padding: const EdgeInsets.fromLTRB(
-                //         16.0,
-                //         0.0,
-                //         16.0,
-                //         0.0,
-                //       ),
-                //       child: buildTopSellingProductList(),
-                //     ),
-                //     Container(
-                //       height: 83,
-                //     )
-                //   ]),
-                // )
+                SliverToBoxAdapter(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          color: MyTheme.white,
+                          margin: EdgeInsets.only(top: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  16.0,
+                                  20.0,
+                                  16.0,
+                                  0.0,
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(context)
+                                      .product_details_screen_description,
+                                  style: TextStyle(
+                                      color: MyTheme.dark_font_grey,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                  8.0,
+                                  0.0,
+                                  8.0,
+                                  8.0,
+                                ),
+                                child: _productDetails != null
+                                    ? buildExpandableDescription()
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 8.0),
+                                        child:
+                                            ShimmerHelper().buildBasicShimmer(
+                                          height: 60.0,
+                                        )),
+                              ),
+                            ],
+                          ),
+                        ),
+                        divider(),
+                        InkWell(
+                          onTap: () {
+                            // if (_productDetails.video_link == "") {
+                            //   ToastComponent.showDialog(
+                            //       AppLocalizations.of(context)
+                            //           .product_details_screen_video_not_available,
+                            //       gravity: Toast.center,
+                            //       duration: Toast.lengthLong);
+                            //   return;
+                            // }
+                            //
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return VideoDescription(
+                            //     url: _productDetails.video_link,
+                            //   );
+                            // })).then((value) {
+                            //   onPopped(value);
+                            // });
+                          },
+                          child: Container(
+                            color: MyTheme.white,
+                            height: 48,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                18.0,
+                                14.0,
+                                18.0,
+                                14.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .product_details_screen_video,
+                                    style: TextStyle(
+                                        color: MyTheme.dark_font_grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Spacer(),
+                                  Image.asset(
+                                    "assets/arrow.png",
+                                    height: 11,
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        divider(),
+                        InkWell(
+                          onTap: () {
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) {
+                            //   return ProductReviews(id: widget.id);
+                            // })).then((value) {
+                            //   onPopped(value);
+                            // });
+                          },
+                          child: Container(
+                            color: MyTheme.white,
+                            height: 48,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                18.0,
+                                14.0,
+                                18.0,
+                                14.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .product_details_screen_reviews,
+                                    style: TextStyle(
+                                        color: MyTheme.dark_font_grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Spacer(),
+                                  Image.asset(
+                                    "assets/arrow.png",
+                                    height: 11,
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        divider(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return CommonWebviewScreen(
+                                url:
+                                    "${AppConfig.RAW_BASE_URL}/mobile-page/seller-policy",
+                                page_name: AppLocalizations.of(context)
+                                    .product_details_screen_seller_policy,
+                              );
+                            }));
+                          },
+                          child: Container(
+                            color: MyTheme.white,
+                            height: 48,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                18.0,
+                                14.0,
+                                18.0,
+                                14.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .product_details_screen_seller_policy,
+                                    style: TextStyle(
+                                        color: MyTheme.dark_font_grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Spacer(),
+                                  Image.asset(
+                                    "assets/arrow.png",
+                                    height: 11,
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        divider(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return CommonWebviewScreen(
+                                url:
+                                    "${AppConfig.RAW_BASE_URL}/mobile-page/return-policy",
+                                page_name: AppLocalizations.of(context)
+                                    .product_details_screen_return_policy,
+                              );
+                            }));
+                          },
+                          child: Container(
+                            color: MyTheme.white,
+                            height: 48,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                18.0,
+                                14.0,
+                                18.0,
+                                14.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .product_details_screen_return_policy,
+                                    style: TextStyle(
+                                        color: MyTheme.dark_font_grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Spacer(),
+                                  Image.asset(
+                                    "assets/arrow.png",
+                                    height: 11,
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        divider(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return CommonWebviewScreen(
+                                url:
+                                    "${AppConfig.RAW_BASE_URL}/mobile-page/support-policy",
+                                page_name: AppLocalizations.of(context)
+                                    .product_details_screen_support_policy,
+                              );
+                            }));
+                          },
+                          child: Container(
+                            color: MyTheme.white,
+                            height: 48,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                18.0,
+                                14.0,
+                                18.0,
+                                14.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)
+                                        .product_details_screen_support_policy,
+                                    style: TextStyle(
+                                        color: MyTheme.dark_font_grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Spacer(),
+                                  Image.asset(
+                                    "assets/arrow.png",
+                                    height: 11,
+                                    width: 20,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        divider(),
+                      ]),
+                ),
+
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        18.0,
+                        24.0,
+                        18.0,
+                        0.0,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .product_details_screen_products_may_like,
+                        style: TextStyle(
+                            color: MyTheme.dark_font_grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    buildProductsMayLikeList()
+                  ]),
+                ),
+
+                //Top selling product
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        18.0,
+                        24.0,
+                        18.0,
+                        0.0,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)
+                            .top_selling_products_screen_top_selling_products,
+                        style: TextStyle(
+                            color: MyTheme.dark_font_grey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        16.0,
+                        0.0,
+                        16.0,
+                        0.0,
+                      ),
+                      child: buildTopSellingProductList(),
+                    ),
+                    Container(
+                      height: 83,
+                    )
+                  ]),
+                )
               ],
             ):Center(child: CircularProgressIndicator(),),
           )),
