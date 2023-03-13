@@ -32,5 +32,6 @@ class AppConfig {
   static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
   static const String BASE_URLV1 = "http://192.168.68.102:8081/";
   static const String BASE_URL_noslash = "http://192.168.68.102";
+  static const String IMAGE_URL = "http://192.168.68.102:6660/upload/";
   // static const String port =
 }

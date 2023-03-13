@@ -2,8 +2,10 @@ import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:active_ecommerce_flutter/screens/product_details.dart';
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
+
+import '../app_config.dart';
 class MiniProductCard extends StatefulWidget {
-  int id;
+  String id;
   String image;
   String name;
   String main_price;
@@ -41,7 +43,7 @@ class _MiniProductCardState extends State<MiniProductCard> {
                             top: Radius.circular(6), bottom: Radius.zero),
                         child: FadeInImage.assetNetwork(
                           placeholder: 'assets/placeholder.png',
-                          image:  widget.image,
+                          image: AppConfig.IMAGE_URL+widget.image,
                           fit: BoxFit.cover,
                         ))),
               ),

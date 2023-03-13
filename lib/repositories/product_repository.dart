@@ -121,19 +121,21 @@ class ProductRepository {
     return productDetailsResponseFromJson(response.body);
   }
 
-  Future<ProductMiniResponse> getRelatedProducts({@required int id = 0}) async {
-    Uri url =
-        Uri.parse("${AppConfig.BASE_URL}/products/related/" + id.toString());
+  Future<AllProductResponse> getRelatedProducts({@required String id }) async {
+    Uri url = Uri.parse("${AppConfig.BASE_URLV1}product/list?limit=10&user_id=" + id.toString()+'&offset=1');
+
+    print(url.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
     });
-    return productMiniResponseFromJson(response.body);
+    print(response.body.toString());
+    return allProductResponseFromJson(response.body);
   }
 
-  Future<ProductMiniResponse> getTopFromThisSellerProducts(
-      {@required int id = 0}) async {
+  Future<AllProductResponse> getTopFromThisSellerProducts(
+      {@required String id }) async {
     Uri url = Uri.parse(
-        "${AppConfig.BASE_URL}/products/top-from-seller/" + id.toString());
+        "${AppConfig.BASE_URLV1}order/topsellingproduct?user_id=" + id.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
     });
@@ -141,7 +143,7 @@ class ProductRepository {
     print("top selling product url ${url.toString()}");
     print("top selling product ${response.body.toString()}");
 
-    return productMiniResponseFromJson(response.body);
+    return allProductResponseFromJson(response.body);
   }
 
   Future<VariantResponse> getVariantWiseInfo(

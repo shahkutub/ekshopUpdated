@@ -37,6 +37,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
 
+import '../data_model/all_product_response.dart';
 import '../data_model/product_details_response.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -87,9 +88,9 @@ class _ProductDetailsState extends State<ProductDetails>
 
   double opacity = 0;
 
-  List<dynamic> _relatedProducts = [];
+  List<Data> _relatedProducts = [];
   bool _relatedProductInit = false;
-  List<dynamic> _topProducts = [];
+  List<Data> _topProducts = [];
   bool _topProductInit = false;
 
   @override
@@ -142,8 +143,8 @@ class _ProductDetailsState extends State<ProductDetails>
     if (is_logged_in.$ == true) {
       fetchWishListCheckInfo();
     }
-    // fetchRelatedProducts();
-    // fetchTopProducts();
+     fetchRelatedProducts();
+     fetchTopProducts();
   }
 
   fetchProductDetails() async {
@@ -153,32 +154,33 @@ class _ProductDetailsState extends State<ProductDetails>
     if(productDetailsResponse != null){
       if (productDetailsResponse.data != null) {
         _productDetails = productDetailsResponse.data;
-        sellerChatTitleController.text =
-            productDetailsResponse.data.name;
+        // sellerChatTitleController.text =
+        //     productDetailsResponse.data.name;
+        // print('pName: '+_productDetails.name);
       }
 
-      print('pName: '+_productDetails.name);
+
       //setProductDetailValues();
     }
 
     setState(() {});
   }
 
-  // fetchRelatedProducts() async {
-  //   var relatedProductResponse =
-  //       await ProductRepository().getRelatedProducts(id: widget.id);
-  //   _relatedProducts.addAll(relatedProductResponse.products);
-  //   _relatedProductInit = true;
-  //
-  //   setState(() {});
-  // }
+  fetchRelatedProducts() async {
+    var relatedProductResponse =
+        await ProductRepository().getRelatedProducts(id: merchant_id.$);
+    _relatedProducts.addAll(relatedProductResponse.data);
+    _relatedProductInit = true;
 
-  // fetchTopProducts() async {
-  //   var topProductResponse =
-  //       await ProductRepository().getTopFromThisSellerProducts(id: widget.id);
-  //   _topProducts.addAll(topProductResponse.products);
-  //   _topProductInit = true;
-  // }
+    setState(() {});
+  }
+
+  fetchTopProducts() async {
+    var topProductResponse =
+        await ProductRepository().getTopFromThisSellerProducts(id: merchant_id.$);
+    _topProducts.addAll(topProductResponse.data);
+    _topProductInit = true;
+  }
 
   setProductDetailValues() {
     if (_productDetails != null) {
@@ -2164,11 +2166,11 @@ class _ProductDetailsState extends State<ProductDetails>
           itemBuilder: (context, index) {
             return ListProductCard(
                 id: _topProducts[index].id,
-                image: _topProducts[index].thumbnail_image,
+                image: _topProducts[index].images[0],
                 name: _topProducts[index].name,
-                main_price: _topProducts[index].main_price,
-                stroked_price: _topProducts[index].stroked_price,
-                has_discount: _topProducts[index].has_discount);
+                main_price: _topProducts[index].price.toString(),
+                stroked_price: _topProducts[index].price.toString(),
+                has_discount: true);
           },
         ),
       );
@@ -2222,11 +2224,12 @@ class _ProductDetailsState extends State<ProductDetails>
             itemBuilder: (context, index) {
               return MiniProductCard(
                   id: _relatedProducts[index].id,
-                  image: _relatedProducts[index].thumbnail_image,
+                  image: _relatedProducts[index].images[0],
                   name: _relatedProducts[index].name,
-                  main_price: _relatedProducts[index].main_price,
-                  stroked_price: _relatedProducts[index].stroked_price,
-                  has_discount: _relatedProducts[index].has_discount);
+                  main_price: _relatedProducts[index].price.toString(),
+                  stroked_price:'0',
+                  //has_discount: _relatedProducts[index].has_discount);
+                  has_discount: true);
             },
           ),
         ),
@@ -2465,14 +2468,14 @@ class _ProductDetailsState extends State<ProductDetails>
                       InkWell(
                         onTap: () {
                           openPhotoDialog(
-                              context, AppConfig.BASE_URL_noslash+':6660/upload/'+_productDetails.images[_currentImage]);
+                              context, AppConfig.IMAGE_URL+_productDetails.images[_currentImage]);
                         },
                         child: Container(
                             height: double.infinity,
                             width: double.infinity,
                             child: FadeInImage.assetNetwork(
                               placeholder: 'assets/placeholder_rectangle.png',
-                              image: AppConfig.BASE_URL_noslash+':6660/upload/'+i,
+                              image: AppConfig.IMAGE_URL+i,
                               fit: BoxFit.fitHeight,
                             )),
                       ),
