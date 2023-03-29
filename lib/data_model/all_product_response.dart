@@ -27,7 +27,7 @@ class AllProductResponse {
         data['image'] = this.image;
         data['totalCount'] = this.totalCount;
         if (this.data != null) {
-            data['`data`'] = this.data.map((v) => v.toJson()).toList();
+            data['data'] = this.data.map((v) => v.toJson()).toList();
         }
         return data;
     }
@@ -115,7 +115,7 @@ class Data {
 
             sku: json['sku'],
             status: json['status'],
-            stock_status_id: json['stock_status_id'],
+            //stock_status_id: json['stock_status_id'],
             store_id: json['store_id'],
             subtract: json['subtract'],
             tax_class_id: json['tax_class_id'],

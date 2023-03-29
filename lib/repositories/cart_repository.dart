@@ -76,7 +76,7 @@ class CartRepository {
   }
 
   Future<CartAddResponse> getCartAddResponse(
-      @required int id,
+      @required String id,
       @required String variant,
       @required int user_id,
       @required int quantity) async {

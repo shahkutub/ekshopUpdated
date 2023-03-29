@@ -124,14 +124,14 @@ class _SplashScreenState extends State<SplashScreen> {
                           color: Colors.white),
                     ),
                   ),
-                  Text(
-                    "V " + _packageInfo.version,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.0,
-                      color: Colors.white,
-                    ),
-                  ),
+                  // Text(
+                  //   "V " + _packageInfo.version,
+                  //   style: TextStyle(
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 14.0,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

@@ -125,7 +125,7 @@ class DataDetails {
             related: json['related'] != null ? (json['related'] as List).map((i) => Related.fromJson(i)).toList() : null,
             sku: json['sku'],
             status: json['status'],
-            stock_status_id: json['stock_status_id'],
+            //stock_status_id: json['stock_status_id'],
             store_id: json['store_id'],
             subtract: json['subtract'],
             //tag: json['tag'] != null ? (json['tag'] as List).map((i) => Object.fromJson(i)).toList() : null,

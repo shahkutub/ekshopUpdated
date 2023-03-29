@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
 import 'package:active_ecommerce_flutter/custom/text_styles.dart';
+import 'package:active_ecommerce_flutter/data_model/cart_item.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
 import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
@@ -39,6 +40,8 @@ import 'package:active_ecommerce_flutter/custom/box_decorations.dart';
 
 import '../data_model/all_product_response.dart';
 import '../data_model/product_details_response.dart';
+import '../helpers/DatabaseHelper.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ProductDetails extends StatefulWidget {
   String id;
@@ -93,8 +96,15 @@ class _ProductDetailsState extends State<ProductDetails>
   List<Data> _topProducts = [];
   bool _topProductInit = false;
 
+  List<CartItem> cart_item_list = [];
+
+  DatabaseHelper dbHelper;
+
   @override
-  void initState() {
+  Future<void> initState()  {
+
+    dbHelper = DatabaseHelper.instance;
+
     _ColorAnimationController =
         AnimationController(vsync: this, duration: Duration(seconds: 0));
 
@@ -138,7 +148,10 @@ class _ProductDetailsState extends State<ProductDetails>
     super.dispose();
   }
 
-  fetchAll() {
+  fetchAll() async {
+    cart_item_list = await dbHelper.getCartItems();
+    print('cart_items: ${cart_item_list.length.toString()}');
+
     fetchProductDetails();
     if (is_logged_in.$ == true) {
       fetchWishListCheckInfo();
@@ -154,11 +167,13 @@ class _ProductDetailsState extends State<ProductDetails>
     if(productDetailsResponse != null){
       if (productDetailsResponse.data != null) {
         _productDetails = productDetailsResponse.data;
+        _stock = _productDetails.quantity;
+        _singlePrice = _productDetails.price;
+        calculateTotalPrice();
         // sellerChatTitleController.text =
         //     productDetailsResponse.data.name;
         // print('pName: '+_productDetails.name);
       }
-
 
       //setProductDetailValues();
     }
@@ -188,7 +203,7 @@ class _ProductDetailsState extends State<ProductDetails>
       // _singlePrice = _productDetails.price;
       // _singlePriceString = _productDetails.price;
       calculateTotalPrice();
-     // _stock = _productDetails.current_stock;
+      _stock = _productDetails.quantity;
      //  _productDetails.images.forEach((photo) {
      //    _productImageList.add(photo);
      //  });
@@ -362,49 +377,75 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   onPressAddToCart(context, snackbar) {
-    //addToCart(mode: "add_to_cart", context: context, snackbar: snackbar);
+    addToCart(mode: "add_to_cart", context: context, snackbar: snackbar);
   }
 
   onPressBuyNow(context) {
-   // addToCart(mode: "buy_now", context: context);
+    addToCart(mode: "buy_now", context: context);
   }
 
-  // addToCart({mode, context = null, snackbar = null}) async {
-  //   if (is_logged_in.$ == false) {
-  //     // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning, context,
-  //     //     gravity: Toast.center, duration: Toast.lengthLong);
-  //     Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-  //     return;
-  //   }
-  //
-  //   // print(widget.id);
-  //   // print(_variant);
-  //   // print(user_id.$);
-  //   // print(_quantity);
-  //
-  //   // var cartAddResponse = await CartRepository()
-  //   //     .getCartAddResponse(widget.id, _variant, user_id.$, _quantity);
-  //
-  //   if (cartAddResponse.result == false) {
-  //     ToastComponent.showDialog(cartAddResponse.message,
-  //         gravity: Toast.center, duration: Toast.lengthLong);
-  //     return;
-  //   } else {
-  //     if (mode == "add_to_cart") {
-  //       if (snackbar != null && context != null) {
-  //         ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  //       }
-  //       reset();
-  //       fetchAll();
-  //     } else if (mode == 'buy_now') {
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) {
-  //         return Cart(has_bottomnav: false);
-  //       })).then((value) {
-  //         onPopped(value);
-  //       });
-  //     }
-  //   }
-  // }
+  addToCart({mode, context = null, snackbar = null}) async {
+
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnId: _productDetails.id,
+      DatabaseHelper.columnName: _productDetails.name,
+      DatabaseHelper.columnPrice: _productDetails.price.toString(),
+      DatabaseHelper.columnQuantity: _quantity,
+    };
+    dbHelper.addCartItem(row);
+
+    cart_item_list = await dbHelper.getCartItems();
+    print('cart_items: ${cart_item_list.length}');
+
+      if (mode == "add_to_cart") {
+        if (snackbar != null && context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        }
+        // reset();
+        // fetchAll();
+      } else if (mode == 'buy_now') {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return Cart(has_bottomnav: false);
+        })).then((value) {
+          onPopped(value);
+        });
+      }
+
+    // if (is_logged_in.$ == false) {
+    //   // ToastComponent.showDialog(AppLocalizations.of(context).common_login_warning,
+    //   //     gravity: Toast.center, duration: Toast.lengthLong);
+    //   Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    //   return;
+    // }
+
+    // print(widget.id);
+    // print(_variant);
+    // print(user_id.$);
+    // print(_quantity);
+    //
+    // var cartAddResponse = await CartRepository()
+    //     .getCartAddResponse(widget.id, _variant, user_id.$, _quantity);
+    //
+    // if (cartAddResponse.result == false) {
+    //   ToastComponent.showDialog(cartAddResponse.message,
+    //       gravity: Toast.center, duration: Toast.lengthLong);
+    //   return;
+    // } else {
+    //   if (mode == "add_to_cart") {
+    //     if (snackbar != null && context != null) {
+    //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    //     }
+    //     reset();
+    //     fetchAll();
+    //   } else if (mode == 'buy_now') {
+    //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //       return Cart(has_bottomnav: false);
+    //     })).then((value) {
+    //       onPopped(value);
+    //     });
+    //   }
+    // }
+  }
 
   onPopped(value) async {
     reset();
@@ -702,7 +743,7 @@ class _ProductDetailsState extends State<ProductDetails>
         messenger_title: conversationCreateResponse.title,
         messenger_image: conversationCreateResponse.shop_logo,
       );
-      ;
+
     })).then((value) {
       onPopped(value);
     });
@@ -790,44 +831,49 @@ class _ProductDetailsState extends State<ProductDetails>
                                     fontWeight: FontWeight.bold),
                               ))),
                       Spacer(),
-                      InkWell(
-                        onTap: () {
-                          onPressShare(context);
-                        },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          child: Center(
-                            child: Icon(
-                              Icons.share_outlined,
-                              color: MyTheme.dark_font_grey,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     onPressShare(context);
+                      //   },
+                      //   child: Container(
+                      //     decoration:
+                      //         BoxDecorations.buildCircularButtonDecoration_1(),
+                      //     width: 36,
+                      //     height: 36,
+                      //     child: Center(
+                      //       child: Icon(
+                      //         Icons.share_outlined,
+                      //         color: MyTheme.dark_font_grey,
+                      //         size: 16,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(width: 10),
                       InkWell(
                         onTap: () {
                           onWishTap();
                         },
-                        child: Container(
-                          decoration:
-                              BoxDecorations.buildCircularButtonDecoration_1(),
-                          width: 36,
-                          height: 36,
-                          child: Center(
-                            child: Icon(
-                              FontAwesome.heart,
-                              color: _isInWishList
-                                  ? Color.fromRGBO(230, 46, 4, 1)
-                                  : MyTheme.dark_font_grey,
-                              size: 16,
-                            ),
-                          ),
-                        ),
+                        child: badges.Badge(
+                          badgeColor: Colors.purple,
+                          badgeContent: Text(cart_item_list.length>0?cart_item_list.length.toString():'0',style:TextStyle(color: Colors.white,fontSize: 10),),
+                          child: Icon(Icons.shopping_cart,color: Colors.purple,),
+                        )
+                        // Container(
+                        //   decoration:
+                        //       BoxDecorations.buildCircularButtonDecoration_1(),
+                        //   width: 36,
+                        //   height: 36,
+                        //   child: Center(
+                        //     child: Icon(
+                        //       FontAwesome.shopping_cart,
+                        //       color: _isInWishList
+                        //           ? Color.fromRGBO(230, 46, 4, 1)
+                        //           : MyTheme.dark_font_grey,
+                        //       size: 16,
+                        //     ),
+                        //   ),
+                        // ),
                       ),
                     ],
                   ),
@@ -1398,8 +1444,8 @@ class _ProductDetailsState extends State<ProductDetails>
             padding: const EdgeInsets.only(left: 5.0),
             child: Text(
               //_productDetails.currency_symbol +
-                  //_totalPrice.toString(),
-                  _productDetails.price.toString(),
+                  _totalPrice.toString(),
+                  //_productDetails.price.toString(),
               style: TextStyle(
                   color: MyTheme.accent_color,
                   fontSize: 16.0,
@@ -2516,4 +2562,8 @@ class _ProductDetailsState extends State<ProductDetails>
       height: 5,
     );
   }
+
+
+
 }
+

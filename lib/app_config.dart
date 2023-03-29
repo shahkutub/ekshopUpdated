@@ -20,9 +20,9 @@ class AppConfig {
   //configure this
 
   // static const DOMAIN_PATH = "192.168.6.1/folder"; //localhost
-  //
+  //http://192.168.68.119:8081
   static const DOMAIN_PATH =
-      "192.168.68.102"; // directly inside the public folder
+      "192.168.68.119"; // directly inside the public folder
 
   //do not configure these below
   static const String API_ENDPATH = "api/v2";
@@ -30,8 +30,9 @@ class AppConfig {
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "${PROTOCOL}${DOMAIN_PATH}";
   static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
-  static const String BASE_URLV1 = "http://192.168.68.102:8081/";
-  static const String BASE_URL_noslash = "http://192.168.68.102";
-  static const String IMAGE_URL = "http://192.168.68.102:6660/upload/";
+  static const String BASE_URLV1 = "http://13.250.177.76:8080/";
+  static const String BASE_URL_noslash = "http://192.168.68.119";
+  static const String IMAGE_URL = "http://13.250.177.76:3111/upload/";
+  static const String IMAGE_URL_slider = "http://13.250.177.76:3110/upload/";
   // static const String port =
 }

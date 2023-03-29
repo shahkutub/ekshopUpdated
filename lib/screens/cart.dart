@@ -16,6 +16,9 @@ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:toast/toast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../data_model/cart_item.dart';
+import '../helpers/DatabaseHelper.dart';
+
 class Cart extends StatefulWidget {
   Cart(
       {Key key, this.has_bottomnav, this.from_navigation = false, this.counter})
@@ -35,7 +38,7 @@ class _CartState extends State<Cart> {
   bool _isInitial = true;
   var _cartTotal = 0.00;
   var _cartTotalString = ". . .";
-
+  List<CartItem> cartList = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -64,6 +67,8 @@ class _CartState extends State<Cart> {
   }
 
   fetchData() async {
+    cartList = await DatabaseHelper.instance.getCartItems();
+
     getCartCount();
     var cartResponseList =
         await CartRepository().getCartResponseList(user_id.$);
@@ -310,7 +315,8 @@ class _CartState extends State<Cart> {
                 child: buildBottomContainer(),
               )
             ],
-          )),
+          )
+      ),
     );
   }
 
@@ -526,6 +532,7 @@ class _CartState extends State<Cart> {
   }
 
   SingleChildScrollView buildCartSellerItemList(seller_index) {
+
     return SingleChildScrollView(
       child: ListView.separated(
         separatorBuilder: (context, index) => SizedBox(

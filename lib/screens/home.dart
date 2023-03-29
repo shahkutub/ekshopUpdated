@@ -608,8 +608,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 left: Radius.circular(6), right: Radius.zero),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'assets/placeholder.png',
-                              image:
-                                  'http://192.168.68.102:6660/upload/${_featuredCategoryList[index].image}',
+                              image: AppConfig.IMAGE_URL+'${_featuredCategoryList[index].image}',
                               fit: BoxFit.cover,
                             ))),
                     Flexible(
@@ -957,7 +956,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.all(Radius.circular(6)),
                             child: FadeInImage.assetNetwork(
                               placeholder: 'assets/placeholder_rectangle.png',
-                              image: "http://192.168.68.102:2500/upload/$i",
+
+                              image: AppConfig.IMAGE_URL_slider+i,
                               height: 140,
                               fit: BoxFit.cover,
                             ))),

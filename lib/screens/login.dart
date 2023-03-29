@@ -310,7 +310,14 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
-                        height: 36,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
+                        //height: 36,
                         child: TextField(
                           controller: _emailController,
                           autofocus: false,
@@ -409,15 +416,26 @@ class _LoginState extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Container(
-                      height: 36,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                      ),
                       child: TextField(
                         controller: _passwordController,
                         autofocus: false,
                         obscureText: true,
                         enableSuggestions: false,
                         autocorrect: false,
-                        decoration: InputDecorations.buildInputDecoration_1(
-                            hint_text: "• • • • • • • •"),
+                        decoration: InputDecoration(
+
+                          suffix: IconButton(
+                            icon: Icon(Icons.visibility,size: 10,),
+                          )
+                        ),
+
                       ),
                     ),
                     GestureDetector(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:active_ecommerce_flutter/custom/common_functions.dart';
+import 'package:active_ecommerce_flutter/helpers/DatabaseHelper.dart';
 import 'package:active_ecommerce_flutter/my_theme.dart';
 import 'package:active_ecommerce_flutter/presenter/bottom_appbar_index.dart';
 import 'package:active_ecommerce_flutter/presenter/cart_counter.dart';
@@ -19,6 +20,9 @@ import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:badges/badges.dart';
 import 'package:route_transitions/route_transitions.dart';
+
+import '../data_model/cart_item.dart';
+import 'cart/cart_screen.dart';
 
 class Main extends StatefulWidget {
   Main({Key key, go_back = true}) : super(key: key);
@@ -38,16 +42,21 @@ class _MainState extends State<Main> {
   CartCounter counter = CartCounter();
 
   var _children = [];
+  List<CartItem> cartList = [];
 
-  fetchAll(){
+  fetchAll() async {
+
     getCartCount();
   }
 
   void onTapped(int i) {
     fetchAll();
-    if (!is_logged_in.$ && (i == 3 || i == 2)) {
-      
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    // if (!is_logged_in.$ && (i == 3 || i == 2)) {
+    //   Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    //   return;
+    // }
+    if (i == 2) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(cartList:cartList,has_bottomnav: true,from_navigation:true)));
       return;
     }
 
@@ -71,13 +80,16 @@ class _MainState extends State<Main> {
   }
 
   void initState() {
+    getCartFromLocal();
+
     _children = [
       Home(counter: counter,),
       CategoryList(
         is_base_category: true,
 
       ),
-      Cart(has_bottomnav: true,from_navigation:true,counter: counter,),
+      //Cart(has_bottomnav: true,from_navigation:true,counter: counter,),
+      CartScreen(cartList: cartList,has_bottomnav: true,from_navigation:true),
       Profile()
     ];
     fetchAll();
@@ -174,12 +186,14 @@ class _MainState extends State<Main> {
                               height: 16,
                             ),
                             padding: EdgeInsets.all(4),
+                            //badgeContent: Text(cartList.length.toString(),style:TextStyle(color: Colors.white,fontSize: 10),),
+
                             badgeContent: StreamBuilder<int>(
                               stream: counter.controller.stream,
                               builder: (context, snapshot) {
                                 if(snapshot.hasData)
                                 return Text(snapshot.data.toString()+"", style: TextStyle(color: Colors.white,fontSize: 8));
-                                return Text("0", style: TextStyle(color: Colors.white,fontSize: 8));
+                                return Text(cartList.length.toString(), style: TextStyle(color: Colors.white,fontSize: 8));
                               }
                             ),
                           ),
@@ -208,6 +222,11 @@ class _MainState extends State<Main> {
         ),
       ),
     );
+  }
+
+  Future<void> getCartFromLocal() async {
+    cartList = await DatabaseHelper.instance.getCartItems();
+    counter.controller.sink.add(cartList.length);
   }
 
 
