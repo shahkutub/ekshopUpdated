@@ -42,6 +42,7 @@ class _CartScreenState extends State<CartScreen>{
     //setState(() {
       initData();
     //});
+    getSetCartTotal();
 
   }
 
@@ -142,16 +143,14 @@ class _CartScreenState extends State<CartScreen>{
             Container(
                 width: DeviceInfo(context).width / 4,
                 height: 120,
-                // child: ClipRRect(
-                //     borderRadius: BorderRadius.horizontal(
-                //         left: Radius.circular(6), right: Radius.zero),
-                //     child: FadeInImage.assetNetwork(
-                //       placeholder: 'assets/placeholder.png',
-                //       // image: _shopList[seller_index]
-                //       //     .cart_items[item_index]
-                //       //     .product_thumbnail_image,
-                //       fit: BoxFit.cover,
-                //     ))
+                child: ClipRRect(
+                    borderRadius: BorderRadius.horizontal(
+                        left: Radius.circular(6), right: Radius.zero),
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/placeholder.png',
+                      image: widget.cartList[index].imageUrl != null?widget.cartList[index].imageUrl:'http://13.250.177.76:3111/upload/1677348256896the_body_shop_british_rose_fresh_plumping_face_mask_-_75ml.jpg-1677348315766-.png',
+                      fit: BoxFit.cover,
+                    ))
             ),
             Container(
               //color: Colors.red,
@@ -175,7 +174,7 @@ class _CartScreenState extends State<CartScreen>{
                       padding: const EdgeInsets.only(top: 23.0),
                       child: Row(
                         children: [
-                          Text('test',
+                          Text('${widget.cartList[index].price}',
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
@@ -199,7 +198,12 @@ class _CartScreenState extends State<CartScreen>{
                 children: [
                   GestureDetector(
                     onTap: () {
+                      DatabaseHelper.instance.deleteItem(widget.cartList[index].id);
+                      widget.cartList.remove(widget.cartList[index]);
+                      getSetCartTotal();
+                      setState(() {
 
+                      });
                     },
                     child: Container(
                       child: Padding(
@@ -351,7 +355,10 @@ class _CartScreenState extends State<CartScreen>{
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        //onPressUpdate();
+                        widget.cartList.forEach((element) {
+                          DatabaseHelper.instance.updateItem(element);
+                        });
+
                       },
                     ),
                   ),
@@ -419,8 +426,8 @@ class _CartScreenState extends State<CartScreen>{
   getSetCartTotal() {
     _cartTotal = 0.00;
 
-        if (cartList.length > 0) {
-          cartList.forEach((cart_item) {
+        if (widget.cartList.length > 0) {
+          widget.cartList.forEach((cart_item) {
             _cartTotal += double.parse(
                 ((double.parse(cart_item.price)) * cart_item.quantity)
                     .toStringAsFixed(2));

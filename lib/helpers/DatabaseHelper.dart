@@ -7,12 +7,13 @@ class DatabaseHelper {
   static final _databaseName = "ekshop.db";
   static final _databaseVersion = 1;
 
-  static final table = 'cart';
+  static final tableCart = 'cart';
 
   static final columnId = 'id';
   static final columnName = 'name';
   static final columnPrice = 'price';
   static final columnQuantity = 'quantity';
+  static final columnCartImageUrl = 'imageUrl';
 
   // Make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -38,10 +39,11 @@ class DatabaseHelper {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE $table (
+      CREATE TABLE $tableCart (
         $columnId TEXT,
         $columnName TEXT,
         $columnPrice TEXT,
+        $columnCartImageUrl TEXT,
         $columnQuantity INTEGER
       )
     ''');
@@ -51,28 +53,28 @@ class DatabaseHelper {
   Future<int> addCartItem(Map<String, dynamic> row) async {
     Database db = await database;
     return await db.insert(
-        table, row, conflictAlgorithm: ConflictAlgorithm.replace);
+        tableCart, row, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<int> addItem(CartItem item) async {
     final db = await database;
-    return await db.insert(table, item.toMap());
+    return await db.insert(tableCart, item.toMap());
   }
 
   Future<int> updateItem(CartItem item) async {
     final db = await database;
     return await db.update(
-      table,
+      tableCart,
       item.toMap(),
       where: '$columnId = ?',
       whereArgs: [item.id],
     );
   }
 
-  Future<int> deleteItem(int id) async {
+  Future<int> deleteItem(String id) async {
     final db = await database;
     return await db.delete(
-      table,
+      tableCart,
       where: '$columnId = ?',
       whereArgs: [id],
     );

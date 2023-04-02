@@ -385,17 +385,18 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   addToCart({mode, context = null, snackbar = null}) async {
-
+    print('imgurl${_productDetails.images[0]}');
     Map<String, dynamic> row = {
       DatabaseHelper.columnId: _productDetails.id,
       DatabaseHelper.columnName: _productDetails.name,
       DatabaseHelper.columnPrice: _productDetails.price.toString(),
+      DatabaseHelper.columnCartImageUrl: AppConfig.IMAGE_URL+_productDetails.images[0],
       DatabaseHelper.columnQuantity: _quantity,
     };
     dbHelper.addCartItem(row);
 
     cart_item_list = await dbHelper.getCartItems();
-    print('cart_items: ${cart_item_list.length}');
+    //print('cart_items: ${cart_item_list[2].imageUrl}');
 
       if (mode == "add_to_cart") {
         if (snackbar != null && context != null) {

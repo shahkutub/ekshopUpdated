@@ -99,9 +99,12 @@ class ProductRepository {
         page = ""}) async {
     Uri url = Uri.parse("${AppConfig.BASE_URLV1}product/list?limit=10" +
         "&user_id=${merchant_id.$}&offset=${page}");
+    print(url);
 
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
     });
 
     print('allprodResponse: '+response.body.toString());

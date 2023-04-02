@@ -123,8 +123,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   fetchAll() {
-
-
+    fetchAllProducts();
     fetchCarouselImages();
     fetchBannerOneImages();
     fetchBannerTwoImages();
