@@ -20,8 +20,16 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  var discountVisibility;
+
   @override
   Widget build(BuildContext context) {
+    if(widget.has_discount && widget.discount != null ){
+      discountVisibility = true;
+    }else{
+      discountVisibility = false;
+    }
+
     print((MediaQuery.of(context).size.width - 48 ) / 2);
     return InkWell(
       onTap: () {

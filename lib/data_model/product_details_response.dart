@@ -35,7 +35,7 @@ class DataDetails {
     int v;
     String id;
     Brand brand;
-    int calculable_price;
+    dynamic calculable_price;
     List<Category> category;
     int cost_price;
     String createdAt;

@@ -129,7 +129,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     fetchBannerTwoImages();
     fetchFeaturedCategories();
     fetchFeaturedProducts();
-    fetchAllProducts();
+    //fetchAllProducts();
     getCartCount();
   }
 
@@ -191,7 +191,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _isAllProductInitial = false;
     _totalAllProductData = productResponse.totalCount;
     _showAllLoadingContainer = false;
-    //setState(() {});
+    setState(() {});
   }
 
   reset() {
@@ -484,49 +484,49 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
-  Widget buildHomeAllProducts(context) {
-    if (_isAllProductInitial && _allProductList.length == 0) {
-      return SingleChildScrollView(
-          child: ShimmerHelper().buildProductGridShimmer(
-              scontroller: _allProductScrollController));
-    } else if (_allProductList.length > 0) {
-      //snapshot.hasData
-
-      return GridView.builder(
-        // 2
-        //addAutomaticKeepAlives: true,
-        itemCount: _allProductList.length,
-        controller: _allProductScrollController,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.618),
-        padding: EdgeInsets.all(16.0),
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          // 3
-          return ProductCard(
-            //id: int.parse(_allProductList[index].store_id),
-            image: _allProductList[index].images[0],
-            //image: 'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
-            name: _allProductList[index].name,
-            // main_price: _allProductList[index].price.toString(),
-            // stroked_price: _allProductList[index].price.toString(),
-            has_discount: false,
-            // discount: _allProductList[index].price.toString(),
-          );
-        },
-      );
-    } else if (_totalAllProductData == 0) {
-      return Center(
-          child: Text(
-              AppLocalizations.of(context).common_no_product_is_available));
-    } else {
-      return Container(); // should never be happening
-    }
-  }
+  // Widget buildHomeAllProducts(context) {
+  //   if (_isAllProductInitial && _allProductList.length == 0) {
+  //     return SingleChildScrollView(
+  //         child: ShimmerHelper().buildProductGridShimmer(
+  //             scontroller: _allProductScrollController));
+  //   } else if (_allProductList.length > 0) {
+  //     //snapshot.hasData
+  //
+  //     return GridView.builder(
+  //       // 2
+  //       //addAutomaticKeepAlives: true,
+  //       itemCount: _allProductList.length,
+  //       controller: _allProductScrollController,
+  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //           crossAxisCount: 2,
+  //           crossAxisSpacing: 16,
+  //           mainAxisSpacing: 16,
+  //           childAspectRatio: 0.618),
+  //       padding: EdgeInsets.all(16.0),
+  //       physics: NeverScrollableScrollPhysics(),
+  //       shrinkWrap: true,
+  //       itemBuilder: (context, index) {
+  //         // 3
+  //         return ProductCard(
+  //           //id: int.parse(_allProductList[index].store_id),
+  //           image: _allProductList[index].images[0],
+  //           //image: 'https://media.istockphoto.com/id/1419645742/photo/anonymous-woman-holding-a-gift-box-and-looking-at-beauty-cosmetics-products-inside.jpg?s=1024x1024&w=is&k=20&c=yUMmkwNnXtHCJnF2VPyAiroRPmW_6bY6hnlfWTDbl7k=',
+  //           name: _allProductList[index].name,
+  //           // main_price: _allProductList[index].price.toString(),
+  //           // stroked_price: _allProductList[index].price.toString(),
+  //           has_discount: false,
+  //           // discount: _allProductList[index].price.toString(),
+  //         );
+  //       },
+  //     );
+  //   } else if (_totalAllProductData == 0) {
+  //     return Center(
+  //         child: Text(
+  //             AppLocalizations.of(context).common_no_product_is_available));
+  //   } else {
+  //     return Container(); // should never be happening
+  //   }
+  // }
 
   Widget buildHomeAllProducts2(context) {
     if (_isAllProductInitial && _allProductList.length == 0) {
@@ -552,8 +552,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                main_price: _allProductList[index].price.toString(),
                stroked_price: _allProductList[index].price.toString(),
              // has_discount: _allProductList[index].has_discount,
-              has_discount: true,
-               discount: _allProductList[index].price.toString(),
+              has_discount: _allProductList[index].has_discount,
+              discount: _allProductList[index].discount.toString(),
             );
           });
     } else if (_totalAllProductData == 0) {

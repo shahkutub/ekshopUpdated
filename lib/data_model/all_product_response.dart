@@ -35,6 +35,8 @@ class AllProductResponse {
 
 class Data {
     int v;
+    bool has_discount;
+    dynamic discount;
     String id;
     String brand;
     List<Category> category;
@@ -80,11 +82,12 @@ class Data {
     String weight_class_id;
     String width;
 
-    Data({this.v, this.id, this.brand, this.category, this.cost_price, this.description, this.ean, this.height, this.images, this.isbn, this.jan, this.length, this.length_class_id, this.location, this.manufacturer, this.manufacturer_id, this.meta_description, this.meta_keyword, this.meta_title, this.minimum_qty, this.model, this.mpn, this.name, this.points, this.price, this.product_attribute, this.product_discount, this.product_option_value, this.product_reward, this.product_special, this.quantity, this.related, this.sku, this.status, this.stock_status_id, this.store_id, this.subtract, this.tag, this.tax_class_id, this.type, this.upc, this.user, this.weight, this.weight_class_id, this.width});
+    Data({this.v, this.has_discount,this.id, this.brand, this.category, this.cost_price, this.description, this.ean, this.height, this.images, this.isbn, this.jan, this.length, this.length_class_id, this.location, this.manufacturer, this.manufacturer_id, this.meta_description, this.meta_keyword, this.meta_title, this.minimum_qty, this.model, this.mpn, this.name, this.points, this.price, this.product_attribute, this.product_discount, this.product_option_value, this.product_reward, this.product_special, this.quantity, this.related, this.sku, this.status, this.stock_status_id, this.store_id, this.subtract, this.tag, this.tax_class_id, this.type, this.upc, this.user, this.weight, this.weight_class_id, this.width});
 
     factory Data.fromJson(Map<String, dynamic> json) {
         return Data(
             v: json['__v'],
+            has_discount: json['has_discount'],
             id: json['_id'],
             brand: json['brand'],
             category: json['category'] != null ? (json['category'] as List).map((i) => Category.fromJson(i)).toList() : null,
@@ -131,6 +134,7 @@ class Data {
     Map<String, dynamic> toJson() {
         final Map<String, dynamic> data = new Map<String, dynamic>();
         data['__v'] = this.v;
+        data['has_discount'] = this.has_discount;
         data['_id'] = this.id;
         data['brand'] = this.brand;
         data['cost_price'] = this.cost_price;

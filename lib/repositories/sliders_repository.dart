@@ -12,10 +12,15 @@ class SlidersRepository {
     Uri url = Uri.parse(AppConfig.BASE_URLV1 +
         "ekshop/theme/slider/list?user_id=" +
         merchant_id.$);
+
+    print('sliderApi: ${url}');
+
     final response = await http.get(
       url,
       headers: {
         "App-Language": app_language.$,
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
       },
     );
     print(response.body.toString());

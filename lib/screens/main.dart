@@ -45,7 +45,8 @@ class _MainState extends State<Main> {
   List<CartItem> cartList = [];
 
   fetchAll() async {
-
+    cartList = await DatabaseHelper.instance.getCartItems();
+    counter.controller.sink.add(cartList.length);
     getCartCount();
   }
 
@@ -56,7 +57,7 @@ class _MainState extends State<Main> {
     //   return;
     // }
     if (i == 2) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(cartList:cartList,has_bottomnav: true,from_navigation:true)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen(cartList:cartList,has_bottomnav: true,from_navigation:true))).whenComplete(() => getCartFromLocal());
       return;
     }
 
@@ -80,7 +81,10 @@ class _MainState extends State<Main> {
   }
 
   void initState() {
-    getCartFromLocal();
+    setState(() {
+      getCartFromLocal();
+    });
+
 
     _children = [
       Home(counter: counter,),

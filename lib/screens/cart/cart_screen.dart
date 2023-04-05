@@ -327,7 +327,7 @@ class _CartScreenState extends State<CartScreen>{
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
-                    width: (MediaQuery.of(context).size.width - 48) * (1 / 3),
+                    width: MediaQuery.of(context).size.width/3,
                     height: 58,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -350,28 +350,29 @@ class _CartScreenState extends State<CartScreen>{
                       child: Text(
                         AppLocalizations.of(context).cart_screen_update_cart,
                         style: TextStyle(
-                            color: MyTheme.dark_font_grey,
+                            color: MyTheme.white,
                             fontSize: 13,
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
                         widget.cartList.forEach((element) {
                           DatabaseHelper.instance.updateItem(element);
+
                         });
 
                       },
                     ),
                   ),
                 ),
+                SizedBox(width: 10,),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
                     height: 58,
-                    width: (MediaQuery.of(context).size.width - 48) * (2 / 3),
+                    width: MediaQuery.of(context).size.width/2,
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        border:
-                        Border.all(color: MyTheme.accent_color, width: 1),
+                        //border: Border.all(color: MyTheme.accent_color, width: 1),
                         borderRadius: app_language_rtl.$
                             ? const BorderRadius.only(
                           topLeft: const Radius.circular(6.0),
