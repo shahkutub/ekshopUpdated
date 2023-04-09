@@ -33,6 +33,6 @@ class AppConfig {
   static const String BASE_URLV1 = "https://api.ekshop.com.bd/";
   static const String BASE_URL_noslash = "http://192.168.68.119";
   static const String IMAGE_URL = "https://imup3.ekshop.com.bd/upload/";
-  static const String IMAGE_URL_slider = "https://imup1.ekshop.com.bd/upload/";
+  static const String IMAGE_URL_slider = "https://imup2.ekshop.com.bd/upload/";
   // static const String port =
 }

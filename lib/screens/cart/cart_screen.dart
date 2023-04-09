@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/data_model/cart_item.dart';
 import 'package:active_ecommerce_flutter/helpers/DatabaseHelper.dart';
+import 'package:active_ecommerce_flutter/screens/check_out/check_out_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:toast/toast.dart';
@@ -357,7 +358,7 @@ class _CartScreenState extends State<CartScreen>{
                       onPressed: () {
                         widget.cartList.forEach((element) {
                           DatabaseHelper.instance.updateItem(element);
-
+                          Toast.show("Cart updated", duration: Toast.lengthShort, gravity:  Toast.bottom);
                         });
 
                       },
@@ -388,15 +389,15 @@ class _CartScreenState extends State<CartScreen>{
                         )),
                     child: ElevatedButton(
                       child: Text(
-                        AppLocalizations.of(context)
-                            .cart_screen_proceed_to_shipping,
+                        //AppLocalizations.of(context).cart_screen_proceed_to_shipping,
+                        'Proceed to checkout',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        //onPressProceedToShipping();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen()));
                       },
                     ),
                   ),
