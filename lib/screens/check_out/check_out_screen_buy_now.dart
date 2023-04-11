@@ -3,23 +3,25 @@
  import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../data_model/product_details_response.dart';
 import '../../my_theme.dart';
 
-class CheckOutScreen extends StatefulWidget {
+class CheckOutScreenBuyNow extends StatefulWidget {
 
-  final double subTotal;
+  final DataDetails productDetails ;
   final int shipping;
+  final int quantity;
   final double vat;
 
 
-  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat}) : super(key: key);
+  const CheckOutScreenBuyNow({Key key, this.productDetails, this.shipping,this.quantity, this.vat}) : super(key: key);
 
   @override
   _CheckoutState createState() => _CheckoutState();
 
  }
 
- class _CheckoutState extends State<CheckOutScreen> {
+ class _CheckoutState extends State<CheckOutScreenBuyNow> {
    // Default Radio Button Selected Item When App Starts.
    String radioButtonItemPickUp = 'Home';
    // Group Value for Radio Button.
@@ -401,7 +403,7 @@ class CheckOutScreen extends StatefulWidget {
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                  children: [
                                    Text('Subtotal'),
-                                   Text('${widget.subTotal.toStringAsFixed(2)} tk'),
+                                   Text('${(widget.productDetails.price*widget.quantity).toStringAsFixed(2)} tk'),
                                  ],
                                ),
                                Divider(),

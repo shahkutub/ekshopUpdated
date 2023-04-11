@@ -2,6 +2,8 @@ import 'package:active_ecommerce_flutter/custom/device_info.dart';
 import 'package:active_ecommerce_flutter/custom/text_styles.dart';
 import 'package:active_ecommerce_flutter/data_model/cart_item.dart';
 import 'package:active_ecommerce_flutter/screens/cart.dart';
+import 'package:active_ecommerce_flutter/screens/check_out/check_out_screen.dart';
+import 'package:active_ecommerce_flutter/screens/check_out/check_out_screen_buy_now.dart';
 import 'package:active_ecommerce_flutter/screens/common_webview_screen.dart';
 import 'package:active_ecommerce_flutter/screens/login.dart';
 import 'package:active_ecommerce_flutter/screens/product_reviews.dart';
@@ -42,6 +44,8 @@ import '../data_model/all_product_response.dart';
 import '../data_model/product_details_response.dart';
 import '../helpers/DatabaseHelper.dart';
 import 'package:badges/badges.dart' as badges;
+
+import 'cart/cart_screen.dart';
 
 class ProductDetails extends StatefulWidget {
   String id;
@@ -385,20 +389,40 @@ class _ProductDetailsState extends State<ProductDetails>
   }
 
   addToCart({mode, context = null, snackbar = null}) async {
-    print('imgurl${_productDetails.images[0]}');
-    Map<String, dynamic> row = {
-      DatabaseHelper.columnId: _productDetails.id,
-      DatabaseHelper.columnName: _productDetails.name,
-      DatabaseHelper.columnPrice: _productDetails.price.toString(),
-      DatabaseHelper.columnCartImageUrl: AppConfig.IMAGE_URL+_productDetails.images[0],
-      DatabaseHelper.columnQuantity: _quantity,
-    };
-    dbHelper.addCartItem(row);
 
-    cart_item_list = await dbHelper.getCartItems();
     //print('cart_items: ${cart_item_list[2].imageUrl}');
 
+      bool isExist = false;
       if (mode == "add_to_cart") {
+        cart_item_list =  await DatabaseHelper.instance.getCartItems();
+        cart_item_list.forEach((element) {
+          if(element.id == _productDetails.id &&  element.name == _productDetails.name){
+            isExist = true;
+          }
+        });
+
+        print('imgurl${_productDetails.images[0]}');
+        Map<String, dynamic> row = {
+          DatabaseHelper.columnId: _productDetails.id,
+          DatabaseHelper.columnName: _productDetails.name,
+          DatabaseHelper.columnPrice: _productDetails.price.toString(),
+          DatabaseHelper.columnCartImageUrl: AppConfig.IMAGE_URL+_productDetails.images[0],
+          DatabaseHelper.columnQuantity: _quantity,
+        };
+
+        if(!isExist){
+          dbHelper.addCartItem(row);
+        }else{
+          dbHelper.updateItem(CartItem(name: _productDetails.name,id: _productDetails.id,
+              quantity:_quantity,price: _productDetails.price.toString(),
+              imageUrl:AppConfig.IMAGE_URL+_productDetails.images[0] ));
+        }
+
+        cart_item_list = await dbHelper.getCartItems();
+        setState(() {
+
+        });
+
         if (snackbar != null && context != null) {
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
@@ -406,7 +430,7 @@ class _ProductDetailsState extends State<ProductDetails>
         // fetchAll();
       } else if (mode == 'buy_now') {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return Cart(has_bottomnav: false);
+          return CheckOutScreenBuyNow(productDetails: _productDetails,quantity:_quantity );
         })).then((value) {
           onPopped(value);
         });
@@ -765,8 +789,9 @@ class _ProductDetailsState extends State<ProductDetails>
         label: AppLocalizations.of(context)
             .product_details_screen_snackbar_show_cart,
         onPressed: () {
+          //var cartList = DatabaseHelper.instance.getCartItems();
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return Cart(has_bottomnav: false);
+            return CartScreen(has_bottomnav: true,from_navigation:true);
           })).then((value) {
             onPopped(value);
           });
@@ -853,7 +878,10 @@ class _ProductDetailsState extends State<ProductDetails>
                       SizedBox(width: 10),
                       InkWell(
                         onTap: () {
-                          onWishTap();
+                          //onWishTap();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return CartScreen(has_bottomnav: true,from_navigation:true);
+                          }));
                         },
                         child: badges.Badge(
                           badgeColor: Colors.purple,

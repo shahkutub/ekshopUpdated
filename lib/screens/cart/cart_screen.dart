@@ -3,6 +3,7 @@ import 'package:active_ecommerce_flutter/helpers/DatabaseHelper.dart';
 import 'package:active_ecommerce_flutter/screens/check_out/check_out_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:toast/toast.dart';
 
 import '../../custom/box_decorations.dart';
@@ -12,7 +13,6 @@ import '../../custom/toast_component.dart';
 import '../../custom/useful_elements.dart';
 import '../../helpers/shared_value_helper.dart';
 import '../../my_theme.dart';
-import '../../presenter/cart_counter.dart';
 
 class CartScreen extends StatefulWidget {
 
@@ -37,13 +37,16 @@ class _CartScreenState extends State<CartScreen>{
 
   String _cartTotalString = '0';
 
+  bool checkValue = false;
+
+
   @override
   void initState() {
     super.initState();
     //setState(() {
       initData();
     //});
-    getSetCartTotal();
+
 
   }
 
@@ -58,7 +61,7 @@ class _CartScreenState extends State<CartScreen>{
   @override
   Widget build(BuildContext context) {
 
-    print('cartList: ${widget.cartList.length}');
+    //print('cartList: ${widget.cartList.length}');
 
     return Scaffold(
         key: _scaffoldKey,
@@ -116,6 +119,9 @@ class _CartScreenState extends State<CartScreen>{
     cartList = await DatabaseHelper.instance.getCartItems();
     print('cartList: ${cartList.length}');
 
+    setState(() {
+      getSetCartTotal();
+    });
   }
   SingleChildScrollView buildCartSellerItemList() {
 
@@ -124,7 +130,7 @@ class _CartScreenState extends State<CartScreen>{
         separatorBuilder: (context, index) => SizedBox(
           height: 14,
         ),
-        itemCount: widget.cartList.length,
+        itemCount: cartList.length,
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -149,7 +155,7 @@ class _CartScreenState extends State<CartScreen>{
                         left: Radius.circular(6), right: Radius.zero),
                     child: FadeInImage.assetNetwork(
                       placeholder: 'assets/placeholder.png',
-                      image: widget.cartList[index].imageUrl != null?widget.cartList[index].imageUrl:'http://13.250.177.76:3111/upload/1677348256896the_body_shop_british_rose_fresh_plumping_face_mask_-_75ml.jpg-1677348315766-.png',
+                      image: cartList[index].imageUrl != null?cartList[index].imageUrl:'http://13.250.177.76:3111/upload/1677348256896the_body_shop_british_rose_fresh_plumping_face_mask_-_75ml.jpg-1677348315766-.png',
                       fit: BoxFit.cover,
                     ))
             ),
@@ -163,7 +169,7 @@ class _CartScreenState extends State<CartScreen>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.cartList[index].name,
+                      cartList[index].name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyle(
@@ -175,7 +181,7 @@ class _CartScreenState extends State<CartScreen>{
                       padding: const EdgeInsets.only(top: 23.0),
                       child: Row(
                         children: [
-                          Text('${widget.cartList[index].price}',
+                          Text('${cartList[index].price}',
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
@@ -199,8 +205,8 @@ class _CartScreenState extends State<CartScreen>{
                 children: [
                   GestureDetector(
                     onTap: () {
-                      DatabaseHelper.instance.deleteItem(widget.cartList[index].id);
-                      widget.cartList.remove(widget.cartList[index]);
+                      DatabaseHelper.instance.deleteItem(cartList[index].id);
+                      cartList.remove(cartList[index]);
                       getSetCartTotal();
                       setState(() {
 
@@ -228,7 +234,7 @@ class _CartScreenState extends State<CartScreen>{
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        widget.cartList[index].quantity = widget.cartList[index].quantity+1;
+                        cartList[index].quantity = cartList[index].quantity+1;
                         onQuantityIncrease(index);
                       });
 
@@ -247,15 +253,15 @@ class _CartScreenState extends State<CartScreen>{
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                    child: Text('${widget.cartList[index].quantity}',
+                    child: Text('${cartList[index].quantity}',
                       style:
                       TextStyle(color: MyTheme.accent_color, fontSize: 16),
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      if(widget.cartList[index].quantity >0){
-                        widget.cartList[index].quantity = widget.cartList[index].quantity - 1;
+                      if(cartList[index].quantity >0){
+                        cartList[index].quantity = cartList[index].quantity - 1;
                         onQuantityDecrease(index);
                       }
                     },
@@ -329,7 +335,7 @@ class _CartScreenState extends State<CartScreen>{
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
                     width: MediaQuery.of(context).size.width/3,
-                    height: 58,
+                    height: 45,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         // border:
@@ -356,7 +362,7 @@ class _CartScreenState extends State<CartScreen>{
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        widget.cartList.forEach((element) {
+                        cartList.forEach((element) {
                           DatabaseHelper.instance.updateItem(element);
                           Toast.show("Cart updated", duration: Toast.lengthShort, gravity:  Toast.bottom);
                         });
@@ -369,7 +375,7 @@ class _CartScreenState extends State<CartScreen>{
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
-                    height: 58,
+                    height: 45,
                     width: MediaQuery.of(context).size.width/2,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -397,7 +403,25 @@ class _CartScreenState extends State<CartScreen>{
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen()));
+                        if (is_logged_in.$ == false) {
+                          showDialog(
+                              // barrierDismissible: false,
+                              context: context,
+                            builder: (BuildContext context){
+                                return AlertDialog(
+                                    contentPadding: EdgeInsets.zero,
+                                  content: StatefulBuilder(
+                                builder: (BuildContext context, StateSetter _setState) {
+                                  return dialogUserInput(context,_setState);
+                                }
+                              ));
+                            }
+                          );
+
+                        }else{
+
+                        }
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(subTotal: _cartTotal,)));
                       },
                     ),
                   ),
@@ -428,8 +452,8 @@ class _CartScreenState extends State<CartScreen>{
   getSetCartTotal() {
     _cartTotal = 0.00;
 
-        if (widget.cartList.length > 0) {
-          widget.cartList.forEach((cart_item) {
+        if (cartList.length > 0) {
+          cartList.forEach((cart_item) {
             _cartTotal += double.parse(
                 ((double.parse(cart_item.price)) * cart_item.quantity)
                     .toStringAsFixed(2));
@@ -453,6 +477,256 @@ class _CartScreenState extends State<CartScreen>{
       //     gravity: Toast.center,
       //     duration: Toast.lengthLong);
     }
+  }
+
+  Widget dialogContent(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 0.0,right: 0.0),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+              top: 18.0,
+            ),
+            margin: EdgeInsets.only(top: 13.0,right: 8.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 0.0,
+                    offset: Offset(0.0, 0.0),
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(
+                  height: 20.0,
+                ),
+                // Center(
+                //     child: Container(
+                //       margin: EdgeInsets.all(5),
+                //       //width: MediaQuery.of(context).size.width * 0.65,
+                //       //padding: const EdgeInsets.all(0.0),
+                //       child:TextField(
+                //         style: TextStyle(color: Colors.white),
+                //         keyboardType: TextInputType.number,
+                //         decoration: InputDecoration(
+                //           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,style: BorderStyle.solid)),
+                //           labelText: 'Mobile number',
+                //           hintText: 'Enter Mobile number',
+                //
+                //           enabledBorder: OutlineInputBorder(
+                //             borderSide:
+                //             BorderSide(width: 2, color: Colors.white), //<-- SEE HERE
+                //             borderRadius: BorderRadius.circular(5),
+                //           ),
+                //
+                //           hintStyle: TextStyle(color: Colors.white),
+                //           labelStyle: TextStyle(color: Colors.white),
+                //
+                //
+                //         ),
+                //
+                //
+                //
+                //
+                //       ),
+                //
+                //     )//
+                // ),
+                SizedBox(height: 24.0),
+                Center(
+                  child: Text('Input OTP',style: TextStyle(color: Colors.white,fontSize: 20),),
+                ),
+                SizedBox(height: 24.0),
+                Center(
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5),
+                      alignment: Alignment.center,
+                      //width: MediaQuery.of(context).size.width * 0.65,
+                      padding: const EdgeInsets.all(0.0),
+                      child:
+                      OtpTextField(
+                        numberOfFields: 6,
+                        textStyle: TextStyle(fontSize: 20,color: Colors.white),
+                        borderColor: Color(0xFF512DA8),
+                        //set to true to show as box or false to show as dash
+                        showFieldAsBox: true,
+                        //runs when a code is typed in
+                        onCodeChanged: (String code) {
+                          //handle validation or checks here
+                        },
+                        //runs when every textfield is filled
+                        onSubmit: (String verificationCode){
+                          print('code'+verificationCode);
+
+                         // otpcode = verificationCode;
+
+                          // showDialog(
+                          //     context: context,
+                          //     builder: (context){
+                          //       return AlertDialog(
+                          //         title: Text("Verification Code"),
+                          //         content: Text('Code entered is $verificationCode'),
+                          //       );
+                          //     }
+                          // );
+                        }, // end onSubmit
+                      ),
+
+                    )//
+                ),
+                SizedBox(height: 24.0),
+
+                InkWell(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 15.0,bottom:15.0),
+                    decoration: BoxDecoration(
+                      color:Colors.white,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(16.0),
+                          bottomRight: Radius.circular(16.0)),
+                    ),
+                    child:  Text(
+                      "OK",
+                      style: TextStyle(color: Colors.blue,fontSize: 25.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onTap:(){
+
+                  },
+                )
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget dialogUserInput(BuildContext context,StateSetter _setState) {
+
+    return Container(
+      margin: EdgeInsets.only(left: 0.0,right: 0.0),
+      child: Stack(
+        children: <Widget>[
+          Container(
+
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 0.0,
+                    offset: Offset(0.0, 0.0),
+                  ),
+                ]),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(
+                  height: 20.0,
+                ),
+
+                SizedBox(height: 24.0),
+                Center(
+                  child: Text('Login',style: TextStyle(color: Colors.purpleAccent,fontSize: 20),),
+                ),
+                Center(
+                  child: Text('Login if you are a returning customer',style: TextStyle(color: Colors.black,fontSize: 10),),
+                ),
+                SizedBox(height: 24.0),
+
+                Center(
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      //width: MediaQuery.of(context).size.width * 0.65,
+                      //padding: const EdgeInsets.all(0.0),
+                      child:TextField(
+                        style: TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,style: BorderStyle.solid)),
+                          labelText: 'Input Mobile ',
+                          hintText: 'Input Mobile ',
+
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                            BorderSide(width: 2, color: Colors.grey), //<-- SEE HERE
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+
+                          hintStyle: TextStyle(color: Colors.purple),
+                          labelStyle: TextStyle(color: Colors.deepPurple),
+
+
+                        ),
+
+
+
+
+                      ),
+
+                    )//
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: checkValue,
+                      onChanged: (bool value) {
+
+                        _setState(() {
+                          checkValue = value;
+                          // if(!value){
+                          //   checkValue = true;
+                          // }else{
+                          //   checkValue = false;
+                          // }
+                        });
+                      },
+                    ),
+                    Text('Use email instead')
+
+                  ],
+                ),
+                SizedBox(height: 24.0),
+
+                InkWell(
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    margin: EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color:Colors.purple,
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child:  Text(
+                      "Submit",
+                      style: TextStyle(color: Colors.white,fontSize: 15.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  onTap:(){
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
   }
 
 }
