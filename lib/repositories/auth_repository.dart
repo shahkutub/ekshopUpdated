@@ -13,6 +13,8 @@ import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
+import '../data_model/customer_reg_response.dart';
+
 class AuthRepository {
 
 
@@ -226,6 +228,31 @@ class AuthRepository {
 
     return userByTokenResponseFromJson(response.body);
   }
+
+  Future<customer_reg_response> customerRegResponse(String phone,String email) async {
+      var post_body = jsonEncode(
+          {
+            "phone": "${phone}",
+            "code": "+880",
+            "otp": "true",
+            "otpnumber": "",
+            "email": email,
+            "choose_option": "true",
+          },
+          );
+      print(post_body);
+      Uri url = Uri.parse("${AppConfig.BASE_URLV1}user/customer-registration");
+      final response = await http.post(url,
+          headers: {
+            "Accept": "*/*",
+            "Content-Type": "application/json",
+            "App-Language": app_language.$,
+          },
+          body: post_body);
+      print(response.body.toString());
+      return customer_reg_responseFromJson(response.body);
+     // return response.body.toString();
+    }
 
 
 }

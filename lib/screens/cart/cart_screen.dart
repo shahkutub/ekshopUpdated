@@ -13,6 +13,7 @@ import '../../custom/toast_component.dart';
 import '../../custom/useful_elements.dart';
 import '../../helpers/shared_value_helper.dart';
 import '../../my_theme.dart';
+import '../../repositories/auth_repository.dart';
 
 class CartScreen extends StatefulWidget {
 
@@ -38,6 +39,9 @@ class _CartScreenState extends State<CartScreen>{
   String _cartTotalString = '0';
 
   bool checkValue = false;
+
+  var emailEditController = TextEditingController();
+  var phoneEditController = TextEditingController();
 
 
   @override
@@ -479,7 +483,7 @@ class _CartScreenState extends State<CartScreen>{
     }
   }
 
-  Widget dialogContent(BuildContext context) {
+  Widget dialogOtp(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 0.0,right: 0.0),
       child: Stack(
@@ -541,7 +545,7 @@ class _CartScreenState extends State<CartScreen>{
                 // ),
                 SizedBox(height: 24.0),
                 Center(
-                  child: Text('Input OTP',style: TextStyle(color: Colors.white,fontSize: 20),),
+                  child: Text('Input OTP',style: TextStyle(color: Colors.purple,fontSize: 20),),
                 ),
                 SizedBox(height: 24.0),
                 Center(
@@ -593,13 +597,14 @@ class _CartScreenState extends State<CartScreen>{
                           bottomRight: Radius.circular(16.0)),
                     ),
                     child:  Text(
-                      "OK",
-                      style: TextStyle(color: Colors.blue,fontSize: 25.0),
+                      "Submit",
+                      style: TextStyle(color: Colors.purple,fontSize: 25.0),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   onTap:(){
-
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 )
               ],
@@ -647,18 +652,49 @@ class _CartScreenState extends State<CartScreen>{
                 ),
                 SizedBox(height: 24.0),
 
+                !checkValue?
                 Center(
                     child: Container(
                       margin: EdgeInsets.all(15),
                       //width: MediaQuery.of(context).size.width * 0.65,
                       //padding: const EdgeInsets.all(0.0),
                       child:TextField(
+                        controller: phoneEditController,
                         style: TextStyle(color: Colors.black),
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,style: BorderStyle.solid)),
                           labelText: 'Input Mobile ',
-                          hintText: 'Input Mobile ',
+                         // hintText: '',
+
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                            BorderSide(width: 2, color: Colors.grey), //<-- SEE HERE
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          hintStyle: TextStyle(color: Colors.purple),
+                          labelStyle: TextStyle(color: Colors.deepPurple),
+                          prefixText: '+880 '
+
+                        ),
+
+                      ),
+
+                    )//
+                ):SizedBox(),
+                checkValue?Center(
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      //width: MediaQuery.of(context).size.width * 0.65,
+                      //padding: const EdgeInsets.all(0.0),
+                      child:TextField(
+                        controller: emailEditController,
+                        style: TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white,style: BorderStyle.solid)),
+                          labelText: 'Input Email ',
+                          hintText: 'Input Email ',
 
                           enabledBorder: OutlineInputBorder(
                             borderSide:
@@ -669,16 +705,12 @@ class _CartScreenState extends State<CartScreen>{
                           hintStyle: TextStyle(color: Colors.purple),
                           labelStyle: TextStyle(color: Colors.deepPurple),
 
-
                         ),
-
-
-
 
                       ),
 
                     )//
-                ),
+                ):SizedBox(),
                 Row(
                   children: [
                     Checkbox(
@@ -699,6 +731,7 @@ class _CartScreenState extends State<CartScreen>{
 
                   ],
                 ),
+
                 SizedBox(height: 24.0),
 
                 InkWell(
@@ -716,8 +749,33 @@ class _CartScreenState extends State<CartScreen>{
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  onTap:(){
-                    Navigator.pop(context);
+                  onTap:() async {
+                    if(!checkValue){
+                      emailEditController.text = '';
+                    }else{
+                      phoneEditController.text = '';
+                    }
+                    //Navigator.pop(context);
+                    var customerRegResponse = await AuthRepository().customerRegResponse(phoneEditController.text, emailEditController.text);
+                    if(customerRegResponse != null){
+                      if(!customerRegResponse.success){
+                        showDialog(
+                          // barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                  contentPadding: EdgeInsets.zero,
+                                  content: StatefulBuilder(
+                                      builder: (BuildContext context, StateSetter _setState) {
+                                        return dialogOtp(context);
+                                      }
+                                  ));
+                            }
+                        );
+                      }
+                    }
+
+
                   },
                 )
               ],
