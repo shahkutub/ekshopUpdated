@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:active_ecommerce_flutter/helpers/shared_value_helper.dart';
 
+import '../data_model/customer_information_response.dart';
 import '../data_model/customer_reg_response.dart';
 
 class AuthRepository {
@@ -229,15 +230,15 @@ class AuthRepository {
     return userByTokenResponseFromJson(response.body);
   }
 
-  Future<customer_reg_response> customerRegResponse(String phone,String email) async {
+    Future<customer_reg_response> customerRegResponse(String phone,String email) async {
       var post_body = jsonEncode(
           {
-            "phone": "${phone}",
+            "phone": int.parse(phone),
             "code": "+880",
-            "otp": "true",
+            "otp": phone.isEmpty?"true":"false",
             "otpnumber": "",
             "email": email,
-            "choose_option": "true",
+            "choose_option": phone.isEmpty?"true":"false",
           },
           );
       print(post_body);
@@ -253,6 +254,55 @@ class AuthRepository {
       return customer_reg_responseFromJson(response.body);
      // return response.body.toString();
     }
+
+    Future<customer_reg_response> otpOkResponse(String phone,String email, String otpNum) async {
+      var post_body = jsonEncode(
+          {
+            "phone": int.parse(phone),
+            "code": "+880",
+            "otp": phone.isEmpty?"true":"false",
+            "otpnumber": "",
+            "email": email,
+            "choose_option": phone.isEmpty?"true":"false",
+            "otpNum": otpNum,
+          },
+          );
+      print(post_body);
+      Uri url = Uri.parse("${AppConfig.BASE_URLV1}user/otpOk-registration");
+      final response = await http.post(url,
+          headers: {
+            "Accept": "*/*",
+            "Content-Type": "application/json",
+            "App-Language": app_language.$,
+          },
+          body: post_body);
+      print(response.body.toString());
+      return customer_reg_responseFromJson(response.body);
+     // return response.body.toString();
+    }
+
+    Future<CustomerInformationResponse> customerInformationResponse(String phone,String email) async {
+          var post_body = jsonEncode(
+              {
+                "phone": "${phone}",
+                "email": email,
+                "email_choosen": phone.isEmpty?"true":"false",
+                "otpSuccess": 'true',
+              },
+              );
+          print(post_body);
+          Uri url = Uri.parse("${AppConfig.BASE_URLV1}user/customer_information");
+          final response = await http.post(url,
+              headers: {
+                "Accept": "*/*",
+                "Content-Type": "application/json",
+                "App-Language": app_language.$,
+              },
+              body: post_body);
+          print(response.body.toString());
+          return customer_info_responseFromJson(response.body);
+         // return response.body.toString();
+        }
 
 
 }

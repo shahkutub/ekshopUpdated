@@ -1,6 +1,7 @@
 
 
- import 'package:flutter/cupertino.dart';
+ import 'package:active_ecommerce_flutter/data_model/customer_information_response.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../my_theme.dart';
@@ -10,9 +11,10 @@ class CheckOutScreen extends StatefulWidget {
   final double subTotal;
   final int shipping;
   final double vat;
+  final DataCustomerInfo customerInfo;
 
 
-  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat}) : super(key: key);
+  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo}) : super(key: key);
 
   @override
   _CheckoutState createState() => _CheckoutState();
@@ -34,6 +36,20 @@ class CheckOutScreen extends StatefulWidget {
    final _formKey = GlobalKey<FormState>();
    String dropdownValueCountry = 'Select Country';
    String dropdownValueDivision = 'Select division';
+
+  var nameEditController = TextEditingController();
+  var phoneEditController = TextEditingController();
+  var emailEditController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    nameEditController.text = widget.customerInfo.name;
+    phoneEditController.text = widget.customerInfo.phone;
+    emailEditController.text = widget.customerInfo.email;
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -94,6 +110,7 @@ class CheckOutScreen extends StatefulWidget {
                              width: width/2.2,
                              height: width/8,
                              child: TextFormField(
+                               controller: nameEditController,
                                validator: (value) {
                                  if (value.isEmpty) {
                                    return 'Please enter name';
@@ -113,6 +130,7 @@ class CheckOutScreen extends StatefulWidget {
                              width: width/2.2,
                              height: width/8,
                              child: TextFormField(
+                               controller: emailEditController,
                                validator: (value) {
                                  if (value.isEmpty) {
                                    return 'Please enter email';
@@ -140,6 +158,7 @@ class CheckOutScreen extends StatefulWidget {
                              width: width/2.2,
                              height: width/8,
                              child: TextFormField(
+                               controller: phoneEditController,
                                validator: (value) {
                                  if (value.isEmpty) {
                                    return 'Please enter phone number';
@@ -178,193 +197,193 @@ class CheckOutScreen extends StatefulWidget {
                            )
                          ],
                        ),
-                       SizedBox(height: 20,),
-                       //country division
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Container(
-                               width: width/2.2,
-                               height: width/8,
-                               child: InputDecorator(
-                                 decoration: InputDecoration(
-                                   contentPadding: EdgeInsets.symmetric(
-                                       horizontal: 20.0, vertical: 15.0),
-                                   labelText: 'Country',
-                                   border:
-                                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                                 ),
-
-                                 child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                                   value: dropdownValueCountry,
-                                   icon: const Icon(Icons.arrow_drop_down),
-                                   iconSize: 24,
-                                   elevation: 16,
-                                   style: const TextStyle(color: Colors.deepPurple),
-
-                                   onChanged: (String newValue) {
-                                     setState(() {
-                                       dropdownValueCountry = newValue;
-                                     });
-                                   },
-                                   items: <String>['Select Country', 'Two', 'Free', 'Four']
-                                       .map<DropdownMenuItem<String>>((String value) {
-                                     return DropdownMenuItem<String>(
-                                       value: value,
-                                       child: Text(value),
-                                     );
-                                   }).toList(),
-                                 ),  ),
-                               )
-                           ),
-
-                           Container(
-                             width: width/2.2,
-                             height: width/8,
-                             child: InputDecorator(
-                               decoration: InputDecoration(
-                                 contentPadding: EdgeInsets.symmetric(
-                                     horizontal: 20.0, vertical: 15.0),
-                                 labelText: 'Division',
-                                 border:
-                                 OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                               ),
-
-                               child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                                 value: dropdownValueDivision,
-                                 icon: const Icon(Icons.arrow_drop_down),
-                                 iconSize: 24,
-                                 elevation: 16,
-                                 style: const TextStyle(color: Colors.deepPurple),
-
-                                 onChanged: (String newValue) {
-                                   setState(() {
-                                     dropdownValueDivision = newValue;
-                                   });
-                                 },
-                                 items: <String>['Select division', 'Two', 'Free', 'Four']
-                                     .map<DropdownMenuItem<String>>((String value) {
-                                   return DropdownMenuItem<String>(
-                                     value: value,
-                                     child: Text(value),
-                                   );
-                                 }).toList(),
-                               ),  ),
-                             )
-                           )
-                         ],
-                       ),
-                       SizedBox(height: 20,),
-                       //district upozila
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Container(
-                               width: width/2.2,
-                               height: width/8,
-                               child: InputDecorator(
-                                 decoration: InputDecoration(
-                                   contentPadding: EdgeInsets.symmetric(
-                                       horizontal: 20.0, vertical: 15.0),
-                                   labelText: 'District',
-                                   border:
-                                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                                 ),
-
-                                 child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                                   value: dropdownValueCountry,
-                                   icon: const Icon(Icons.arrow_drop_down),
-                                   iconSize: 24,
-                                   elevation: 16,
-                                   style: const TextStyle(color: Colors.deepPurple),
-
-                                   onChanged: (String newValue) {
-                                     setState(() {
-                                       dropdownValueCountry = newValue;
-                                     });
-                                   },
-                                   items: <String>['Select Country', 'Two', 'Free', 'Four']
-                                       .map<DropdownMenuItem<String>>((String value) {
-                                     return DropdownMenuItem<String>(
-                                       value: value,
-                                       child: Text(value),
-                                     );
-                                   }).toList(),
-                                 ),  ),
-                               )
-                           ),
-                           Container(
-                               width: width/2.2,
-                               height: width/8,
-                               child: InputDecorator(
-                                 decoration: InputDecoration(
-                                   contentPadding: EdgeInsets.symmetric(
-                                       horizontal: 20.0, vertical: 15.0),
-                                   labelText: 'Upozila',
-                                   border:
-                                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                                 ),
-
-                                 child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                                   value: dropdownValueDivision,
-                                   icon: const Icon(Icons.arrow_drop_down),
-                                   iconSize: 24,
-                                   elevation: 16,
-                                   style: const TextStyle(color: Colors.deepPurple),
-
-                                   onChanged: (String newValue) {
-                                     setState(() {
-                                       dropdownValueDivision = newValue;
-                                     });
-                                   },
-                                   items: <String>['Select division', 'Two', 'Free', 'Four']
-                                       .map<DropdownMenuItem<String>>((String value) {
-                                     return DropdownMenuItem<String>(
-                                       value: value,
-                                       child: Text(value),
-                                     );
-                                   }).toList(),
-                                 ),  ),
-                               )
-                           )
-                         ],
-                       ),
-                       SizedBox(height: 20,),
-                       //union
-                       Container(
-                           width: width,
-                           height: width/8,
-                           child: InputDecorator(
-                             decoration: InputDecoration(
-                               contentPadding: EdgeInsets.symmetric(
-                                   horizontal: 20.0, vertical: 15.0),
-                               labelText: 'Union Parishad',
-                               border:
-                               OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                             ),
-
-                             child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                               value: dropdownValueCountry,
-                               icon: const Icon(Icons.arrow_drop_down),
-                               iconSize: 24,
-                               elevation: 16,
-                               style: const TextStyle(color: Colors.black),
-
-                               onChanged: (String newValue) {
-                                 setState(() {
-                                   dropdownValueCountry = newValue;
-                                 });
-                               },
-                               items: <String>['Select Country', 'Two', 'Free', 'Four']
-                                   .map<DropdownMenuItem<String>>((String value) {
-                                 return DropdownMenuItem<String>(
-                                   value: value,
-                                   child: Text(value),
-                                 );
-                               }).toList(),
-                             ),  ),
-                           )
-                       ),
+                       // SizedBox(height: 20,),
+                       // //country division
+                       // Row(
+                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       //   children: [
+                       //     Container(
+                       //         width: width/2.2,
+                       //         height: width/8,
+                       //         child: InputDecorator(
+                       //           decoration: InputDecoration(
+                       //             contentPadding: EdgeInsets.symmetric(
+                       //                 horizontal: 20.0, vertical: 15.0),
+                       //             labelText: 'Country',
+                       //             border:
+                       //             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                       //           ),
+                       //
+                       //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
+                       //             value: dropdownValueCountry,
+                       //             icon: const Icon(Icons.arrow_drop_down),
+                       //             iconSize: 24,
+                       //             elevation: 16,
+                       //             style: const TextStyle(color: Colors.deepPurple),
+                       //
+                       //             onChanged: (String newValue) {
+                       //               setState(() {
+                       //                 dropdownValueCountry = newValue;
+                       //               });
+                       //             },
+                       //             items: <String>['Select Country', 'Two', 'Free', 'Four']
+                       //                 .map<DropdownMenuItem<String>>((String value) {
+                       //               return DropdownMenuItem<String>(
+                       //                 value: value,
+                       //                 child: Text(value),
+                       //               );
+                       //             }).toList(),
+                       //           ),  ),
+                       //         )
+                       //     ),
+                       //
+                       //     Container(
+                       //       width: width/2.2,
+                       //       height: width/8,
+                       //       child: InputDecorator(
+                       //         decoration: InputDecoration(
+                       //           contentPadding: EdgeInsets.symmetric(
+                       //               horizontal: 20.0, vertical: 15.0),
+                       //           labelText: 'Division',
+                       //           border:
+                       //           OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                       //         ),
+                       //
+                       //         child: DropdownButtonHideUnderline( child:DropdownButton<String>(
+                       //           value: dropdownValueDivision,
+                       //           icon: const Icon(Icons.arrow_drop_down),
+                       //           iconSize: 24,
+                       //           elevation: 16,
+                       //           style: const TextStyle(color: Colors.deepPurple),
+                       //
+                       //           onChanged: (String newValue) {
+                       //             setState(() {
+                       //               dropdownValueDivision = newValue;
+                       //             });
+                       //           },
+                       //           items: <String>['Select division', 'Two', 'Free', 'Four']
+                       //               .map<DropdownMenuItem<String>>((String value) {
+                       //             return DropdownMenuItem<String>(
+                       //               value: value,
+                       //               child: Text(value),
+                       //             );
+                       //           }).toList(),
+                       //         ),  ),
+                       //       )
+                       //     )
+                       //   ],
+                       // ),
+                       // SizedBox(height: 20,),
+                       // //district upozila
+                       // Row(
+                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       //   children: [
+                       //     Container(
+                       //         width: width/2.2,
+                       //         height: width/8,
+                       //         child: InputDecorator(
+                       //           decoration: InputDecoration(
+                       //             contentPadding: EdgeInsets.symmetric(
+                       //                 horizontal: 20.0, vertical: 15.0),
+                       //             labelText: 'District',
+                       //             border:
+                       //             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                       //           ),
+                       //
+                       //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
+                       //             value: dropdownValueCountry,
+                       //             icon: const Icon(Icons.arrow_drop_down),
+                       //             iconSize: 24,
+                       //             elevation: 16,
+                       //             style: const TextStyle(color: Colors.deepPurple),
+                       //
+                       //             onChanged: (String newValue) {
+                       //               setState(() {
+                       //                 dropdownValueCountry = newValue;
+                       //               });
+                       //             },
+                       //             items: <String>['Select Country', 'Two', 'Free', 'Four']
+                       //                 .map<DropdownMenuItem<String>>((String value) {
+                       //               return DropdownMenuItem<String>(
+                       //                 value: value,
+                       //                 child: Text(value),
+                       //               );
+                       //             }).toList(),
+                       //           ),  ),
+                       //         )
+                       //     ),
+                       //     Container(
+                       //         width: width/2.2,
+                       //         height: width/8,
+                       //         child: InputDecorator(
+                       //           decoration: InputDecoration(
+                       //             contentPadding: EdgeInsets.symmetric(
+                       //                 horizontal: 20.0, vertical: 15.0),
+                       //             labelText: 'Upozila',
+                       //             border:
+                       //             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                       //           ),
+                       //
+                       //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
+                       //             value: dropdownValueDivision,
+                       //             icon: const Icon(Icons.arrow_drop_down),
+                       //             iconSize: 24,
+                       //             elevation: 16,
+                       //             style: const TextStyle(color: Colors.deepPurple),
+                       //
+                       //             onChanged: (String newValue) {
+                       //               setState(() {
+                       //                 dropdownValueDivision = newValue;
+                       //               });
+                       //             },
+                       //             items: <String>['Select division', 'Two', 'Free', 'Four']
+                       //                 .map<DropdownMenuItem<String>>((String value) {
+                       //               return DropdownMenuItem<String>(
+                       //                 value: value,
+                       //                 child: Text(value),
+                       //               );
+                       //             }).toList(),
+                       //           ),  ),
+                       //         )
+                       //     )
+                       //   ],
+                       // ),
+                       // SizedBox(height: 20,),
+                       // //union
+                       // Container(
+                       //     width: width,
+                       //     height: width/8,
+                       //     child: InputDecorator(
+                       //       decoration: InputDecoration(
+                       //         contentPadding: EdgeInsets.symmetric(
+                       //             horizontal: 20.0, vertical: 15.0),
+                       //         labelText: 'Union Parishad',
+                       //         border:
+                       //         OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                       //       ),
+                       //
+                       //       child: DropdownButtonHideUnderline( child:DropdownButton<String>(
+                       //         value: dropdownValueCountry,
+                       //         icon: const Icon(Icons.arrow_drop_down),
+                       //         iconSize: 24,
+                       //         elevation: 16,
+                       //         style: const TextStyle(color: Colors.black),
+                       //
+                       //         onChanged: (String newValue) {
+                       //           setState(() {
+                       //             dropdownValueCountry = newValue;
+                       //           });
+                       //         },
+                       //         items: <String>['Select Country', 'Two', 'Free', 'Four']
+                       //             .map<DropdownMenuItem<String>>((String value) {
+                       //           return DropdownMenuItem<String>(
+                       //             value: value,
+                       //             child: Text(value),
+                       //           );
+                       //         }).toList(),
+                       //       ),  ),
+                       //     )
+                       // ),
                        SizedBox(height: 20,),
                        //Address
                        Container(

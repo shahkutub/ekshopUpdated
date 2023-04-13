@@ -43,6 +43,8 @@ class _CartScreenState extends State<CartScreen>{
   var emailEditController = TextEditingController();
   var phoneEditController = TextEditingController();
 
+  String otpcode;
+
 
   @override
   void initState() {
@@ -368,7 +370,12 @@ class _CartScreenState extends State<CartScreen>{
                       onPressed: () {
                         cartList.forEach((element) {
                           DatabaseHelper.instance.updateItem(element);
-                          Toast.show("Cart updated", duration: Toast.lengthShort, gravity:  Toast.bottom);
+                          ToastComponent.showDialog(
+                              "Cart updated",
+                              gravity: Toast.center,
+                              duration: Toast.lengthLong);
+
+                          //Toast.show("Cart updated", duration: Toast.lengthShort, gravity:  Toast.bottom);
                         });
 
                       },
@@ -409,7 +416,7 @@ class _CartScreenState extends State<CartScreen>{
                       onPressed: () {
                         if (is_logged_in.$ == false) {
                           showDialog(
-                              // barrierDismissible: false,
+                               barrierDismissible: false,
                               context: context,
                             builder: (BuildContext context){
                                 return AlertDialog(
@@ -556,8 +563,8 @@ class _CartScreenState extends State<CartScreen>{
                       padding: const EdgeInsets.all(0.0),
                       child:
                       OtpTextField(
-                        numberOfFields: 6,
-                        textStyle: TextStyle(fontSize: 20,color: Colors.white),
+                        numberOfFields: 4,
+                        textStyle: TextStyle(fontSize: 20,color: Colors.black),
                         borderColor: Color(0xFF512DA8),
                         //set to true to show as box or false to show as dash
                         showFieldAsBox: true,
@@ -569,7 +576,7 @@ class _CartScreenState extends State<CartScreen>{
                         onSubmit: (String verificationCode){
                           print('code'+verificationCode);
 
-                         // otpcode = verificationCode;
+                          otpcode = verificationCode;
 
                           // showDialog(
                           //     context: context,
@@ -589,24 +596,43 @@ class _CartScreenState extends State<CartScreen>{
 
                 InkWell(
                   child: Container(
-                    padding: EdgeInsets.only(top: 15.0,bottom:15.0),
+                    margin: EdgeInsets.all(20),
+                    padding: EdgeInsets.only(top: 10.0,bottom:10.0),
                     decoration: BoxDecoration(
-                      color:Colors.white,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(16.0),
-                          bottomRight: Radius.circular(16.0)),
+                      color:Colors.purple,
+                      borderRadius: BorderRadius.all(Radius.circular(5))
                     ),
                     child:  Text(
                       "Submit",
-                      style: TextStyle(color: Colors.purple,fontSize: 25.0),
+                      style: TextStyle(color: Colors.white,fontSize: 25.0),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  onTap:(){
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                  onTap:() async {
+                    var otpOkResponse = await AuthRepository().otpOkResponse(phoneEditController.text, emailEditController.text,otpcode);
+                    if(otpOkResponse != null ){
+                      if(otpOkResponse.success){
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        var customerInfoResponse = await AuthRepository().customerInformationResponse(phoneEditController.text, emailEditController.text);
+                        if(customerInfoResponse != null){
+                          if(customerInfoResponse.data != null){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(customerInfo:customerInfoResponse.data, subTotal: _cartTotal,)));
+                          }
+                        }
+
+                      }else{
+                        ToastComponent.showDialog(
+                            "Otp did not matched",
+                            gravity: Toast.center,
+                            duration: Toast.lengthLong);
+                      }
+                      
+                    }
+
                   },
-                )
+                ),
+                SizedBox(height: 24.0),
               ],
             ),
           ),
@@ -619,11 +645,13 @@ class _CartScreenState extends State<CartScreen>{
   Widget dialogUserInput(BuildContext context,StateSetter _setState) {
 
     return Container(
+      height: 400,
       margin: EdgeInsets.only(left: 0.0,right: 0.0),
       child: Stack(
         children: <Widget>[
-          Container(
 
+
+          Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.rectangle,
@@ -687,7 +715,8 @@ class _CartScreenState extends State<CartScreen>{
                       margin: EdgeInsets.all(15),
                       //width: MediaQuery.of(context).size.width * 0.65,
                       //padding: const EdgeInsets.all(0.0),
-                      child:TextField(
+                      child:
+                      TextField(
                         controller: emailEditController,
                         style: TextStyle(color: Colors.black),
                         keyboardType: TextInputType.emailAddress,
@@ -755,31 +784,74 @@ class _CartScreenState extends State<CartScreen>{
                     }else{
                       phoneEditController.text = '';
                     }
-                    //Navigator.pop(context);
-                    var customerRegResponse = await AuthRepository().customerRegResponse(phoneEditController.text, emailEditController.text);
-                    if(customerRegResponse != null){
-                      if(!customerRegResponse.success){
-                        showDialog(
-                          // barrierDismissible: false,
-                            context: context,
-                            builder: (BuildContext context){
-                              return AlertDialog(
-                                  contentPadding: EdgeInsets.zero,
-                                  content: StatefulBuilder(
-                                      builder: (BuildContext context, StateSetter _setState) {
-                                        return dialogOtp(context);
-                                      }
-                                  ));
-                            }
-                        );
+
+                    if(!checkValue){
+                      if(phoneEditController.text.isEmpty){
+                        ToastComponent.showDialog(
+                            "Input Phone number",
+                            gravity: Toast.center,
+                            duration: Toast.lengthLong);
+                      }else{
+                        var customerRegResponse = await AuthRepository().customerRegResponse(phoneEditController.text, emailEditController.text);
+                        if(customerRegResponse != null){
+                          if(customerRegResponse.success){
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                      contentPadding: EdgeInsets.zero,
+                                      content: StatefulBuilder(
+                                          builder: (BuildContext context, StateSetter _setState) {
+                                            return dialogOtp(context);
+                                          }
+                                      ));
+                                }
+                            );
+                          }
+                        }
+                      }
+                    }else{
+                      if(emailEditController.text.isEmpty){
+                        ToastComponent.showDialog(
+                            "Input email",
+                            gravity: Toast.center,
+                            duration: Toast.lengthLong);
+                      }else{
+                        var customerRegResponse = await AuthRepository().customerRegResponse(phoneEditController.text, emailEditController.text);
+                        if(customerRegResponse != null){
+                          if(customerRegResponse.success){
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                      contentPadding: EdgeInsets.zero,
+                                      content: StatefulBuilder(
+                                          builder: (BuildContext context, StateSetter _setState) {
+                                            return dialogOtp(context);
+                                          }
+                                      ));
+                                }
+                            );
+                          }
+                        }
                       }
                     }
-
 
                   },
                 )
               ],
             ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+                icon:Icon(Icons.cancel,
+                color: Colors.red),color: Colors.red),
           ),
 
         ],

@@ -88,6 +88,7 @@ dependencies:
   flutter_local_notifications: ^9.7.0
   sqflite: ^2.0.0+3
   flutter_otp_text_field: ^1.1.1
+  fluttertoast: ^8.2.1
 
 
 dev_dependencies:
