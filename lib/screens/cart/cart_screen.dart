@@ -1,5 +1,6 @@
 import 'package:active_ecommerce_flutter/data_model/cart_item.dart';
 import 'package:active_ecommerce_flutter/helpers/DatabaseHelper.dart';
+import 'package:active_ecommerce_flutter/repositories/location_repository.dart';
 import 'package:active_ecommerce_flutter/screens/check_out/check_out_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +12,7 @@ import '../../custom/device_info.dart';
 import '../../custom/text_styles.dart';
 import '../../custom/toast_component.dart';
 import '../../custom/useful_elements.dart';
+import '../../data_model/country_list_response.dart';
 import '../../helpers/shared_value_helper.dart';
 import '../../my_theme.dart';
 import '../../repositories/auth_repository.dart';
@@ -45,12 +47,15 @@ class _CartScreenState extends State<CartScreen>{
 
   String otpcode;
 
+  List<CountryData> countryList = [];
+
 
   @override
-  void initState() {
+  Future<void> initState()  {
     super.initState();
     //setState(() {
       initData();
+
     //});
 
 
@@ -125,9 +130,15 @@ class _CartScreenState extends State<CartScreen>{
     cartList = await DatabaseHelper.instance.getCartItems();
     print('cartList: ${cartList.length}');
 
+
     setState(() {
       getSetCartTotal();
+
     });
+    //countryList.add(CountryData(name: 'Select country'));
+    CountryListResponse countryListResponse = await LocationRepository().getCountryListResponse();
+    countryList = countryListResponse.country_data;
+
   }
   SingleChildScrollView buildCartSellerItemList() {
 
@@ -414,25 +425,26 @@ class _CartScreenState extends State<CartScreen>{
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        if (is_logged_in.$ == false) {
-                          showDialog(
-                               barrierDismissible: false,
-                              context: context,
-                            builder: (BuildContext context){
-                                return AlertDialog(
-                                    contentPadding: EdgeInsets.zero,
-                                  content: StatefulBuilder(
-                                builder: (BuildContext context, StateSetter _setState) {
-                                  return dialogUserInput(context,_setState);
-                                }
-                              ));
-                            }
-                          );
+                        // if (is_logged_in.$ == false) {
+                        //   showDialog(
+                        //        barrierDismissible: false,
+                        //       context: context,
+                        //     builder: (BuildContext context){
+                        //         return AlertDialog(
+                        //             contentPadding: EdgeInsets.zero,
+                        //           content: StatefulBuilder(
+                        //         builder: (BuildContext context, StateSetter _setState) {
+                        //           return dialogUserInput(context,_setState);
+                        //         }
+                        //       ));
+                        //     }
+                        //   );
+                        //
+                        // }else{
+                        // }
 
-                        }else{
 
-                        }
-                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(subTotal: _cartTotal,)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(subTotal: _cartTotal,countryList: countryList,)));
                       },
                     ),
                   ),

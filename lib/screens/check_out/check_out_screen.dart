@@ -1,6 +1,8 @@
 
 
- import 'package:active_ecommerce_flutter/data_model/customer_information_response.dart';
+ import 'package:active_ecommerce_flutter/data_model/country_list_response.dart';
+import 'package:active_ecommerce_flutter/data_model/customer_information_response.dart';
+import 'package:active_ecommerce_flutter/repositories/location_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +14,10 @@ class CheckOutScreen extends StatefulWidget {
   final int shipping;
   final double vat;
   final DataCustomerInfo customerInfo;
+  final List<CountryData> countryList;
 
 
-  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo}) : super(key: key);
+  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo,this.countryList}) : super(key: key);
 
   @override
   _CheckoutState createState() => _CheckoutState();
@@ -34,20 +37,35 @@ class CheckOutScreen extends StatefulWidget {
 
 
    final _formKey = GlobalKey<FormState>();
-   String dropdownValueCountry = 'Select Country';
+   String dropdownValueCountry = 'Select country';
    String dropdownValueDivision = 'Select division';
+   String dropdownValueDistrict = 'Select District';
+   String dropdownValueThana = 'Select upozila';
+   String dropdownValueUp = 'Select Union Parishad';
 
   var nameEditController = TextEditingController();
   var phoneEditController = TextEditingController();
   var emailEditController = TextEditingController();
 
+   List<CountryData> divisionList = [];
+
+  int countryid;
+   final divisionKey = GlobalKey<FormFieldState>();
+
   @override
-  void initState() {
+  Future<void> initState()  {
     // TODO: implement initState
     super.initState();
-    nameEditController.text = widget.customerInfo.name;
-    phoneEditController.text = widget.customerInfo.phone;
-    emailEditController.text = widget.customerInfo.email;
+    if(widget.customerInfo != null){
+      nameEditController.text = widget.customerInfo.name;
+      phoneEditController.text = widget.customerInfo.phone;
+      emailEditController.text = widget.customerInfo.email;
+    }
+
+    widget.countryList.insert(0,CountryData(name: 'Select country'));
+
+
+
   }
 
   @override
@@ -197,82 +215,94 @@ class CheckOutScreen extends StatefulWidget {
                            )
                          ],
                        ),
-                       // SizedBox(height: 20,),
-                       // //country division
-                       // Row(
-                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       //   children: [
-                       //     Container(
-                       //         width: width/2.2,
-                       //         height: width/8,
-                       //         child: InputDecorator(
-                       //           decoration: InputDecoration(
-                       //             contentPadding: EdgeInsets.symmetric(
-                       //                 horizontal: 20.0, vertical: 15.0),
-                       //             labelText: 'Country',
-                       //             border:
-                       //             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                       //           ),
-                       //
-                       //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //             value: dropdownValueCountry,
-                       //             icon: const Icon(Icons.arrow_drop_down),
-                       //             iconSize: 24,
-                       //             elevation: 16,
-                       //             style: const TextStyle(color: Colors.deepPurple),
-                       //
-                       //             onChanged: (String newValue) {
-                       //               setState(() {
-                       //                 dropdownValueCountry = newValue;
-                       //               });
-                       //             },
-                       //             items: <String>['Select Country', 'Two', 'Free', 'Four']
-                       //                 .map<DropdownMenuItem<String>>((String value) {
-                       //               return DropdownMenuItem<String>(
-                       //                 value: value,
-                       //                 child: Text(value),
-                       //               );
-                       //             }).toList(),
-                       //           ),  ),
-                       //         )
-                       //     ),
-                       //
-                       //     Container(
-                       //       width: width/2.2,
-                       //       height: width/8,
-                       //       child: InputDecorator(
-                       //         decoration: InputDecoration(
-                       //           contentPadding: EdgeInsets.symmetric(
-                       //               horizontal: 20.0, vertical: 15.0),
-                       //           labelText: 'Division',
-                       //           border:
-                       //           OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                       //         ),
-                       //
-                       //         child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //           value: dropdownValueDivision,
-                       //           icon: const Icon(Icons.arrow_drop_down),
-                       //           iconSize: 24,
-                       //           elevation: 16,
-                       //           style: const TextStyle(color: Colors.deepPurple),
-                       //
-                       //           onChanged: (String newValue) {
-                       //             setState(() {
-                       //               dropdownValueDivision = newValue;
-                       //             });
-                       //           },
-                       //           items: <String>['Select division', 'Two', 'Free', 'Four']
-                       //               .map<DropdownMenuItem<String>>((String value) {
-                       //             return DropdownMenuItem<String>(
-                       //               value: value,
-                       //               child: Text(value),
-                       //             );
-                       //           }).toList(),
-                       //         ),  ),
-                       //       )
-                       //     )
-                       //   ],
-                       // ),
+                       SizedBox(height: 20,),
+                       //country & division
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           widget.countryList.length>0?
+                           Container(
+                               width: width/2.2,
+                               height: width/8,
+                               child: InputDecorator(
+                                 decoration: InputDecoration(
+                                   contentPadding: EdgeInsets.symmetric(
+                                       horizontal: 20.0, vertical: 15.0),
+                                   labelText: 'Country',
+                                   border:
+                                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                                 ),
+
+                                 child: DropdownButtonHideUnderline(
+                                   child:DropdownButton(
+                                   //hint: Text("Select Country"),
+                                   value: dropdownValueCountry,
+                                   icon: const Icon(Icons.arrow_drop_down),
+                                   iconSize: 24,
+                                   elevation: 16,
+                                   style: const TextStyle(color: Colors.deepPurple),
+
+                                   onChanged: (String newValue)  {
+                                     //setState(()  {
+                                       dropdownValueCountry = newValue;
+                                     //divisionKey.currentState.reset();
+                                       widget.countryList.forEach((element){
+                                         if(newValue != 'Select country' && newValue == element.name){
+                                           countryid = element.id;
+                                           getDivision();
+                                         }
+                                       });
+
+                                     //});
+                                   },
+                                   items: widget.countryList.map((country){
+                                     return DropdownMenuItem(
+                                       child: Text(country.name),
+                                       value: country.name,
+                                     );
+                                   }).toList(),
+                                 ),  ),
+                               )
+                           ):SizedBox(),
+
+                           Container(
+                             width: width/2.2,
+                             height: width/8,
+                             child: InputDecorator(
+                               decoration: InputDecoration(
+                                 contentPadding: EdgeInsets.symmetric(
+                                     horizontal: 20.0, vertical: 15.0),
+                                 labelText: 'Division',
+                                 border:
+                                 OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                               ),
+
+                               child: divisionList.length>0?
+                               DropdownButtonHideUnderline( child:DropdownButton(
+                                 value: dropdownValueDivision,
+                                 key: divisionKey,
+                                 icon: const Icon(Icons.arrow_drop_down),
+                                 iconSize: 24,
+                                 elevation: 16,
+                                 style: const TextStyle(color: Colors.deepPurple),
+
+                                 onChanged: (String newValue) {
+                                  // setState(() {
+                                     dropdownValueDivision = newValue;
+
+                                  // });
+                                 },
+                                 items: divisionList.map((country){
+                                   return DropdownMenuItem(
+                                     child: Text(country.name),
+                                     value: country.name,
+                                   );
+                                 }).toList(),
+                               ),):SizedBox(),
+                             )
+                           )
+                         ],
+                       ),
                        // SizedBox(height: 20,),
                        // //district upozila
                        // Row(
@@ -325,7 +355,7 @@ class CheckOutScreen extends StatefulWidget {
                        //           ),
                        //
                        //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //             value: dropdownValueDivision,
+                       //             value: dropdownValueThana,
                        //             icon: const Icon(Icons.arrow_drop_down),
                        //             iconSize: 24,
                        //             elevation: 16,
@@ -333,10 +363,10 @@ class CheckOutScreen extends StatefulWidget {
                        //
                        //             onChanged: (String newValue) {
                        //               setState(() {
-                       //                 dropdownValueDivision = newValue;
+                       //                 dropdownValueThana = newValue;
                        //               });
                        //             },
-                       //             items: <String>['Select division', 'Two', 'Free', 'Four']
+                       //             items: <String>['Select upozila', 'Two', 'Free', 'Four']
                        //                 .map<DropdownMenuItem<String>>((String value) {
                        //               return DropdownMenuItem<String>(
                        //                 value: value,
@@ -363,7 +393,7 @@ class CheckOutScreen extends StatefulWidget {
                        //       ),
                        //
                        //       child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //         value: dropdownValueCountry,
+                       //         value: dropdownValueUp,
                        //         icon: const Icon(Icons.arrow_drop_down),
                        //         iconSize: 24,
                        //         elevation: 16,
@@ -371,10 +401,10 @@ class CheckOutScreen extends StatefulWidget {
                        //
                        //         onChanged: (String newValue) {
                        //           setState(() {
-                       //             dropdownValueCountry = newValue;
+                       //             dropdownValueUp = newValue;
                        //           });
                        //         },
-                       //         items: <String>['Select Country', 'Two', 'Free', 'Four']
+                       //         items: <String>['Select Union Parishad', 'Two', 'Free', 'Four']
                        //             .map<DropdownMenuItem<String>>((String value) {
                        //           return DropdownMenuItem<String>(
                        //             value: value,
@@ -384,6 +414,7 @@ class CheckOutScreen extends StatefulWidget {
                        //       ),  ),
                        //     )
                        // ),
+
                        SizedBox(height: 20,),
                        //Address
                        Container(
@@ -671,6 +702,17 @@ class CheckOutScreen extends StatefulWidget {
       elevation: 0.0,
       titleSpacing: 0,
     );
+  }
+
+  void getDivision() async{
+    divisionList.clear();
+    CountryListResponse countryListResponse = await LocationRepository().getDivisionListResponse(countryid);
+    divisionList = countryListResponse.country_data;
+    divisionList.insert(0,CountryData(name: 'Select division'));
+
+    setState(() {
+
+    });
   }
 
  }
