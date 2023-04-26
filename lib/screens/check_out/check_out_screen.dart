@@ -5,6 +5,7 @@ import 'package:active_ecommerce_flutter/data_model/customer_information_respons
 import 'package:active_ecommerce_flutter/repositories/location_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../my_theme.dart';
 
@@ -39,18 +40,24 @@ class CheckOutScreen extends StatefulWidget {
    final _formKey = GlobalKey<FormState>();
    String dropdownValueCountry = 'Select country';
    String dropdownValueDivision = 'Select division';
-   String dropdownValueDistrict = 'Select District';
-   String dropdownValueThana = 'Select upozila';
-   String dropdownValueUp = 'Select Union Parishad';
+   String dropdownValueDistrict = 'Select district';
+   String dropdownValueUpozila = 'Select upozila';
+   String dropdownValueUp = 'Select union parishad';
 
   var nameEditController = TextEditingController();
   var phoneEditController = TextEditingController();
   var emailEditController = TextEditingController();
 
    List<CountryData> divisionList = [];
+   List<CountryData> districtList = [];
+   List<CountryData> upozilaList = [];
+   List<CountryData> upList = [];
 
   int countryid;
-   final divisionKey = GlobalKey<FormFieldState>();
+  int divisionId;
+  int districtId;
+  int upozilaId;
+  //final divisionKey = GlobalKey<FormFieldState>();
 
   @override
   Future<void> initState()  {
@@ -62,7 +69,7 @@ class CheckOutScreen extends StatefulWidget {
       emailEditController.text = widget.customerInfo.email;
     }
 
-    widget.countryList.insert(0,CountryData(name: 'Select country'));
+    widget.countryList.insert(0,CountryData(name: dropdownValueCountry));
 
 
 
@@ -240,7 +247,7 @@ class CheckOutScreen extends StatefulWidget {
                                    icon: const Icon(Icons.arrow_drop_down),
                                    iconSize: 24,
                                    elevation: 16,
-                                   style: const TextStyle(color: Colors.deepPurple),
+                                   style: const TextStyle(color: Colors.black),
 
                                    onChanged: (String newValue)  {
                                      //setState(()  {
@@ -280,16 +287,21 @@ class CheckOutScreen extends StatefulWidget {
                                child: divisionList.length>0?
                                DropdownButtonHideUnderline( child:DropdownButton(
                                  value: dropdownValueDivision,
-                                 key: divisionKey,
+                                 //key: divisionKey,
                                  icon: const Icon(Icons.arrow_drop_down),
                                  iconSize: 24,
                                  elevation: 16,
-                                 style: const TextStyle(color: Colors.deepPurple),
+                                 style: const TextStyle(color: Colors.black),
 
                                  onChanged: (String newValue) {
                                   // setState(() {
                                      dropdownValueDivision = newValue;
-
+                                     divisionList.forEach((element){
+                                       if(newValue != 'Select division' && newValue == element.name){
+                                         divisionId = element.id;
+                                         getDistrict();
+                                       }
+                                     });
                                   // });
                                  },
                                  items: divisionList.map((country){
@@ -303,117 +315,145 @@ class CheckOutScreen extends StatefulWidget {
                            )
                          ],
                        ),
-                       // SizedBox(height: 20,),
-                       // //district upozila
-                       // Row(
-                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       //   children: [
-                       //     Container(
-                       //         width: width/2.2,
-                       //         height: width/8,
-                       //         child: InputDecorator(
-                       //           decoration: InputDecoration(
-                       //             contentPadding: EdgeInsets.symmetric(
-                       //                 horizontal: 20.0, vertical: 15.0),
-                       //             labelText: 'District',
-                       //             border:
-                       //             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                       //           ),
-                       //
-                       //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //             value: dropdownValueCountry,
-                       //             icon: const Icon(Icons.arrow_drop_down),
-                       //             iconSize: 24,
-                       //             elevation: 16,
-                       //             style: const TextStyle(color: Colors.deepPurple),
-                       //
-                       //             onChanged: (String newValue) {
-                       //               setState(() {
-                       //                 dropdownValueCountry = newValue;
-                       //               });
-                       //             },
-                       //             items: <String>['Select Country', 'Two', 'Free', 'Four']
-                       //                 .map<DropdownMenuItem<String>>((String value) {
-                       //               return DropdownMenuItem<String>(
-                       //                 value: value,
-                       //                 child: Text(value),
-                       //               );
-                       //             }).toList(),
-                       //           ),  ),
-                       //         )
-                       //     ),
-                       //     Container(
-                       //         width: width/2.2,
-                       //         height: width/8,
-                       //         child: InputDecorator(
-                       //           decoration: InputDecoration(
-                       //             contentPadding: EdgeInsets.symmetric(
-                       //                 horizontal: 20.0, vertical: 15.0),
-                       //             labelText: 'Upozila',
-                       //             border:
-                       //             OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                       //           ),
-                       //
-                       //           child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //             value: dropdownValueThana,
-                       //             icon: const Icon(Icons.arrow_drop_down),
-                       //             iconSize: 24,
-                       //             elevation: 16,
-                       //             style: const TextStyle(color: Colors.deepPurple),
-                       //
-                       //             onChanged: (String newValue) {
-                       //               setState(() {
-                       //                 dropdownValueThana = newValue;
-                       //               });
-                       //             },
-                       //             items: <String>['Select upozila', 'Two', 'Free', 'Four']
-                       //                 .map<DropdownMenuItem<String>>((String value) {
-                       //               return DropdownMenuItem<String>(
-                       //                 value: value,
-                       //                 child: Text(value),
-                       //               );
-                       //             }).toList(),
-                       //           ),  ),
-                       //         )
-                       //     )
-                       //   ],
-                       // ),
-                       // SizedBox(height: 20,),
-                       // //union
-                       // Container(
-                       //     width: width,
-                       //     height: width/8,
-                       //     child: InputDecorator(
-                       //       decoration: InputDecoration(
-                       //         contentPadding: EdgeInsets.symmetric(
-                       //             horizontal: 20.0, vertical: 15.0),
-                       //         labelText: 'Union Parishad',
-                       //         border:
-                       //         OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-                       //       ),
-                       //
-                       //       child: DropdownButtonHideUnderline( child:DropdownButton<String>(
-                       //         value: dropdownValueUp,
-                       //         icon: const Icon(Icons.arrow_drop_down),
-                       //         iconSize: 24,
-                       //         elevation: 16,
-                       //         style: const TextStyle(color: Colors.black),
-                       //
-                       //         onChanged: (String newValue) {
-                       //           setState(() {
-                       //             dropdownValueUp = newValue;
-                       //           });
-                       //         },
-                       //         items: <String>['Select Union Parishad', 'Two', 'Free', 'Four']
-                       //             .map<DropdownMenuItem<String>>((String value) {
-                       //           return DropdownMenuItem<String>(
-                       //             value: value,
-                       //             child: Text(value),
-                       //           );
-                       //         }).toList(),
-                       //       ),  ),
-                       //     )
-                       // ),
+                       SizedBox(height: 20,),
+                       //district upozila
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           Container(
+                               width: width/2.2,
+                               height: width/8,
+                               child: InputDecorator(
+                                 decoration: InputDecoration(
+                                   contentPadding: EdgeInsets.symmetric(
+                                       horizontal: 20.0, vertical: 15.0),
+                                   labelText: 'District',
+                                   border:
+                                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                                 ),
+
+                                 child: districtList.length>0?
+                                 DropdownButtonHideUnderline( child:DropdownButton(
+                                   value: dropdownValueDistrict,
+                                   //key: divisionKey,
+                                   icon: const Icon(Icons.arrow_drop_down),
+                                   iconSize: 24,
+                                   elevation: 16,
+                                   style: const TextStyle(color: Colors.black),
+
+                                   onChanged: (String newValue) {
+                                     // setState(() {
+                                     dropdownValueDistrict = newValue;
+                                     districtList.forEach((element){
+                                       if(newValue != 'Select district' && newValue == element.name){
+                                         districtId = element.id;
+                                         getUpozila();
+                                       }
+                                     });
+                                     // });
+                                   },
+                                   items: districtList.map((country){
+                                     return DropdownMenuItem(
+                                       child: Text(country.name),
+                                       value: country.name,
+                                     );
+                                   }).toList(),
+                                 ),):SizedBox(),
+
+                               )
+                           ),
+                           Container(
+                               width: width/2.2,
+                               height: width/8,
+                               child: InputDecorator(
+                                 decoration: InputDecoration(
+                                   contentPadding: EdgeInsets.symmetric(
+                                       horizontal: 20.0, vertical: 15.0),
+                                   labelText: 'Upozila',
+                                   border:
+                                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                                 ),
+
+                                 child: upozilaList.length>0?
+                                 DropdownButtonHideUnderline( child:DropdownButton(
+                                   value: dropdownValueUpozila,
+                                   //key: divisionKey,
+                                   icon: const Icon(Icons.arrow_drop_down),
+                                   iconSize: 24,
+                                   elevation: 16,
+                                   style: const TextStyle(color: Colors.black),
+
+                                   onChanged: (String newValue) {
+                                     // setState(() {
+                                     dropdownValueUpozila = newValue;
+                                     upozilaList.forEach((element){
+                                       if(newValue != 'Select upozila' && newValue == element.name){
+                                         upozilaId = element.id;
+                                          getUp();
+                                       }
+                                     });
+                                     // });
+                                   },
+                                   items: upozilaList.map((country){
+                                     return DropdownMenuItem(
+                                       child: Text(country.name),
+                                       value: country.name,
+                                     );
+                                   }).toList(),
+                                 ),):SizedBox(),
+
+                               )
+                           )
+                         ],
+                       ),
+                       SizedBox(height: 20,),
+                       //union
+                       Container(
+                           width: width,
+                           height: width/8,
+                           child: InputDecorator(
+                             decoration: InputDecoration(
+                               contentPadding: EdgeInsets.symmetric(
+                                   horizontal: 20.0, vertical: 15.0),
+                               labelText: 'Union Parishad',
+                               border:
+                               OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+                             ),
+
+                             child: upList.length>0?
+                             DropdownButtonHideUnderline( child:DropdownButton(
+                               value: dropdownValueUp,
+                               //key: divisionKey,
+                               icon: const Icon(Icons.arrow_drop_down),
+                               iconSize: 24,
+                               elevation: 16,
+                               style: const TextStyle(color: Colors.black),
+
+                               onChanged: (String newValue) {
+                                 // setState(() {
+                                 dropdownValueUp = newValue;
+                                 upList.forEach((element){
+                                   if(newValue != 'Select union parishad' && newValue == element.name){
+                                     //upozilaId = element.id;
+                                     //getUp();
+                                   }
+                                 });
+                                 // });
+                                 setState(() {
+
+                                 });
+                               },
+                               items: upList.map((country){
+                                 return DropdownMenuItem(
+                                   child: Text(country.name),
+                                   value: country.name,
+                                 );
+                               }).toList(),
+                             ),):SizedBox(),
+
+
+                           )
+                       ),
 
                        SizedBox(height: 20,),
                        //Address
@@ -708,12 +748,44 @@ class CheckOutScreen extends StatefulWidget {
     divisionList.clear();
     CountryListResponse countryListResponse = await LocationRepository().getDivisionListResponse(countryid);
     divisionList = countryListResponse.country_data;
-    divisionList.insert(0,CountryData(name: 'Select division'));
-
+    divisionList.insert(0,CountryData(name: dropdownValueDivision));
     setState(() {
 
     });
   }
+
+   void getDistrict() async{
+     districtList.clear();
+     CountryListResponse countryListResponse = await LocationRepository().getDistrictListResponse(divisionId);
+     districtList = countryListResponse.country_data;
+     districtList.insert(0,CountryData(name: dropdownValueDistrict));
+
+     setState(() {
+
+     });
+   }
+
+   void getUpozila() async{
+     upozilaList.clear();
+     CountryListResponse countryListResponse = await LocationRepository().getUpozilaListResponse(districtId);
+     upozilaList = countryListResponse.country_data;
+     upozilaList.insert(0,CountryData(name: dropdownValueUpozila));
+
+     setState(() {
+
+     });
+   }
+
+   void getUp() async{
+     upList.clear();
+     CountryListResponse countryListResponse = await LocationRepository().getUpListResponse(upozilaId);
+     upList = countryListResponse.country_data;
+     upList.insert(0,CountryData(name: dropdownValueUp));
+
+     setState(() {
+
+     });
+   }
 
  }
 
