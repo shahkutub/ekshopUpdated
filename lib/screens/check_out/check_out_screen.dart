@@ -1,11 +1,13 @@
 
 
- import 'package:active_ecommerce_flutter/data_model/country_list_response.dart';
+ import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+import 'package:active_ecommerce_flutter/data_model/country_list_response.dart';
 import 'package:active_ecommerce_flutter/data_model/customer_information_response.dart';
 import 'package:active_ecommerce_flutter/repositories/location_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:toast/toast.dart';
 
 import '../../my_theme.dart';
 
@@ -46,7 +48,9 @@ class CheckOutScreen extends StatefulWidget {
 
   var nameEditController = TextEditingController();
   var phoneEditController = TextEditingController();
+  var alterPhoneEditController = TextEditingController();
   var emailEditController = TextEditingController();
+  var addressEditController = TextEditingController();
 
    List<CountryData> divisionList = [];
    List<CountryData> districtList = [];
@@ -57,6 +61,9 @@ class CheckOutScreen extends StatefulWidget {
   int divisionId;
   int districtId;
   int upozilaId;
+
+  int upId;
+
   //final divisionKey = GlobalKey<FormFieldState>();
 
   @override
@@ -204,6 +211,7 @@ class CheckOutScreen extends StatefulWidget {
                              width: width/2.2,
                              height: width/8,
                              child: TextFormField(
+                               controller: alterPhoneEditController,
                                validator: (value) {
                                  if (value.isEmpty) {
                                    return 'Please enter alternative phone number';
@@ -434,7 +442,7 @@ class CheckOutScreen extends StatefulWidget {
                                  dropdownValueUp = newValue;
                                  upList.forEach((element){
                                    if(newValue != 'Select union parishad' && newValue == element.name){
-                                     //upozilaId = element.id;
+                                     upId = element.id;
                                      //getUp();
                                    }
                                  });
@@ -461,6 +469,7 @@ class CheckOutScreen extends StatefulWidget {
                          width: width,
                          //height: width/8,
                          child: TextFormField(
+                           controller: addressEditController,
                            maxLines: 3,
                            validator: (value) {
                              if (value.isEmpty) {
@@ -704,7 +713,45 @@ class CheckOutScreen extends StatefulWidget {
                                child: Text('Place Order',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                              ),
                              onTap: (){
+                               if(nameEditController.text.isEmpty){
+                                 ToastComponent.showDialog(
+                                     "Input name",
+                                 );
+                               }else if(emailEditController.text.isEmpty){
+                                 ToastComponent.showDialog(
+                                     "Input email",
+                                     );
 
+                               }else if(phoneEditController.text.isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Input mobile number",
+                                   );
+
+                               }else if(countryid.toString().isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Select country",
+                                   );
+                               }else if(divisionId.toString().isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Select division",
+                                   );
+                               }else if(districtId.toString().isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Select district",
+                                   );
+                               }else if(upozilaId.toString().isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Select upozila",
+                                   );
+                               }else if(upId.toString().isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Select union porishad",
+                                   );
+                               }else if(addressEditController.text.isEmpty){
+                                 ToastComponent.showDialog(
+                                   "Input address",
+                                   );
+                               }
                              },
                            ),
                          ],
