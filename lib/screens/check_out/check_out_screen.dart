@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 
 import '../../my_theme.dart';
+import '../../repositories/order_repository.dart';
 
 class CheckOutScreen extends StatefulWidget {
 
@@ -18,9 +19,10 @@ class CheckOutScreen extends StatefulWidget {
   final double vat;
   final DataCustomerInfo customerInfo;
   final List<CountryData> countryList;
+  final double discount;
 
 
-  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo,this.countryList}) : super(key: key);
+  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo,this.countryList, this.discount}) : super(key: key);
 
   @override
   _CheckoutState createState() => _CheckoutState();
@@ -57,15 +59,16 @@ class CheckOutScreen extends StatefulWidget {
    List<CountryData> upozilaList = [];
    List<CountryData> upList = [];
 
-  int countryid;
-  int divisionId;
-  int districtId;
-  int upozilaId;
+   String countryName = '';
+   String countryId = '';
+   String divisionId = '';
+   String districtId = '';
+   String upozilaId = '';
 
-  int upId;
+   String upId;
 
   //final divisionKey = GlobalKey<FormFieldState>();
-
+   double grandTotal;
   @override
   Future<void> initState()  {
     // TODO: implement initState
@@ -78,6 +81,7 @@ class CheckOutScreen extends StatefulWidget {
 
     widget.countryList.insert(0,CountryData(name: dropdownValueCountry));
 
+    grandTotal = widget.subTotal+widget.shipping+widget.vat-widget.discount;
 
 
   }
@@ -263,7 +267,8 @@ class CheckOutScreen extends StatefulWidget {
                                      //divisionKey.currentState.reset();
                                        widget.countryList.forEach((element){
                                          if(newValue != 'Select country' && newValue == element.name){
-                                           countryid = element.id;
+                                           countryId = element.id.toString();
+                                           countryName = element.name.toString();
                                            getDivision();
                                          }
                                        });
@@ -306,7 +311,7 @@ class CheckOutScreen extends StatefulWidget {
                                      dropdownValueDivision = newValue;
                                      divisionList.forEach((element){
                                        if(newValue != 'Select division' && newValue == element.name){
-                                         divisionId = element.id;
+                                         divisionId = element.id.toString();
                                          getDistrict();
                                        }
                                      });
@@ -354,7 +359,7 @@ class CheckOutScreen extends StatefulWidget {
                                      dropdownValueDistrict = newValue;
                                      districtList.forEach((element){
                                        if(newValue != 'Select district' && newValue == element.name){
-                                         districtId = element.id;
+                                         districtId = element.id.toString();
                                          getUpozila();
                                        }
                                      });
@@ -396,7 +401,7 @@ class CheckOutScreen extends StatefulWidget {
                                      dropdownValueUpozila = newValue;
                                      upozilaList.forEach((element){
                                        if(newValue != 'Select upozila' && newValue == element.name){
-                                         upozilaId = element.id;
+                                         upozilaId = element.id.toString();
                                           getUp();
                                        }
                                      });
@@ -442,7 +447,7 @@ class CheckOutScreen extends StatefulWidget {
                                  dropdownValueUp = newValue;
                                  upList.forEach((element){
                                    if(newValue != 'Select union parishad' && newValue == element.name){
-                                     upId = element.id;
+                                     upId = element.id.toString();
                                      //getUp();
                                    }
                                  });
@@ -458,7 +463,6 @@ class CheckOutScreen extends StatefulWidget {
                                  );
                                }).toList(),
                              ),):SizedBox(),
-
 
                            )
                        ),
@@ -508,7 +512,7 @@ class CheckOutScreen extends StatefulWidget {
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                  children: [
                                    Text('Shipping'),
-                                   Text('50 tk'),
+                                   Text('${widget.shipping} tk'),
                                  ],
                                ),
                                Divider(),
@@ -516,7 +520,7 @@ class CheckOutScreen extends StatefulWidget {
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                  children: [
                                    Text('Vat'),
-                                   Text('0 tk'),
+                                   Text('${widget.vat} tk'),
                                  ],
                                ),
                                Divider(),
@@ -524,7 +528,7 @@ class CheckOutScreen extends StatefulWidget {
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                  children: [
                                    Text('Payable Total',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                                   Text('800 tk',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                                   Text('${grandTotal} tk',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
                                  ],
                                ),
                                Divider(),
@@ -713,6 +717,10 @@ class CheckOutScreen extends StatefulWidget {
                                child: Text('Place Order',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                              ),
                              onTap: (){
+
+                               print('countryId: '+countryId);
+                               print('diviId: '+divisionId);
+
                                if(nameEditController.text.isEmpty){
                                  ToastComponent.showDialog(
                                      "Input name",
@@ -727,7 +735,7 @@ class CheckOutScreen extends StatefulWidget {
                                    "Input mobile number",
                                    );
 
-                               }else if(countryid.toString().isEmpty){
+                               }else if(countryId.toString().isEmpty){
                                  ToastComponent.showDialog(
                                    "Select country",
                                    );
@@ -751,13 +759,14 @@ class CheckOutScreen extends StatefulWidget {
                                  ToastComponent.showDialog(
                                    "Input address",
                                    );
+                               }else{
+                                 submitOrder();
                                }
                              },
                            ),
                          ],
                        ),
                        SizedBox(height: 20,),
-
                      ],
                    )
                ),
@@ -793,7 +802,7 @@ class CheckOutScreen extends StatefulWidget {
 
   void getDivision() async{
     divisionList.clear();
-    CountryListResponse countryListResponse = await LocationRepository().getDivisionListResponse(countryid);
+    CountryListResponse countryListResponse = await LocationRepository().getDivisionListResponse(int.parse(countryId));
     divisionList = countryListResponse.country_data;
     divisionList.insert(0,CountryData(name: dropdownValueDivision));
     setState(() {
@@ -803,7 +812,7 @@ class CheckOutScreen extends StatefulWidget {
 
    void getDistrict() async{
      districtList.clear();
-     CountryListResponse countryListResponse = await LocationRepository().getDistrictListResponse(divisionId);
+     CountryListResponse countryListResponse = await LocationRepository().getDistrictListResponse(int.parse(divisionId));
      districtList = countryListResponse.country_data;
      districtList.insert(0,CountryData(name: dropdownValueDistrict));
 
@@ -814,7 +823,7 @@ class CheckOutScreen extends StatefulWidget {
 
    void getUpozila() async{
      upozilaList.clear();
-     CountryListResponse countryListResponse = await LocationRepository().getUpozilaListResponse(districtId);
+     CountryListResponse countryListResponse = await LocationRepository().getUpozilaListResponse(int.parse(districtId));
      upozilaList = countryListResponse.country_data;
      upozilaList.insert(0,CountryData(name: dropdownValueUpozila));
 
@@ -825,7 +834,7 @@ class CheckOutScreen extends StatefulWidget {
 
    void getUp() async{
      upList.clear();
-     CountryListResponse countryListResponse = await LocationRepository().getUpListResponse(upozilaId);
+     CountryListResponse countryListResponse = await LocationRepository().getUpListResponse(int.parse(upozilaId));
      upList = countryListResponse.country_data;
      upList.insert(0,CountryData(name: dropdownValueUp));
 
@@ -834,5 +843,17 @@ class CheckOutScreen extends StatefulWidget {
      });
    }
 
+  Future<void> submitOrder() async {
+    // var orderItemResponse =
+    //     await OrderRepository().submitOrder(radioButtonItemPickUp,nameEditController.text.toString(),
+    //         emailEditController.text.toString(),phoneEditController.text.toString(),
+    //         alterPhoneEditController.text.toString(),countryName,countryId,divisionId,
+    //         districtId,upozilaId,addressEditController.text.toString(),widget.discount.toString(),widget.vat.toString(),widget.subTotal.toString());
+
+  }
+
+
  }
+
+
 

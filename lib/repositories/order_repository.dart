@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/app_config.dart';
+import 'package:active_ecommerce_flutter/data_model/review_submit_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:active_ecommerce_flutter/data_model/order_mini_response.dart';
@@ -45,4 +46,50 @@ class OrderRepository {
 
     return orderItemlResponseFromJson(response.body);
   }
+
+  Future<ReviewSubmitResponse> submitOrder(String pickup,String customer_name,
+      String customer_email,String customer_mobile,String customer_alternative_mobile,
+      String country,String country_id,String division,String district,String upazila,
+      String customer_mail_addr,String discount_amount,String vat,String grand_total,
+      String shipping_cost,String total_amount,String merchant,String store,String customer_info,
+      String product,String payment_type,String api_from,) async {
+    var map = new Map<String, dynamic>();
+    map['pickup'] = pickup;
+    map['customer_name'] = customer_name;
+    map['customer_email'] = customer_email;
+    map['customer_mobile'] = customer_mobile;
+    map['customer_alternative_mobile'] = customer_alternative_mobile;
+    map['country'] = country;
+    map['country_id'] = country_id;
+    map['division'] = division;
+    map['district'] = district;
+    map['upazila'] = upazila;
+    map['customer_mail_addr'] = customer_mail_addr;
+    map['discount_amount'] = discount_amount;
+    map['vat'] = vat;
+    map['grand_total'] = grand_total;
+    map['shipping_cost'] = shipping_cost;
+    map['total_amount'] = total_amount;
+    map['merchant'] = merchant;
+    map['store'] = store;
+    map['customer_info'] = customer_info;
+    map['product'] = product;
+    map['payment_type'] = payment_type;
+    map['api_from'] = api_from;
+
+    print(map);
+    Uri url = Uri.parse("${AppConfig.BASE_URLV1}order/createn");
+    final response = await http.post(url,
+        headers: {
+          "Accept": "*/*",
+          "Content-Type": "application/json",
+          "App-Language": app_language.$,
+        },
+        body: map);
+    print(response.body.toString());
+    return reviewSubmitResponseFromJson(response.body);
+    // return response.body.toString();
+  }
+
+
 }

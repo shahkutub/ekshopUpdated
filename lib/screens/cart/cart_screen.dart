@@ -443,8 +443,7 @@ class _CartScreenState extends State<CartScreen>{
                         // }else{
                         // }
 
-
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(subTotal: _cartTotal,countryList: countryList,)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(subTotal: _cartTotal,countryList: countryList,discount: 0.0,shipping: 0,vat: 0.0,)));
                       },
                     ),
                   ),
