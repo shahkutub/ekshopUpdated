@@ -3,16 +3,18 @@ class CartItem {
   String name;
   String price;
   String imageUrl;
+  String detailjson;
   int quantity;
 
 
-  CartItem({this.id, this.name, this.price, this.imageUrl,this.quantity});
+  CartItem({this.id, this.name, this.price, this.imageUrl,this.detailjson,this.quantity});
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'name': name,
       'price': price,
       'imageUrl': imageUrl,
+      'prodDetailJson': detailjson,
       'quantity': quantity,
 
     };
@@ -27,6 +29,7 @@ class CartItem {
     name = map['name'];
     price = map['price'];
     imageUrl = map['imageUrl'];
+    detailjson = map['detailjson'];
     quantity = map['quantity'];
 
   }

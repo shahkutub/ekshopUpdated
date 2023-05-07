@@ -14,6 +14,7 @@ class DatabaseHelper {
   static final columnPrice = 'price';
   static final columnQuantity = 'quantity';
   static final columnCartImageUrl = 'imageUrl';
+  static final columnCartDetailJson = 'detailjson';
 
   // Make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -43,6 +44,7 @@ class DatabaseHelper {
         $columnId TEXT,
         $columnName TEXT,
         $columnPrice TEXT,
+        $columnCartDetailJson TEXT,
         $columnCartImageUrl TEXT,
         $columnQuantity INTEGER
       )

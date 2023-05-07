@@ -129,6 +129,7 @@ class _CartScreenState extends State<CartScreen>{
   initData() async {
     cartList = await DatabaseHelper.instance.getCartItems();
     print('cartList: ${cartList.length}');
+    print('cartprodjson: ${cartList[0].detailjson}');
 
 
     setState(() {
@@ -310,7 +311,7 @@ class _CartScreenState extends State<CartScreen>{
                 )*/
       ),
 
-      height: widget.has_bottomnav ? 200 : 120,
+      height: widget.has_bottomnav ? 120 : 120,
       //color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4),

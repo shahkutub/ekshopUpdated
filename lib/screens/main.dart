@@ -47,7 +47,7 @@ class _MainState extends State<Main> {
   fetchAll() async {
     cartList = await DatabaseHelper.instance.getCartItems();
     counter.controller.sink.add(cartList.length);
-    getCartCount();
+    //getCartCount();
   }
 
   void onTapped(int i) {

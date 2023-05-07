@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
 import 'package:active_ecommerce_flutter/custom/text_styles.dart';
 import 'package:active_ecommerce_flutter/data_model/cart_item.dart';
@@ -402,12 +404,14 @@ class _ProductDetailsState extends State<ProductDetails>
         });
 
         print('imgurl${_productDetails.images[0]}');
+        print('CartDetailJson${jsonEncode(_productDetails).toString()}');
         Map<String, dynamic> row = {
           DatabaseHelper.columnId: _productDetails.id,
           DatabaseHelper.columnName: _productDetails.name,
           DatabaseHelper.columnPrice: _productDetails.price.toString(),
           DatabaseHelper.columnCartImageUrl: AppConfig.IMAGE_URL+_productDetails.images[0],
           DatabaseHelper.columnQuantity: _quantity,
+          DatabaseHelper.columnCartDetailJson: jsonEncode(_productDetails).toString(),
         };
 
         if(!isExist){
