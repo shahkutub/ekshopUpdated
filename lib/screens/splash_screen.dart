@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:active_ecommerce_flutter/app_config.dart';
 import 'package:active_ecommerce_flutter/custom/device_info.dart';
 import 'package:active_ecommerce_flutter/helpers/addons_helper.dart';
@@ -195,6 +197,10 @@ class _SplashScreenState extends State<SplashScreen> {
       if (merchantResponse.data != null) {
         merchant_id.$ = merchantResponse.data[0].id;
         merchant_id.save();
+        merchant_json.$ = jsonEncode(merchantResponse.data[0]).toString();
+        merchant_json.save();
+        
+        print('merchant_json'+merchant_json.$.toString());
       }
     }
   }

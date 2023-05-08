@@ -1,6 +1,8 @@
 
 
- import 'package:active_ecommerce_flutter/custom/toast_component.dart';
+ import 'dart:convert';
+
+import 'package:active_ecommerce_flutter/custom/toast_component.dart';
 import 'package:active_ecommerce_flutter/data_model/country_list_response.dart';
 import 'package:active_ecommerce_flutter/data_model/customer_information_response.dart';
 import 'package:active_ecommerce_flutter/repositories/location_repository.dart';
@@ -9,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 
+import '../../data_model/cart_item.dart';
+import '../../data_model/order_submit_product_model.dart';
+import '../../helpers/shared_value_helper.dart';
 import '../../my_theme.dart';
 import '../../repositories/order_repository.dart';
 
@@ -19,10 +24,11 @@ class CheckOutScreen extends StatefulWidget {
   final double vat;
   final DataCustomerInfo customerInfo;
   final List<CountryData> countryList;
+  final List<CartItem> cartList;
   final double discount;
 
 
-  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo,this.countryList, this.discount}) : super(key: key);
+  const CheckOutScreen({Key key, this.subTotal, this.shipping, this.vat,this.customerInfo,this.countryList, this.discount, this.cartList}) : super(key: key);
 
   @override
   _CheckoutState createState() => _CheckoutState();
@@ -69,6 +75,12 @@ class CheckOutScreen extends StatefulWidget {
 
   //final divisionKey = GlobalKey<FormFieldState>();
    double grandTotal;
+
+  String totalAmount;
+
+  String merchant;
+
+  String store;
   @override
   Future<void> initState()  {
     // TODO: implement initState
@@ -846,11 +858,22 @@ class CheckOutScreen extends StatefulWidget {
    }
 
   Future<void> submitOrder() async {
-    // var orderItemResponse =
-    //     await OrderRepository().submitOrder(radioButtonItemPickUp,nameEditController.text.toString(),
-    //         emailEditController.text.toString(),phoneEditController.text.toString(),
-    //         alterPhoneEditController.text.toString(),countryName,countryId,divisionId,
-    //         districtId,upozilaId,addressEditController.text.toString(),widget.discount.toString(),widget.vat.toString(),widget.subTotal.toString());
+    List<Product> products = [];
+    widget.cartList.forEach((element) {
+      products.add(Product(each_product_price: element.price,id: element.id,info: element.detailjson,
+          total_price: '',total_qty: element.quantity.toString()));
+    });
+
+    String submitjson = jsonEncode(OrderSubmitProductModel(product: products)).toString();
+    print('Productjson'+submitjson.toString());
+
+   // var orderSubmitResponse =
+   //      await OrderRepository().submitOrder(radioButtonItemPickUp,nameEditController.text.toString(),
+   //          emailEditController.text.toString(),phoneEditController.text.toString(),
+   //          alterPhoneEditController.text.toString(),countryName,countryId,divisionId,
+   //          districtId,upozilaId,addressEditController.text.toString(), widget.discount.toString(),
+   //          widget.vat.toString(),widget.subTotal.toString(),widget.shipping.toString(),totalAmount,
+   //        merchant_json.$.toString(),store,customerInfo,);
 
   }
 

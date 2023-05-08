@@ -16,6 +16,11 @@ final SharedValue<String> merchant_id = SharedValue(
   key: "merchant_id", // disk storage key for shared_preferences
 );
 
+final SharedValue<String> merchant_json = SharedValue(
+  value: "", // initial value
+  key: "merchant_json", // disk storage key for shared_preferences
+);
+
 final SharedValue<int> user_id = SharedValue(
   value: 0, // initial value
   key: "user_id", // disk storage key for shared_preferences
