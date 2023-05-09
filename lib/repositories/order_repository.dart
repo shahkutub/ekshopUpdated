@@ -47,7 +47,7 @@ class OrderRepository {
     return orderItemlResponseFromJson(response.body);
   }
 
-  Future<ReviewSubmitResponse> submitOrder(String pickup,String customer_name,
+  Future submitOrder(String pickup,String customer_name,
       String customer_email,String customer_mobile,String customer_alternative_mobile,
       String country,String country_id,String division,String district,String upazila,
       String customer_mail_addr,String discount_amount,String vat,String grand_total,
@@ -78,16 +78,16 @@ class OrderRepository {
     map['api_from'] = api_from;
 
     print(map);
-    Uri url = Uri.parse("${AppConfig.BASE_URLV1}order/createn");
+    Uri url = Uri.parse("${AppConfig.BASE_URLV1}order/create");
     final response = await http.post(url,
         headers: {
           "Accept": "*/*",
-          "Content-Type": "application/json",
+         // "Content-Type": "application/json",
           "App-Language": app_language.$,
         },
         body: map);
     print(response.body.toString());
-    return reviewSubmitResponseFromJson(response.body);
+    //return St(response.body);
     // return response.body.toString();
   }
 

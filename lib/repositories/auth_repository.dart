@@ -235,17 +235,17 @@ class AuthRepository {
           {
             "phone": int.parse(phone),
             "code": "+880",
-            "otp": phone.isEmpty?"true":"false",
+            "otp": phone.isEmpty?true:false,
             "otpnumber": "",
             "email": email,
-            "choose_option": phone.isEmpty?"true":"false",
+            "choose_option": phone.isEmpty?true:false,
           },
           );
       print(post_body);
       Uri url = Uri.parse("${AppConfig.BASE_URLV1}user/customer-registration");
       final response = await http.post(url,
           headers: {
-            "Accept": "*/*",
+           // "Accept": "*/*",
             "Content-Type": "application/json",
             "App-Language": app_language.$,
           },
@@ -260,10 +260,10 @@ class AuthRepository {
           {
             "phone": int.parse(phone),
             "code": "+880",
-            "otp": phone.isEmpty?"true":"false",
+            "otp": phone.isEmpty?true:false,
             "otpnumber": "",
             "email": email,
-            "choose_option": phone.isEmpty?"true":"false",
+            "choose_option": phone.isEmpty?true:false,
             "otpNum": otpNum,
           },
           );
@@ -271,7 +271,7 @@ class AuthRepository {
       Uri url = Uri.parse("${AppConfig.BASE_URLV1}user/otpOk-registration");
       final response = await http.post(url,
           headers: {
-            "Accept": "*/*",
+            //"Accept": "*/*",
             "Content-Type": "application/json",
             "App-Language": app_language.$,
           },
@@ -284,10 +284,11 @@ class AuthRepository {
     Future<CustomerInformationResponse> customerInformationResponse(String phone,String email) async {
           var post_body = jsonEncode(
               {
-                "phone": "${phone}",
+                "phone": int.parse(phone),
+                "code":"+880",
                 "email": email,
-                "email_choosen": phone.isEmpty?"true":"false",
-                "otpSuccess": 'true',
+                "email_choosen": phone.isEmpty?true:false,
+                "otpSuccess": true,
               },
               );
           print(post_body);

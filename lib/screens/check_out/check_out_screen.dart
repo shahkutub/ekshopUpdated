@@ -80,7 +80,7 @@ class CheckOutScreen extends StatefulWidget {
 
   String merchant;
 
-  String store;
+  String store = 'beauty-fi shop';
   @override
   Future<void> initState()  {
     // TODO: implement initState
@@ -640,73 +640,73 @@ class CheckOutScreen extends StatefulWidget {
                                      groupValue: radioIdPayment,
                                      onChanged: (val) {
                                        setState(() {
-                                         radioButtonItemPayment = 'Nagad';
+                                         radioButtonItemPayment = 'ekpay';
                                          radioIdPayment = 2;
                                        });
                                      },
                                    ),
                                    Text(
-                                     'Nagad',
+                                     'Ekpay ',
                                      style: new TextStyle(),
                                    ),
                                  ],
                                ),
                              ),
-                             SizedBox(width: 10,),
-                             Container(
-                               width: width/2.5,
-                               height: width/8,
-                               decoration: BoxDecoration(
-                                   border: Border.all(),
-                                   borderRadius: BorderRadius.circular(5)
-                               ),
-                               child: Row(
-                                 children: [
-                                   Radio(
-                                     value: 3,
-                                     groupValue: radioIdPayment,
-                                     onChanged: (val) {
-                                       setState(() {
-                                         radioButtonItemPayment = 'Bkash';
-                                         radioIdPayment = 3;
-                                       });
-                                     },
-                                   ),
-                                   Text(
-                                     'Bkash',
-                                     style: new TextStyle(),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                             SizedBox(width: 10,),
-                             Container(
-                               width: width/2.5,
-                               height: width/8,
-                               decoration: BoxDecoration(
-                                   border: Border.all(),
-                                   borderRadius: BorderRadius.circular(5)
-                               ),
-                               child: Row(
-                                 children: [
-                                   Radio(
-                                     value: 4,
-                                     groupValue: radioIdPayment,
-                                     onChanged: (val) {
-                                       setState(() {
-                                         radioButtonItemPayment = 'Rocket';
-                                         radioIdPayment = 4;
-                                       });
-                                     },
-                                   ),
-                                   Text(
-                                     'Rocket',
-                                     style: new TextStyle(),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                             SizedBox(width: 10,),
+                             // SizedBox(width: 10,),
+                             // Container(
+                             //   width: width/2.5,
+                             //   height: width/8,
+                             //   decoration: BoxDecoration(
+                             //       border: Border.all(),
+                             //       borderRadius: BorderRadius.circular(5)
+                             //   ),
+                             //   child: Row(
+                             //     children: [
+                             //       Radio(
+                             //         value: 3,
+                             //         groupValue: radioIdPayment,
+                             //         onChanged: (val) {
+                             //           setState(() {
+                             //             radioButtonItemPayment = 'Bkash';
+                             //             radioIdPayment = 3;
+                             //           });
+                             //         },
+                             //       ),
+                             //       Text(
+                             //         'Bkash',
+                             //         style: new TextStyle(),
+                             //       ),
+                             //     ],
+                             //   ),
+                             // ),
+                             // SizedBox(width: 10,),
+                             // Container(
+                             //   width: width/2.5,
+                             //   height: width/8,
+                             //   decoration: BoxDecoration(
+                             //       border: Border.all(),
+                             //       borderRadius: BorderRadius.circular(5)
+                             //   ),
+                             //   child: Row(
+                             //     children: [
+                             //       Radio(
+                             //         value: 4,
+                             //         groupValue: radioIdPayment,
+                             //         onChanged: (val) {
+                             //           setState(() {
+                             //             radioButtonItemPayment = 'Rocket';
+                             //             radioIdPayment = 4;
+                             //           });
+                             //         },
+                             //       ),
+                             //       Text(
+                             //         'Rocket',
+                             //         style: new TextStyle(),
+                             //       ),
+                             //     ],
+                             //   ),
+                             // ),
+                             // SizedBox(width: 10,),
                            ],
                          ),
                        ),
@@ -864,16 +864,16 @@ class CheckOutScreen extends StatefulWidget {
           total_price: '',total_qty: element.quantity.toString()));
     });
 
-    String submitjson = jsonEncode(OrderSubmitProductModel(product: products)).toString();
-    print('Productjson'+submitjson.toString());
+    String productjson = jsonEncode(OrderSubmitProductModel(product: products)).toString();
+    print('Productjson'+productjson.toString());
 
-   // var orderSubmitResponse =
-   //      await OrderRepository().submitOrder(radioButtonItemPickUp,nameEditController.text.toString(),
-   //          emailEditController.text.toString(),phoneEditController.text.toString(),
-   //          alterPhoneEditController.text.toString(),countryName,countryId,divisionId,
-   //          districtId,upozilaId,addressEditController.text.toString(), widget.discount.toString(),
-   //          widget.vat.toString(),widget.subTotal.toString(),widget.shipping.toString(),totalAmount,
-   //        merchant_json.$.toString(),store,customerInfo,);
+   var orderSubmitResponse =
+        await OrderRepository().submitOrder(radioButtonItemPickUp,nameEditController.text.toString(),
+            emailEditController.text.toString(),phoneEditController.text.toString(),
+            alterPhoneEditController.text.toString(),countryName,countryId,divisionId,
+            districtId,upozilaId,addressEditController.text.toString(), widget.discount.toString(),
+            widget.vat.toString(),widget.subTotal.toString(),widget.shipping.toString(),widget.subTotal.toString(),
+          merchant_json.$.toString(),store,jsonEncode(widget.customerInfo),productjson,radioButtonItemPayment,'mobile');
 
   }
 

@@ -1,4 +1,5 @@
 import 'package:active_ecommerce_flutter/data_model/cart_item.dart';
+import 'package:active_ecommerce_flutter/data_model/customer_information_response.dart';
 import 'package:active_ecommerce_flutter/helpers/DatabaseHelper.dart';
 import 'package:active_ecommerce_flutter/repositories/location_repository.dart';
 import 'package:active_ecommerce_flutter/screens/check_out/check_out_screen.dart';
@@ -48,6 +49,8 @@ class _CartScreenState extends State<CartScreen>{
   String otpcode;
 
   List<CountryData> countryList = [];
+
+  DataCustomerInfo customerInfo;
 
 
   @override
@@ -426,25 +429,25 @@ class _CartScreenState extends State<CartScreen>{
                             fontWeight: FontWeight.w700),
                       ),
                       onPressed: () {
-                        // if (is_logged_in.$ == false) {
-                        //   showDialog(
-                        //        barrierDismissible: false,
-                        //       context: context,
-                        //     builder: (BuildContext context){
-                        //         return AlertDialog(
-                        //             contentPadding: EdgeInsets.zero,
-                        //           content: StatefulBuilder(
-                        //         builder: (BuildContext context, StateSetter _setState) {
-                        //           return dialogUserInput(context,_setState);
-                        //         }
-                        //       ));
-                        //     }
-                        //   );
-                        //
-                        // }else{
-                        // }
+                        if (is_logged_in.$ == false) {
+                          showDialog(
+                               barrierDismissible: false,
+                              context: context,
+                            builder: (BuildContext context){
+                                return AlertDialog(
+                                    contentPadding: EdgeInsets.zero,
+                                  content: StatefulBuilder(
+                                builder: (BuildContext context, StateSetter _setState) {
+                                  return dialogUserInput(context,_setState);
+                                }
+                              ));
+                            }
+                          );
 
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(cartList:cartList,subTotal: _cartTotal,countryList: countryList,discount: 0.0,shipping: 0,vat: 0.0,)));
+                        }else{
+                        }
+
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(customerInfo:customerInfo,cartList:cartList,subTotal: _cartTotal,countryList: countryList,discount: 0.0,shipping: 0,vat: 0.0,)));
                       },
                     ),
                   ),
@@ -629,7 +632,8 @@ class _CartScreenState extends State<CartScreen>{
                         var customerInfoResponse = await AuthRepository().customerInformationResponse(phoneEditController.text, emailEditController.text);
                         if(customerInfoResponse != null){
                           if(customerInfoResponse.data != null){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(customerInfo:customerInfoResponse.data, subTotal: _cartTotal,)));
+                            customerInfo = customerInfoResponse.data;
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>  CheckOutScreen(customerInfo:customerInfo,cartList:cartList,subTotal: _cartTotal,countryList: countryList,discount: 0.0,shipping: 0,vat: 0.0,)));
                           }
                         }
 

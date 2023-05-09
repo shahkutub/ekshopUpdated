@@ -119,6 +119,8 @@ class ProductRepository {
     print(url.toString());
     final response = await http.get(url, headers: {
       "App-Language": app_language.$,
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
     });
     print(response.body.toString());
     return productDetailsResponseFromJson(response.body);

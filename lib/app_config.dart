@@ -30,6 +30,7 @@ class AppConfig {
   static const String PROTOCOL = HTTPS ? "https://" : "http://";
   static const String RAW_BASE_URL = "${PROTOCOL}${DOMAIN_PATH}";
   static const String BASE_URL = "${RAW_BASE_URL}/${API_ENDPATH}";
+  //static const String BASE_URLV1 = "http://192.168.68.109:8081/";
   static const String BASE_URLV1 = "https://api.ekshop.com.bd/";
   static const String BASE_URL_noslash = "http://192.168.68.119";
   static const String IMAGE_URL = "https://imup3.ekshop.com.bd/upload/";
